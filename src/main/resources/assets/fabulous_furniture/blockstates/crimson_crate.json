@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "fabulous_furniture:block/crimson_crate"
+      },
+      {
+        "model": "fabulous_furniture:block/crimson_crate",
+        "y": 90
+      }
+    ]
+  }
+}

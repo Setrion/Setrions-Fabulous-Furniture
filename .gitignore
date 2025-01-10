@@ -24,3 +24,5 @@ runs
 run-data
 
 repo
+src/generated/**
+java_pid1268.hprof

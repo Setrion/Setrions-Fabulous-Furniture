@@ -1,0 +1,13 @@
+{
+  "values": {
+    "fabulous_furniture:copper_fridge": {
+      "next_oxidation_stage": "fabulous_furniture:exposed_copper_fridge"
+    },
+    "fabulous_furniture:exposed_copper_fridge": {
+      "next_oxidation_stage": "fabulous_furniture:weathered_copper_fridge"
+    },
+    "fabulous_furniture:weathered_copper_fridge": {
+      "next_oxidation_stage": "fabulous_furniture:oxidized_copper_fridge"
+    }
+  }
+}

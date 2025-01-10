@@ -1,0 +1,16 @@
+{
+  "values": {
+    "fabulous_furniture:copper_fridge": {
+      "waxed": "fabulous_furniture:waxed_copper_fridge"
+    },
+    "fabulous_furniture:exposed_copper_fridge": {
+      "waxed": "fabulous_furniture:waxed_exposed_copper_fridge"
+    },
+    "fabulous_furniture:oxidized_copper_fridge": {
+      "waxed": "fabulous_furniture:waxed_oxidized_copper_fridge"
+    },
+    "fabulous_furniture:weathered_copper_fridge": {
+      "waxed": "fabulous_furniture:waxed_weathered_copper_fridge"
+    }
+  }
+}

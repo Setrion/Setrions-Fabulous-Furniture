@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "fabulous_furniture:block/warped_crate"
+      },
+      {
+        "model": "fabulous_furniture:block/warped_crate",
+        "y": 90
+      }
+    ]
+  }
+}

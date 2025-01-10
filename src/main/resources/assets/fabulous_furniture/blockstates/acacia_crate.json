@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "fabulous_furniture:block/acacia_crate"
+      },
+      {
+        "model": "fabulous_furniture:block/acacia_crate",
+        "y": 90
+      }
+    ]
+  }
+}

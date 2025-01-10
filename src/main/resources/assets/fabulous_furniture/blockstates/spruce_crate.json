@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "fabulous_furniture:block/spruce_crate"
+      },
+      {
+        "model": "fabulous_furniture:block/spruce_crate",
+        "y": 90
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "fabulous_furniture:block/bamboo_crate"
+      },
+      {
+        "model": "fabulous_furniture:block/bamboo_crate",
+        "y": 90
+      }
+    ]
+  }
+}

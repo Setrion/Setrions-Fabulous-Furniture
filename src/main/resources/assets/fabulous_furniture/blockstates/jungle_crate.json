@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "fabulous_furniture:block/jungle_crate"
+      },
+      {
+        "model": "fabulous_furniture:block/jungle_crate",
+        "y": 90
+      }
+    ]
+  }
+}

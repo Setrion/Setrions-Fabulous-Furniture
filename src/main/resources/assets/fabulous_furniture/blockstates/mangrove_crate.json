@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "fabulous_furniture:block/mangrove_crate"
+      },
+      {
+        "model": "fabulous_furniture:block/mangrove_crate",
+        "y": 90
+      }
+    ]
+  }
+}
