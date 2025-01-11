@@ -12,7 +12,7 @@ public class FurnitureFamilies {
 
     private static final Map<Block, FurnitureFamily> MAP = Maps.newHashMap();
 
-    public static final FurnitureFamily OAK = familyBuilder(Blocks.OAK_PLANKS, Blocks.OAK_LOG)
+    public static final FurnitureFamily OAK = familyBuilder(Blocks.OAK_PLANKS, Blocks.OAK_LOG, Blocks.STRIPPED_OAK_LOG)
             .crate(SFFBlocks.OAK_CRATE.get())
             .kitchenCounter(SFFBlocks.OAK_POLISHED_GRANITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_GRANITE)
             .kitchenCounter(SFFBlocks.OAK_POLISHED_DIORITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_DIORITE)
@@ -218,7 +218,7 @@ public class FurnitureFamilies {
             .table(SFFBlocks.OAK_TABLE.get())
             .getFamily();
 
-    public static final FurnitureFamily SPRUCE = familyBuilder(Blocks.SPRUCE_PLANKS, Blocks.SPRUCE_LOG)
+    public static final FurnitureFamily SPRUCE = familyBuilder(Blocks.SPRUCE_PLANKS, Blocks.SPRUCE_LOG, Blocks.STRIPPED_SPRUCE_LOG)
             .crate(SFFBlocks.SPRUCE_CRATE.get())
             .kitchenCounter(SFFBlocks.SPRUCE_POLISHED_GRANITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_GRANITE)
             .kitchenCounter(SFFBlocks.SPRUCE_POLISHED_DIORITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_DIORITE)
@@ -424,7 +424,7 @@ public class FurnitureFamilies {
             .table(SFFBlocks.SPRUCE_TABLE.get())
             .getFamily();
 
-    public static final FurnitureFamily BIRCH = familyBuilder(Blocks.BIRCH_PLANKS, Blocks.BIRCH_LOG)
+    public static final FurnitureFamily BIRCH = familyBuilder(Blocks.BIRCH_PLANKS, Blocks.BIRCH_LOG, Blocks.STRIPPED_BIRCH_LOG)
             .crate(SFFBlocks.BIRCH_CRATE.get())
             .kitchenCounter(SFFBlocks.BIRCH_POLISHED_GRANITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_GRANITE)
             .kitchenCounter(SFFBlocks.BIRCH_POLISHED_DIORITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_DIORITE)
@@ -630,7 +630,7 @@ public class FurnitureFamilies {
             .table(SFFBlocks.BIRCH_TABLE.get())
             .getFamily();
 
-    public static final FurnitureFamily JUNGLE = familyBuilder(Blocks.JUNGLE_PLANKS, Blocks.JUNGLE_LOG)
+    public static final FurnitureFamily JUNGLE = familyBuilder(Blocks.JUNGLE_PLANKS, Blocks.JUNGLE_LOG, Blocks.STRIPPED_JUNGLE_LOG)
             .crate(SFFBlocks.JUNGLE_CRATE.get())
             .kitchenCounter(SFFBlocks.JUNGLE_POLISHED_GRANITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_GRANITE)
             .kitchenCounter(SFFBlocks.JUNGLE_POLISHED_DIORITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_DIORITE)
@@ -836,7 +836,7 @@ public class FurnitureFamilies {
             .table(SFFBlocks.JUNGLE_TABLE.get())
             .getFamily();
 
-    public static final FurnitureFamily ACACIA = familyBuilder(Blocks.ACACIA_PLANKS, Blocks.ACACIA_LOG)
+    public static final FurnitureFamily ACACIA = familyBuilder(Blocks.ACACIA_PLANKS, Blocks.ACACIA_LOG, Blocks.STRIPPED_ACACIA_LOG)
             .crate(SFFBlocks.ACACIA_CRATE.get())
             .kitchenCounter(SFFBlocks.ACACIA_POLISHED_GRANITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_GRANITE)
             .kitchenCounter(SFFBlocks.ACACIA_POLISHED_DIORITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_DIORITE)
@@ -1042,7 +1042,7 @@ public class FurnitureFamilies {
             .table(SFFBlocks.ACACIA_TABLE.get())
             .getFamily();
 
-    public static final FurnitureFamily CHERRY = familyBuilder(Blocks.CHERRY_PLANKS, Blocks.CHERRY_LOG)
+    public static final FurnitureFamily CHERRY = familyBuilder(Blocks.CHERRY_PLANKS, Blocks.CHERRY_LOG, Blocks.STRIPPED_CHERRY_LOG)
             .crate(SFFBlocks.CHERRY_CRATE.get())
             .kitchenCounter(SFFBlocks.CHERRY_POLISHED_GRANITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_GRANITE)
             .kitchenCounter(SFFBlocks.CHERRY_POLISHED_DIORITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_DIORITE)
@@ -1248,7 +1248,7 @@ public class FurnitureFamilies {
             .table(SFFBlocks.CHERRY_TABLE.get())
             .getFamily();
 
-    public static final FurnitureFamily DARK_OAK = familyBuilder(Blocks.DARK_OAK_PLANKS, Blocks.DARK_OAK_LOG)
+    public static final FurnitureFamily DARK_OAK = familyBuilder(Blocks.DARK_OAK_PLANKS, Blocks.DARK_OAK_LOG, Blocks.STRIPPED_DARK_OAK_LOG)
             .crate(SFFBlocks.DARK_OAK_CRATE.get())
             .kitchenCounter(SFFBlocks.DARK_OAK_POLISHED_GRANITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_GRANITE)
             .kitchenCounter(SFFBlocks.DARK_OAK_POLISHED_DIORITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_DIORITE)
@@ -1454,7 +1454,7 @@ public class FurnitureFamilies {
             .table(SFFBlocks.DARK_OAK_TABLE.get())
             .getFamily();
 
-    public static final FurnitureFamily PALE_OAK = familyBuilder(Blocks.PALE_OAK_PLANKS, Blocks.PALE_OAK_LOG)
+    public static final FurnitureFamily PALE_OAK = familyBuilder(Blocks.PALE_OAK_PLANKS, Blocks.PALE_OAK_LOG, Blocks.STRIPPED_PALE_OAK_LOG)
             .crate(SFFBlocks.PALE_OAK_CRATE.get())
             .kitchenCounter(SFFBlocks.PALE_OAK_POLISHED_GRANITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_GRANITE)
             .kitchenCounter(SFFBlocks.PALE_OAK_POLISHED_DIORITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_DIORITE)
@@ -1660,7 +1660,7 @@ public class FurnitureFamilies {
             .table(SFFBlocks.PALE_OAK_TABLE.get())
             .getFamily();
 
-    public static final FurnitureFamily BAMBOO = familyBuilder(Blocks.BAMBOO_PLANKS, Blocks.BAMBOO_BLOCK)
+    public static final FurnitureFamily BAMBOO = familyBuilder(Blocks.BAMBOO_PLANKS, Blocks.BAMBOO_BLOCK, Blocks.STRIPPED_BAMBOO_BLOCK)
             .crate(SFFBlocks.BAMBOO_CRATE.get())
             .kitchenCounter(SFFBlocks.BAMBOO_POLISHED_GRANITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_GRANITE)
             .kitchenCounter(SFFBlocks.BAMBOO_POLISHED_DIORITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_DIORITE)
@@ -1866,7 +1866,7 @@ public class FurnitureFamilies {
             .table(SFFBlocks.BAMBOO_TABLE.get())
             .getFamily();
 
-    public static final FurnitureFamily MANGROVE = familyBuilder(Blocks.MANGROVE_PLANKS, Blocks.MANGROVE_LOG)
+    public static final FurnitureFamily MANGROVE = familyBuilder(Blocks.MANGROVE_PLANKS, Blocks.MANGROVE_LOG, Blocks.STRIPPED_MANGROVE_LOG)
             .crate(SFFBlocks.MANGROVE_CRATE.get())
             .kitchenCounter(SFFBlocks.MANGROVE_POLISHED_GRANITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_GRANITE)
             .kitchenCounter(SFFBlocks.MANGROVE_POLISHED_DIORITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_DIORITE)
@@ -2072,7 +2072,7 @@ public class FurnitureFamilies {
             .table(SFFBlocks.MANGROVE_TABLE.get())
             .getFamily();
 
-    public static final FurnitureFamily CRIMSON = familyBuilder(Blocks.CRIMSON_PLANKS, Blocks.CRIMSON_STEM)
+    public static final FurnitureFamily CRIMSON = familyBuilder(Blocks.CRIMSON_PLANKS, Blocks.CRIMSON_STEM, Blocks.STRIPPED_CRIMSON_STEM)
             .crate(SFFBlocks.CRIMSON_CRATE.get())
             .kitchenCounter(SFFBlocks.CRIMSON_POLISHED_GRANITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_GRANITE)
             .kitchenCounter(SFFBlocks.CRIMSON_POLISHED_DIORITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_DIORITE)
@@ -2278,7 +2278,7 @@ public class FurnitureFamilies {
             .table(SFFBlocks.CRIMSON_TABLE.get())
             .getFamily();
 
-    public static final FurnitureFamily WARPED = familyBuilder(Blocks.WARPED_PLANKS, Blocks.WARPED_STEM)
+    public static final FurnitureFamily WARPED = familyBuilder(Blocks.WARPED_PLANKS, Blocks.WARPED_STEM, Blocks.STRIPPED_WARPED_STEM)
             .crate(SFFBlocks.WARPED_CRATE.get())
             .kitchenCounter(SFFBlocks.WARPED_POLISHED_GRANITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_GRANITE)
             .kitchenCounter(SFFBlocks.WARPED_POLISHED_DIORITE_KITCHEN_COUNTER.get(), Blocks.POLISHED_DIORITE)
@@ -2484,8 +2484,8 @@ public class FurnitureFamilies {
             .table(SFFBlocks.WARPED_TABLE.get())
             .getFamily();
 
-    private static FurnitureFamily.Builder familyBuilder(Block basePlanks, Block baseLog) {
-        FurnitureFamily.Builder blockfamily$builder = new FurnitureFamily.Builder(basePlanks, baseLog);
+    private static FurnitureFamily.Builder familyBuilder(Block basePlanks, Block baseLog, Block baseStrippedLog) {
+        FurnitureFamily.Builder blockfamily$builder = new FurnitureFamily.Builder(basePlanks, baseLog, baseStrippedLog);
         FurnitureFamily blockfamily = MAP.put(basePlanks, blockfamily$builder.getFamily());
         if (blockfamily != null) {
             throw new IllegalStateException("Duplicate family definition for " + BuiltInRegistries.BLOCK.getKey(basePlanks));

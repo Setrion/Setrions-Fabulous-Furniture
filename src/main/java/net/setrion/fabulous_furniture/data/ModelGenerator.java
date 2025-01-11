@@ -218,7 +218,7 @@ public class ModelGenerator extends ModelProvider {
             BlockFamilies.getAllFamilies().toList().forEach(blockFamily -> {
                 if (blockFamily.getBaseBlock() == family.getBasePlanks()) {
                     blockModels.blockStateOutput.accept(createChairBlock(family.get(FurnitureFamily.Variant.CHAIR).get(block), family.getBasePlanks(), TextureMapping.getBlockTexture(blockFamily.get(BlockFamily.Variant.TRAPDOOR)), TextureMapping.getBlockTexture(block), blockModels));
-
+                    blockModels.blockStateOutput.accept(createTableLampBlock(family.get(FurnitureFamily.Variant.TABLE_LAMP).get(block), family.getBasePlanks(), TextureMapping.getBlockTexture(family.getBaseLog()), TextureMapping.getBlockTexture(family.getBaseLog(), "_top"), TextureMapping.getBlockTexture(family.getBaseStrippedLog()), TextureMapping.getBlockTexture(Blocks.REDSTONE_LAMP), TextureMapping.getBlockTexture(Blocks.REDSTONE_LAMP, "_on"), TextureMapping.getBlockTexture(block), blockModels));
                 }
             });
         }));
@@ -255,10 +255,11 @@ public class ModelGenerator extends ModelProvider {
     }
 
     private MultiVariantGenerator createKitchenCounterDoor(Block block, Block counter, ResourceLocation top, ResourceLocation door, BlockModelGenerators blockModels) {
-        ResourceLocation closed = ModelTemplates.KITCHEN_COUNTER_DOOR.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.DOOR, door), blockModels.modelOutput);
-        ResourceLocation open = ModelTemplates.KITCHEN_COUNTER_DOOR_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.DOOR, door), blockModels.modelOutput);
-        ResourceLocation closed_mirrored = ModelTemplates.KITCHEN_COUNTER_DOOR_MIRRORED.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.DOOR, door), blockModels.modelOutput);
-        ResourceLocation open_mirrored = ModelTemplates.KITCHEN_COUNTER_DOOR_MIRRORED_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.DOOR, door), blockModels.modelOutput);
+        TextureMapping mapping = new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.DOOR, door);
+        ResourceLocation closed = ModelTemplates.KITCHEN_COUNTER_DOOR.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation open = ModelTemplates.KITCHEN_COUNTER_DOOR_OPEN.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation closed_mirrored = ModelTemplates.KITCHEN_COUNTER_DOOR_MIRRORED.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation open_mirrored = ModelTemplates.KITCHEN_COUNTER_DOOR_MIRRORED_OPEN.create(block, mapping, blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, closed)).with(
                 PropertyDispatch.properties(KitchenCounterContainerDoorBlock.HINGE, KitchenCounterContainerDoorBlock.OPEN)
                         .select(DoorHingeSide.LEFT, false, Variant.variant().with(VariantProperties.MODEL, closed_mirrored))
@@ -269,10 +270,11 @@ public class ModelGenerator extends ModelProvider {
     }
 
     private MultiVariantGenerator createKitchenCounterGlassDoor(Block block, Block counter, ResourceLocation top, ResourceLocation door, BlockModelGenerators blockModels) {
-        ResourceLocation closed = ModelTemplates.KITCHEN_COUNTER_GLASS_DOOR.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.DOOR, door).put(TextureSlots.GLASS, TextureMapping.getBlockTexture(Blocks.GLASS)), blockModels.modelOutput);
-        ResourceLocation open = ModelTemplates.KITCHEN_COUNTER_GLASS_DOOR_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.DOOR, door).put(TextureSlots.GLASS, TextureMapping.getBlockTexture(Blocks.GLASS)), blockModels.modelOutput);
-        ResourceLocation closed_mirrored = ModelTemplates.KITCHEN_COUNTER_GLASS_DOOR_MIRRORED.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.DOOR, door).put(TextureSlots.GLASS, TextureMapping.getBlockTexture(Blocks.GLASS)), blockModels.modelOutput);
-        ResourceLocation open_mirrored = ModelTemplates.KITCHEN_COUNTER_GLASS_DOOR_MIRRORED_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.DOOR, door).put(TextureSlots.GLASS, TextureMapping.getBlockTexture(Blocks.GLASS)), blockModels.modelOutput);
+        TextureMapping mapping = new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.DOOR, door).put(TextureSlots.GLASS, TextureMapping.getBlockTexture(Blocks.GLASS));
+        ResourceLocation closed = ModelTemplates.KITCHEN_COUNTER_GLASS_DOOR.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation open = ModelTemplates.KITCHEN_COUNTER_GLASS_DOOR_OPEN.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation closed_mirrored = ModelTemplates.KITCHEN_COUNTER_GLASS_DOOR_MIRRORED.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation open_mirrored = ModelTemplates.KITCHEN_COUNTER_GLASS_DOOR_MIRRORED_OPEN.create(block, mapping, blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, closed)).with(
                 PropertyDispatch.properties(KitchenCounterContainerDoorBlock.HINGE, KitchenCounterContainerDoorBlock.OPEN)
                         .select(DoorHingeSide.LEFT, false, Variant.variant().with(VariantProperties.MODEL, closed_mirrored))
@@ -283,8 +285,9 @@ public class ModelGenerator extends ModelProvider {
     }
 
     private MultiVariantGenerator createKitchenCounterSmallDrawer(Block block, Block counter, ResourceLocation top, ResourceLocation door, BlockModelGenerators blockModels) {
-        ResourceLocation closed = ModelTemplates.KITCHEN_COUNTER_SMALL_DRAWER.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.DOOR, door), blockModels.modelOutput);
-        ResourceLocation open = ModelTemplates.KITCHEN_COUNTER_SMALL_DRAWER_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.DOOR, door), blockModels.modelOutput);
+        TextureMapping mapping = new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.DOOR, door);
+        ResourceLocation closed = ModelTemplates.KITCHEN_COUNTER_SMALL_DRAWER.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation open = ModelTemplates.KITCHEN_COUNTER_SMALL_DRAWER_OPEN.create(block, mapping, blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, closed)).with(
                 PropertyDispatch.property(KitchenCounterContainerDrawerBlock.OPEN)
                         .select(false, Variant.variant().with(VariantProperties.MODEL, closed))
@@ -293,8 +296,9 @@ public class ModelGenerator extends ModelProvider {
     }
 
     private MultiVariantGenerator createKitchenCounterBigDrawer(Block block, Block counter, ResourceLocation top, ResourceLocation door, BlockModelGenerators blockModels) {
-        ResourceLocation closed = ModelTemplates.KITCHEN_COUNTER_BIG_DRAWER.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.DOOR, door), blockModels.modelOutput);
-        ResourceLocation open = ModelTemplates.KITCHEN_COUNTER_BIG_DRAWER_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.DOOR, door), blockModels.modelOutput);
+        TextureMapping mapping = new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.DOOR, door);
+        ResourceLocation closed = ModelTemplates.KITCHEN_COUNTER_BIG_DRAWER.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation open = ModelTemplates.KITCHEN_COUNTER_BIG_DRAWER_OPEN.create(block, mapping, blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, closed)).with(
                 PropertyDispatch.property(KitchenCounterContainerDrawerBlock.OPEN)
                         .select(false, Variant.variant().with(VariantProperties.MODEL, closed))
@@ -303,14 +307,16 @@ public class ModelGenerator extends ModelProvider {
     }
 
     private MultiVariantGenerator createKitchenCounterSink(Block block, Block counter, ResourceLocation top, BlockModelGenerators blockModels) {
-        ResourceLocation empty = ModelTemplates.KITCHEN_COUNTER_SINK_EMPTY.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.FAUCET, TextureMapping.getBlockTexture(Blocks.ANVIL)), blockModels.modelOutput);
-        ResourceLocation empty_on = ModelTemplates.KITCHEN_COUNTER_SINK_EMPTY_ON.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.FAUCET, TextureMapping.getBlockTexture(Blocks.ANVIL)).put(TextureSlots.STREAM, TextureMapping.getBlockTexture(Blocks.WATER).withSuffix("_flow")), blockModels.modelOutput);
-        ResourceLocation level_1 = ModelTemplates.KITCHEN_COUNTER_SINK_LEVEL_1.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.FAUCET, TextureMapping.getBlockTexture(Blocks.ANVIL)).put(TextureSlots.WATER, TextureMapping.getBlockTexture(Blocks.WATER).withSuffix("_still")), blockModels.modelOutput);
-        ResourceLocation level_1_on = ModelTemplates.KITCHEN_COUNTER_SINK_LEVEL_1_ON.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.FAUCET, TextureMapping.getBlockTexture(Blocks.ANVIL)).put(TextureSlots.WATER, TextureMapping.getBlockTexture(Blocks.WATER).withSuffix("_still")).put(TextureSlots.STREAM, TextureMapping.getBlockTexture(Blocks.WATER).withSuffix("_flow")), blockModels.modelOutput);
-        ResourceLocation level_2 = ModelTemplates.KITCHEN_COUNTER_SINK_LEVEL_2.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.FAUCET, TextureMapping.getBlockTexture(Blocks.ANVIL)).put(TextureSlots.WATER, TextureMapping.getBlockTexture(Blocks.WATER).withSuffix("_still")), blockModels.modelOutput);
-        ResourceLocation level_2_on = ModelTemplates.KITCHEN_COUNTER_SINK_LEVEL_2_ON.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.FAUCET, TextureMapping.getBlockTexture(Blocks.ANVIL)).put(TextureSlots.WATER, TextureMapping.getBlockTexture(Blocks.WATER).withSuffix("_still")).put(TextureSlots.STREAM, TextureMapping.getBlockTexture(Blocks.WATER).withSuffix("_flow")), blockModels.modelOutput);
-        ResourceLocation level_3 = ModelTemplates.KITCHEN_COUNTER_SINK_LEVEL_3.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.FAUCET, TextureMapping.getBlockTexture(Blocks.ANVIL)).put(TextureSlots.WATER, TextureMapping.getBlockTexture(Blocks.WATER).withSuffix("_still")), blockModels.modelOutput);
-        ResourceLocation level_3_on = ModelTemplates.KITCHEN_COUNTER_SINK_LEVEL_3_ON.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.FAUCET, TextureMapping.getBlockTexture(Blocks.ANVIL)).put(TextureSlots.WATER, TextureMapping.getBlockTexture(Blocks.WATER).withSuffix("_still")).put(TextureSlots.STREAM, TextureMapping.getBlockTexture(Blocks.WATER).withSuffix("_flow")), blockModels.modelOutput);
+        TextureMapping baseMapping = new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.FAUCET, TextureMapping.getBlockTexture(Blocks.ANVIL));
+        TextureMapping fillMapping = baseMapping.put(TextureSlots.WATER, TextureMapping.getBlockTexture(Blocks.WATER).withSuffix("_still"));
+        ResourceLocation empty = ModelTemplates.KITCHEN_COUNTER_SINK_EMPTY.create(block, baseMapping, blockModels.modelOutput);
+        ResourceLocation empty_on = ModelTemplates.KITCHEN_COUNTER_SINK_EMPTY_ON.create(block, baseMapping.put(TextureSlots.STREAM, TextureMapping.getBlockTexture(Blocks.WATER).withSuffix("_flow")), blockModels.modelOutput);
+        ResourceLocation level_1 = ModelTemplates.KITCHEN_COUNTER_SINK_LEVEL_1.create(block, fillMapping, blockModels.modelOutput);
+        ResourceLocation level_1_on = ModelTemplates.KITCHEN_COUNTER_SINK_LEVEL_1_ON.create(block, fillMapping.put(TextureSlots.STREAM, TextureMapping.getBlockTexture(Blocks.WATER).withSuffix("_flow")), blockModels.modelOutput);
+        ResourceLocation level_2 = ModelTemplates.KITCHEN_COUNTER_SINK_LEVEL_2.create(block, fillMapping, blockModels.modelOutput);
+        ResourceLocation level_2_on = ModelTemplates.KITCHEN_COUNTER_SINK_LEVEL_2_ON.create(block, fillMapping.put(TextureSlots.STREAM, TextureMapping.getBlockTexture(Blocks.WATER).withSuffix("_flow")), blockModels.modelOutput);
+        ResourceLocation level_3 = ModelTemplates.KITCHEN_COUNTER_SINK_LEVEL_3.create(block, fillMapping, blockModels.modelOutput);
+        ResourceLocation level_3_on = ModelTemplates.KITCHEN_COUNTER_SINK_LEVEL_3_ON.create(block, fillMapping.put(TextureSlots.STREAM, TextureMapping.getBlockTexture(Blocks.WATER).withSuffix("_flow")), blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, empty)).with(
                 PropertyDispatch.properties(KitchenCounterSinkBlock.ON, KitchenCounterSinkBlock.LEVEL)
                         .select(true, 0, Variant.variant().with(VariantProperties.MODEL, empty_on))
@@ -355,8 +361,9 @@ public class ModelGenerator extends ModelProvider {
     }
 
     private MultiVariantGenerator createKitchenCabinetDoor(Block block, Block cabinet, ResourceLocation door, ResourceLocation handle, BlockModelGenerators blockModels) {
-        ResourceLocation closed = ModelTemplates.KITCHEN_CABINET_DOOR.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.CABINET, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.DOOR, door).put(TextureSlots.HANDLE, handle), blockModels.modelOutput);
-        ResourceLocation open = ModelTemplates.KITCHEN_CABINET_DOOR_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.CABINET, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.DOOR, door).put(TextureSlots.HANDLE, handle), blockModels.modelOutput);
+        TextureMapping mapping = new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.CABINET, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.DOOR, door).put(TextureSlots.HANDLE, handle);
+        ResourceLocation closed = ModelTemplates.KITCHEN_CABINET_DOOR.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation open = ModelTemplates.KITCHEN_CABINET_DOOR_OPEN.create(block, mapping, blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, closed)).with(
                 PropertyDispatch.property(KitchenCabinetContainerDoorBlock.OPEN)
                         .select(false, Variant.variant().with(VariantProperties.MODEL, closed))
@@ -365,8 +372,9 @@ public class ModelGenerator extends ModelProvider {
     }
 
     private MultiVariantGenerator createKitchenCabinetGlassDoor(Block block, Block cabinet, ResourceLocation door, ResourceLocation handle, BlockModelGenerators blockModels) {
-        ResourceLocation closed = ModelTemplates.KITCHEN_CABINET_GLASS_DOOR.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.CABINET, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.DOOR, door).put(TextureSlots.HANDLE, handle).put(TextureSlots.GLASS, TextureMapping.getBlockTexture(Blocks.GLASS)), blockModels.modelOutput);
-        ResourceLocation open = ModelTemplates.KITCHEN_CABINET_GLASS_DOOR_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.CABINET, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.DOOR, door).put(TextureSlots.HANDLE, handle).put(TextureSlots.GLASS, TextureMapping.getBlockTexture(Blocks.GLASS)), blockModels.modelOutput);
+        TextureMapping mapping = new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.CABINET, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.DOOR, door).put(TextureSlots.HANDLE, handle).put(TextureSlots.GLASS, TextureMapping.getBlockTexture(Blocks.GLASS));
+        ResourceLocation closed = ModelTemplates.KITCHEN_CABINET_GLASS_DOOR.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation open = ModelTemplates.KITCHEN_CABINET_GLASS_DOOR_OPEN.create(block, mapping, blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, closed)).with(
                 PropertyDispatch.property(KitchenCabinetContainerDoorBlock.OPEN)
                         .select(false, Variant.variant().with(VariantProperties.MODEL, closed))
@@ -375,10 +383,11 @@ public class ModelGenerator extends ModelProvider {
     }
 
     private MultiVariantGenerator createKitchenCabinetSidewaysDoor(Block block, Block cabinet, ResourceLocation door, ResourceLocation handle, BlockModelGenerators blockModels) {
-        ResourceLocation closed = ModelTemplates.KITCHEN_CABINET_DOOR_SIDEWAYS.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.CABINET, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.DOOR, door).put(TextureSlots.HANDLE, handle), blockModels.modelOutput);
-        ResourceLocation open = ModelTemplates.KITCHEN_CABINET_DOOR_SIDEWAYS_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.CABINET, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.DOOR, door).put(TextureSlots.HANDLE, handle), blockModels.modelOutput);
-        ResourceLocation closed_mirrored = ModelTemplates.KITCHEN_CABINET_DOOR_SIDEWAYS_MIRRORED.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.CABINET, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.DOOR, door).put(TextureSlots.HANDLE, handle), blockModels.modelOutput);
-        ResourceLocation open_mirrored = ModelTemplates.KITCHEN_CABINET_DOOR_SIDEWAYS_MIRRORED_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.CABINET, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.DOOR, door).put(TextureSlots.HANDLE, handle), blockModels.modelOutput);
+        TextureMapping mapping = new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.CABINET, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.DOOR, door).put(TextureSlots.HANDLE, handle);
+        ResourceLocation closed = ModelTemplates.KITCHEN_CABINET_DOOR_SIDEWAYS.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation open = ModelTemplates.KITCHEN_CABINET_DOOR_SIDEWAYS_OPEN.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation closed_mirrored = ModelTemplates.KITCHEN_CABINET_DOOR_SIDEWAYS_MIRRORED.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation open_mirrored = ModelTemplates.KITCHEN_CABINET_DOOR_SIDEWAYS_MIRRORED_OPEN.create(block, mapping, blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, closed)).with(
                 PropertyDispatch.properties(KitchenCabinetContainerSidewaysDoorBlock.HINGE, KitchenCabinetContainerSidewaysDoorBlock.OPEN)
                         .select(DoorHingeSide.LEFT, false, Variant.variant().with(VariantProperties.MODEL, closed_mirrored))
@@ -389,10 +398,11 @@ public class ModelGenerator extends ModelProvider {
     }
 
     private MultiVariantGenerator createKitchenCabinetSidewaysGlassDoor(Block block, Block cabinet, ResourceLocation door, ResourceLocation handle, BlockModelGenerators blockModels) {
-        ResourceLocation closed = ModelTemplates.KITCHEN_CABINET_GLASS_DOOR_SIDEWAYS.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.CABINET, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.DOOR, door).put(TextureSlots.HANDLE, handle).put(TextureSlots.GLASS, TextureMapping.getBlockTexture(Blocks.GLASS)), blockModels.modelOutput);
-        ResourceLocation open = ModelTemplates.KITCHEN_CABINET_GLASS_DOOR_SIDEWAYS_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.CABINET, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.DOOR, door).put(TextureSlots.HANDLE, handle).put(TextureSlots.GLASS, TextureMapping.getBlockTexture(Blocks.GLASS)), blockModels.modelOutput);
-        ResourceLocation closed_mirrored = ModelTemplates.KITCHEN_CABINET_GLASS_DOOR_SIDEWAYS_MIRRORED.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.CABINET, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.DOOR, door).put(TextureSlots.HANDLE, handle).put(TextureSlots.GLASS, TextureMapping.getBlockTexture(Blocks.GLASS)), blockModels.modelOutput);
-        ResourceLocation open_mirrored = ModelTemplates.KITCHEN_CABINET_GLASS_DOOR_SIDEWAYS_MIRRORED_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.CABINET, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.DOOR, door).put(TextureSlots.HANDLE, handle).put(TextureSlots.GLASS, TextureMapping.getBlockTexture(Blocks.GLASS)), blockModels.modelOutput);
+        TextureMapping mapping = new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.CABINET, TextureMapping.getBlockTexture(cabinet)).put(TextureSlots.DOOR, door).put(TextureSlots.HANDLE, handle).put(TextureSlots.GLASS, TextureMapping.getBlockTexture(Blocks.GLASS));
+        ResourceLocation closed = ModelTemplates.KITCHEN_CABINET_GLASS_DOOR_SIDEWAYS.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation open = ModelTemplates.KITCHEN_CABINET_GLASS_DOOR_SIDEWAYS_OPEN.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation closed_mirrored = ModelTemplates.KITCHEN_CABINET_GLASS_DOOR_SIDEWAYS_MIRRORED.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation open_mirrored = ModelTemplates.KITCHEN_CABINET_GLASS_DOOR_SIDEWAYS_MIRRORED_OPEN.create(block, mapping, blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, closed)).with(
                 PropertyDispatch.properties(KitchenCabinetContainerSidewaysDoorBlock.HINGE, KitchenCabinetContainerSidewaysDoorBlock.OPEN)
                         .select(DoorHingeSide.LEFT, false, Variant.variant().with(VariantProperties.MODEL, closed_mirrored))
@@ -403,10 +413,11 @@ public class ModelGenerator extends ModelProvider {
     }
 
     private MultiVariantGenerator createKitchenCabinetShelf(Block block, Block planks, ResourceLocation chain, BlockModelGenerators blockModels) {
-        ResourceLocation single = ModelTemplates.KITCHEN_CABINET_SHELF_SINGLE.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)).put(TextureSlots.CHAIN, chain), blockModels.modelOutput);
-        ResourceLocation left = ModelTemplates.KITCHEN_CABINET_SHELF_LEFT.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)).put(TextureSlots.CHAIN, chain), blockModels.modelOutput);
-        ResourceLocation right = ModelTemplates.KITCHEN_CABINET_SHELF_RIGHT.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)).put(TextureSlots.CHAIN, chain), blockModels.modelOutput);
-        ResourceLocation middle = ModelTemplates.KITCHEN_CABINET_SHELF_MIDDLE.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)).put(TextureSlots.CHAIN, chain), blockModels.modelOutput);
+        TextureMapping mapping = new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)).put(TextureSlots.CHAIN, chain);
+        ResourceLocation single = ModelTemplates.KITCHEN_CABINET_SHELF_SINGLE.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation left = ModelTemplates.KITCHEN_CABINET_SHELF_LEFT.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation right = ModelTemplates.KITCHEN_CABINET_SHELF_RIGHT.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation middle = ModelTemplates.KITCHEN_CABINET_SHELF_MIDDLE.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)), blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, single)).with(
                 PropertyDispatch.property(KitchenCabinetShelfBlock.SHAPE)
                         .select(ShelfShape.SINGLE, Variant.variant().with(VariantProperties.MODEL, single))
@@ -417,14 +428,16 @@ public class ModelGenerator extends ModelProvider {
     }
 
     private MultiVariantGenerator createFridge(Block block, ResourceLocation fridge, ResourceLocation bars, ResourceLocation handle, BlockModelGenerators blockModels) {
-        ResourceLocation bottom = ModelTemplates.FRIDGE_BOTTOM.create(block, new TextureMapping().put(TextureSlot.PARTICLE, fridge).put(TextureSlots.FRIDGE, fridge).put(TextureSlots.BARS, bars).put(TextureSlots.HANDLE, handle), blockModels.modelOutput);
-        ResourceLocation bottom_open = ModelTemplates.FRIDGE_BOTTOM_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, fridge).put(TextureSlots.FRIDGE, fridge).put(TextureSlots.BARS, bars).put(TextureSlots.HANDLE, handle), blockModels.modelOutput);
-        ResourceLocation bottom_mirrored = ModelTemplates.FRIDGE_BOTTOM_MIRRORED.create(block, new TextureMapping().put(TextureSlot.PARTICLE, fridge).put(TextureSlots.FRIDGE, fridge).put(TextureSlots.BARS, bars).put(TextureSlots.HANDLE, handle), blockModels.modelOutput);
-        ResourceLocation bottom_mirrored_open = ModelTemplates.FRIDGE_BOTTOM_MIRRORED_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, fridge).put(TextureSlots.FRIDGE, fridge).put(TextureSlots.BARS, bars).put(TextureSlots.HANDLE, handle), blockModels.modelOutput);
-        ResourceLocation top = ModelTemplates.FRIDGE_TOP.create(block, new TextureMapping().put(TextureSlot.PARTICLE, fridge).put(TextureSlots.FRIDGE, fridge).put(TextureSlots.HANDLE, handle), blockModels.modelOutput);
-        ResourceLocation top_open = ModelTemplates.FRIDGE_TOP_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, fridge).put(TextureSlots.FRIDGE, fridge).put(TextureSlots.HANDLE, handle), blockModels.modelOutput);
-        ResourceLocation top_mirrored = ModelTemplates.FRIDGE_TOP_MIRRORED.create(block, new TextureMapping().put(TextureSlot.PARTICLE, fridge).put(TextureSlots.FRIDGE, fridge).put(TextureSlots.HANDLE, handle), blockModels.modelOutput);
-        ResourceLocation top_mirrored_open = ModelTemplates.FRIDGE_TOP_MIRRORED_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, fridge).put(TextureSlots.FRIDGE, fridge).put(TextureSlots.HANDLE, handle), blockModels.modelOutput);
+        TextureMapping mapping_bottom = new TextureMapping().put(TextureSlot.PARTICLE, fridge).put(TextureSlots.FRIDGE, fridge).put(TextureSlots.BARS, bars).put(TextureSlots.HANDLE, handle);
+        TextureMapping mapping_top = new TextureMapping().put(TextureSlot.PARTICLE, fridge).put(TextureSlots.FRIDGE, fridge).put(TextureSlots.HANDLE, handle);
+        ResourceLocation bottom = ModelTemplates.FRIDGE_BOTTOM.create(block, mapping_bottom, blockModels.modelOutput);
+        ResourceLocation bottom_open = ModelTemplates.FRIDGE_BOTTOM_OPEN.create(block, mapping_bottom, blockModels.modelOutput);
+        ResourceLocation bottom_mirrored = ModelTemplates.FRIDGE_BOTTOM_MIRRORED.create(block, mapping_bottom, blockModels.modelOutput);
+        ResourceLocation bottom_mirrored_open = ModelTemplates.FRIDGE_BOTTOM_MIRRORED_OPEN.create(block, mapping_bottom, blockModels.modelOutput);
+        ResourceLocation top = ModelTemplates.FRIDGE_TOP.create(block, mapping_top, blockModels.modelOutput);
+        ResourceLocation top_open = ModelTemplates.FRIDGE_TOP_OPEN.create(block, mapping_top, blockModels.modelOutput);
+        ResourceLocation top_mirrored = ModelTemplates.FRIDGE_TOP_MIRRORED.create(block, mapping_top, blockModels.modelOutput);
+        ResourceLocation top_mirrored_open = ModelTemplates.FRIDGE_TOP_MIRRORED_OPEN.create(block, mapping_top, blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, bottom)).with(
                 PropertyDispatch.properties(KitchenFridgeBlock.HALF, KitchenFridgeBlock.HINGE, KitchenFridgeBlock.OPEN)
                         .select(DoubleBlockHalf.UPPER, DoorHingeSide.LEFT, false, Variant.variant().with(VariantProperties.MODEL, top_mirrored))
@@ -449,16 +462,17 @@ public class ModelGenerator extends ModelProvider {
     }
 
     private MultiVariantGenerator createTableBlock(Block block, Block planks, BlockModelGenerators blockModels) {
-        ResourceLocation single = ModelTemplates.TABLE_SINGLE.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)), blockModels.modelOutput);
-        ResourceLocation middle = ModelTemplates.TABLE_MIDDLE.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)), blockModels.modelOutput);
-        ResourceLocation north = ModelTemplates.TABLE_NORTH.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)), blockModels.modelOutput);
-        ResourceLocation east = ModelTemplates.TABLE_EAST.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)), blockModels.modelOutput);
-        ResourceLocation south = ModelTemplates.TABLE_SOUTH.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)), blockModels.modelOutput);
-        ResourceLocation west = ModelTemplates.TABLE_WEST.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)), blockModels.modelOutput);
-        ResourceLocation north_east = ModelTemplates.TABLE_NORTH_EAST.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)), blockModels.modelOutput);
-        ResourceLocation north_west = ModelTemplates.TABLE_NORTH_WEST.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)), blockModels.modelOutput);
-        ResourceLocation south_east = ModelTemplates.TABLE_SOUTH_EAST.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)), blockModels.modelOutput);
-        ResourceLocation south_west = ModelTemplates.TABLE_SOUTH_WEST.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)), blockModels.modelOutput);
+        TextureMapping mapping = new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks));
+        ResourceLocation single = ModelTemplates.TABLE_SINGLE.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation middle = ModelTemplates.TABLE_MIDDLE.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation north = ModelTemplates.TABLE_NORTH.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation east = ModelTemplates.TABLE_EAST.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation south = ModelTemplates.TABLE_SOUTH.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation west = ModelTemplates.TABLE_WEST.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation north_east = ModelTemplates.TABLE_NORTH_EAST.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation north_west = ModelTemplates.TABLE_NORTH_WEST.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation south_east = ModelTemplates.TABLE_SOUTH_EAST.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation south_west = ModelTemplates.TABLE_SOUTH_WEST.create(block, mapping, blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, single)).with(
                 PropertyDispatch.properties(TableBlock.NORTH, TableBlock.EAST, TableBlock.SOUTH, TableBlock.WEST)
                         .select(false, false, false, false, Variant.variant().with(VariantProperties.MODEL, single))
@@ -481,20 +495,21 @@ public class ModelGenerator extends ModelProvider {
     }
 
     private MultiVariantGenerator createCurtainBlock(Block block, ResourceLocation wool, ResourceLocation curtain_rod, BlockModelGenerators blockModels) {
-        ResourceLocation small_closed = ModelTemplates.CURTAIN_SMALL_CLOSED.create(block, new TextureMapping().put(TextureSlot.PARTICLE, wool).put(TextureSlots.WOOL, wool).put(TextureSlots.CURTAIN_ROD, curtain_rod), blockModels.modelOutput);
-        ResourceLocation small_single_open = ModelTemplates.CURTAIN_SMALL_SINGLE_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, wool).put(TextureSlots.WOOL, wool).put(TextureSlots.CURTAIN_ROD, curtain_rod), blockModels.modelOutput);
-        ResourceLocation small_left_open = ModelTemplates.CURTAIN_SMALL_LEFT_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, wool).put(TextureSlots.WOOL, wool).put(TextureSlots.CURTAIN_ROD, curtain_rod), blockModels.modelOutput);
-        ResourceLocation small_right_open = ModelTemplates.CURTAIN_SMALL_RIGHT_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, wool).put(TextureSlots.WOOL, wool).put(TextureSlots.CURTAIN_ROD, curtain_rod), blockModels.modelOutput);
-        ResourceLocation big_top_middle_open = ModelTemplates.CURTAIN_BIG_TOP_MIDDLE_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, wool).put(TextureSlots.WOOL, wool).put(TextureSlots.CURTAIN_ROD, curtain_rod), blockModels.modelOutput);
-        ResourceLocation big_top_closed = ModelTemplates.CURTAIN_BIG_TOP_CLOSED.create(block, new TextureMapping().put(TextureSlot.PARTICLE, wool).put(TextureSlots.WOOL, wool).put(TextureSlots.CURTAIN_ROD, curtain_rod), blockModels.modelOutput);
-        ResourceLocation big_bottom_closed = ModelTemplates.CURTAIN_BIG_BOTTOM_CLOSED.create(block, new TextureMapping().put(TextureSlot.PARTICLE, wool).put(TextureSlots.WOOL, wool).put(TextureSlots.CURTAIN_ROD, curtain_rod), blockModels.modelOutput);
-        ResourceLocation big_top_single_open = ModelTemplates.CURTAIN_BIG_TOP_SINGLE_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, wool).put(TextureSlots.WOOL, wool).put(TextureSlots.CURTAIN_ROD, curtain_rod), blockModels.modelOutput);
-        ResourceLocation big_top_right_open = ModelTemplates.CURTAIN_BIG_TOP_RIGHT_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, wool).put(TextureSlots.WOOL, wool).put(TextureSlots.CURTAIN_ROD, curtain_rod), blockModels.modelOutput);
-        ResourceLocation big_top_left_open = ModelTemplates.CURTAIN_BIG_TOP_LEFT_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, wool).put(TextureSlots.WOOL, wool).put(TextureSlots.CURTAIN_ROD, curtain_rod), blockModels.modelOutput);
-        ResourceLocation big_bottom_single_open = ModelTemplates.CURTAIN_BIG_BOTTOM_SINGLE_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, wool).put(TextureSlots.WOOL, wool).put(TextureSlots.CURTAIN_ROD, curtain_rod), blockModels.modelOutput);
-        ResourceLocation big_bottom_right_open = ModelTemplates.CURTAIN_BIG_BOTTOM_RIGHT_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, wool).put(TextureSlots.WOOL, wool).put(TextureSlots.CURTAIN_ROD, curtain_rod), blockModels.modelOutput);
-        ResourceLocation big_bottom_left_open = ModelTemplates.CURTAIN_BIG_BOTTOM_LEFT_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, wool).put(TextureSlots.WOOL, wool).put(TextureSlots.CURTAIN_ROD, curtain_rod), blockModels.modelOutput);
-        ResourceLocation big_bottom_middle_open = ModelTemplates.CURTAIN_BIG_BOTTOM_MIDDLE_OPEN.create(block, new TextureMapping().put(TextureSlot.PARTICLE, wool).put(TextureSlots.WOOL, wool).put(TextureSlots.CURTAIN_ROD, curtain_rod), blockModels.modelOutput);
+        TextureMapping mapping = new TextureMapping().put(TextureSlot.PARTICLE, wool).put(TextureSlots.WOOL, wool).put(TextureSlots.CURTAIN_ROD, curtain_rod);
+        ResourceLocation small_closed = ModelTemplates.CURTAIN_SMALL_CLOSED.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation small_single_open = ModelTemplates.CURTAIN_SMALL_SINGLE_OPEN.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation small_left_open = ModelTemplates.CURTAIN_SMALL_LEFT_OPEN.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation small_right_open = ModelTemplates.CURTAIN_SMALL_RIGHT_OPEN.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation big_top_middle_open = ModelTemplates.CURTAIN_BIG_TOP_MIDDLE_OPEN.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation big_top_closed = ModelTemplates.CURTAIN_BIG_TOP_CLOSED.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation big_bottom_closed = ModelTemplates.CURTAIN_BIG_BOTTOM_CLOSED.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation big_top_single_open = ModelTemplates.CURTAIN_BIG_TOP_SINGLE_OPEN.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation big_top_right_open = ModelTemplates.CURTAIN_BIG_TOP_RIGHT_OPEN.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation big_top_left_open = ModelTemplates.CURTAIN_BIG_TOP_LEFT_OPEN.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation big_bottom_single_open = ModelTemplates.CURTAIN_BIG_BOTTOM_SINGLE_OPEN.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation big_bottom_right_open = ModelTemplates.CURTAIN_BIG_BOTTOM_RIGHT_OPEN.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation big_bottom_left_open = ModelTemplates.CURTAIN_BIG_BOTTOM_LEFT_OPEN.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation big_bottom_middle_open = ModelTemplates.CURTAIN_BIG_BOTTOM_MIDDLE_OPEN.create(block, mapping, blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, small_closed)).with(
                 PropertyDispatch.properties(CurtainBlock.CURTAIN_SHAPE, CurtainBlock.LEFT, CurtainBlock.RIGHT, CurtainBlock.OPEN)
                         .select(CurtainShape.SINGLE, false, false, false, Variant.variant().with(VariantProperties.MODEL, small_closed))
@@ -526,6 +541,13 @@ public class ModelGenerator extends ModelProvider {
         ).with(BlockModelGenerators.createHorizontalFacingDispatch());
     }
 
+    private MultiVariantGenerator createTableLampBlock(Block block, Block planks, ResourceLocation log, ResourceLocation log_top, ResourceLocation stripped_log, ResourceLocation lamp, ResourceLocation lamp_on, ResourceLocation wool, BlockModelGenerators blockModels) {
+        ResourceLocation model = ModelTemplates.TABLE_LAMP.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)).put(TextureSlots.LOG, log).put(TextureSlots.LOG_TOP, log_top).put(TextureSlots.STRIPPED_LOG, stripped_log).put(TextureSlots.LAMP, lamp).put(TextureSlots.WOOL, wool), blockModels.modelOutput);
+        ResourceLocation model_on = ModelTemplates.TABLE_LAMP_ON.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)).put(TextureSlots.LOG, log).put(TextureSlots.LOG_TOP, log_top).put(TextureSlots.STRIPPED_LOG, stripped_log).put(TextureSlots.LAMP, lamp_on).put(TextureSlots.WOOL, wool), blockModels.modelOutput);
+        return MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, model)).with(
+                PropertyDispatch.property(LampBlock.ON).select(true, Variant.variant().with(VariantProperties.MODEL, model_on))
+        );
+    }
     private void registerBasicBlockModel(ItemModelOutput output, Block block, String suffix) {
         output.accept(block.asItem(), ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(block).withSuffix(suffix)));
     }
@@ -554,12 +576,16 @@ public class ModelGenerator extends ModelProvider {
         public static final TextureSlot PLANKS = TextureSlot.create("planks");
         public static final TextureSlot CHAIR = TextureSlot.create("chair");
         public static final TextureSlot LOG = TextureSlot.create("log");
+        public static final TextureSlot LOG_TOP = TextureSlot.create("log_top");
+        public static final TextureSlot STRIPPED_LOG = TextureSlot.create("stripped_log");
+        public static final TextureSlot STRIPPED_LOG_TOP = TextureSlot.create("stripped_log_top");
         public static final TextureSlot COUNTER = TextureSlot.create("counter");
         public static final TextureSlot CABINET = TextureSlot.create("cabinet");
         public static final TextureSlot FRIDGE = TextureSlot.create("fridge");
         public static final TextureSlot TOP = TextureSlot.create("top");
         public static final TextureSlot WOOL = TextureSlot.create("wool");
         public static final TextureSlot CURTAIN_ROD = TextureSlot.create("curtain_rod");
+        public static final TextureSlot LAMP = TextureSlot.create("lamp");
         public static final TextureSlot DECORATION = TextureSlot.create("decoration");
         public static final TextureSlot DOOR = TextureSlot.create("door");
         public static final TextureSlot BARS = TextureSlot.create("bars");
@@ -576,93 +602,100 @@ public class ModelGenerator extends ModelProvider {
     }
 
     public static class ModelTemplates {
-        public static final ModelTemplate CRATE = new ModelTemplate(Optional.of(FabulousFurniture.prefix("crate_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.PLANKS, TextureSlots.LOG);
-        public static final ModelTemplate KITCHEN_COUNTER = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP);
-        public static final ModelTemplate KITCHEN_COUNTER_INNER_CORNER = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_inner_corner_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP);
-        public static final ModelTemplate KITCHEN_COUNTER_OUTER_CORNER = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_outer_corner_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP);
-        public static final ModelTemplate KITCHEN_COUNTER_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_open_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP);
-        public static final ModelTemplate KITCHEN_COUNTER_DOOR = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_door_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR);
-        public static final ModelTemplate KITCHEN_COUNTER_DOOR_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_door_open_template").withPrefix("block/template/")), Optional.of("_open"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR);
-        public static final ModelTemplate KITCHEN_COUNTER_DOOR_MIRRORED = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_door_mirrored_template").withPrefix("block/template/")), Optional.of("_mirrored"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR);
-        public static final ModelTemplate KITCHEN_COUNTER_DOOR_MIRRORED_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_door_mirrored_open_template").withPrefix("block/template/")), Optional.of("_mirrored_open"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR);
-        public static final ModelTemplate KITCHEN_COUNTER_GLASS_DOOR = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_glass_door_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR, TextureSlots.GLASS);
-        public static final ModelTemplate KITCHEN_COUNTER_GLASS_DOOR_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_glass_door_open_template").withPrefix("block/template/")), Optional.of("_open"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR, TextureSlots.GLASS);
-        public static final ModelTemplate KITCHEN_COUNTER_GLASS_DOOR_MIRRORED = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_glass_door_mirrored_template").withPrefix("block/template/")), Optional.of("_mirrored"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR, TextureSlots.GLASS);
-        public static final ModelTemplate KITCHEN_COUNTER_GLASS_DOOR_MIRRORED_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_glass_door_mirrored_open_template").withPrefix("block/template/")), Optional.of("_mirrored_open"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR, TextureSlots.GLASS);
-        public static final ModelTemplate KITCHEN_COUNTER_SMALL_DRAWER = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_small_drawer_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR);
-        public static final ModelTemplate KITCHEN_COUNTER_SMALL_DRAWER_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_small_drawer_open_template").withPrefix("block/template/")), Optional.of("_open"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR);
-        public static final ModelTemplate KITCHEN_COUNTER_BIG_DRAWER = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_big_drawer_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR);
-        public static final ModelTemplate KITCHEN_COUNTER_BIG_DRAWER_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_big_drawer_open_template").withPrefix("block/template/")), Optional.of("_open"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR);
-        public static final ModelTemplate KITCHEN_COUNTER_SINK_EMPTY = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_sink_empty_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.FAUCET);
-        public static final ModelTemplate KITCHEN_COUNTER_SINK_EMPTY_ON = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_sink_empty_on_template").withPrefix("block/template/")), Optional.of("_on"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.FAUCET, TextureSlots.STREAM);
-        public static final ModelTemplate KITCHEN_COUNTER_SINK_LEVEL_1 = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_sink_level_1_template").withPrefix("block/template/")), Optional.of("_level_1"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.FAUCET, TextureSlots.WATER);
-        public static final ModelTemplate KITCHEN_COUNTER_SINK_LEVEL_1_ON = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_sink_level_1_on_template").withPrefix("block/template/")), Optional.of("_level_1_on"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.FAUCET, TextureSlots.WATER, TextureSlots.STREAM);
-        public static final ModelTemplate KITCHEN_COUNTER_SINK_LEVEL_2 = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_sink_level_2_template").withPrefix("block/template/")), Optional.of("_level_2"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.FAUCET, TextureSlots.WATER);
-        public static final ModelTemplate KITCHEN_COUNTER_SINK_LEVEL_2_ON = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_sink_level_2_on_template").withPrefix("block/template/")), Optional.of("_level_2_on"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.FAUCET, TextureSlots.WATER, TextureSlots.STREAM);
-        public static final ModelTemplate KITCHEN_COUNTER_SINK_LEVEL_3 = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_sink_level_3_template").withPrefix("block/template/")), Optional.of("_level_3"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.FAUCET, TextureSlots.WATER);
-        public static final ModelTemplate KITCHEN_COUNTER_SINK_LEVEL_3_ON = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_sink_level_3_on_template").withPrefix("block/template/")), Optional.of("_level_3_on"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.FAUCET, TextureSlots.WATER, TextureSlots.STREAM);
-        public static final ModelTemplate KITCHEN_COUNTER_SMOKER = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_smoker_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.FURNACE);
-        public static final ModelTemplate KITCHEN_COUNTER_SMOKER_LIT = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_counter_smoker_lit_template").withPrefix("block/template/")), Optional.of("_lit"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.FURNACE);
+        public static final ModelTemplate CRATE = getTemplate("crate_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.PLANKS, TextureSlots.LOG);
+        public static final ModelTemplate KITCHEN_COUNTER = getTemplate("kitchen_counter_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP);
+        public static final ModelTemplate KITCHEN_COUNTER_INNER_CORNER = getTemplate("kitchen_counter_inner_corner_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP);
+        public static final ModelTemplate KITCHEN_COUNTER_OUTER_CORNER = getTemplate("kitchen_counter_outer_corner_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP);
+        public static final ModelTemplate KITCHEN_COUNTER_OPEN = getTemplate("kitchen_counter_open_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP);
+        public static final ModelTemplate KITCHEN_COUNTER_DOOR = getTemplate("kitchen_counter_door_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR);
+        public static final ModelTemplate KITCHEN_COUNTER_DOOR_OPEN = getTemplate("kitchen_counter_door_open_template", Optional.of("_open"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR);
+        public static final ModelTemplate KITCHEN_COUNTER_DOOR_MIRRORED = getTemplate("kitchen_counter_door_mirrored_template", Optional.of("_mirrored"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR);
+        public static final ModelTemplate KITCHEN_COUNTER_DOOR_MIRRORED_OPEN = getTemplate("kitchen_counter_door_mirrored_open_template", Optional.of("_mirrored_open"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR);
+        public static final ModelTemplate KITCHEN_COUNTER_GLASS_DOOR = getTemplate("kitchen_counter_glass_door_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR, TextureSlots.GLASS);
+        public static final ModelTemplate KITCHEN_COUNTER_GLASS_DOOR_OPEN = getTemplate("kitchen_counter_glass_door_open_template", Optional.of("_open"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR, TextureSlots.GLASS);
+        public static final ModelTemplate KITCHEN_COUNTER_GLASS_DOOR_MIRRORED = getTemplate("kitchen_counter_glass_door_mirrored_template", Optional.of("_mirrored"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR, TextureSlots.GLASS);
+        public static final ModelTemplate KITCHEN_COUNTER_GLASS_DOOR_MIRRORED_OPEN = getTemplate("kitchen_counter_glass_door_mirrored_open_template", Optional.of("_mirrored_open"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR, TextureSlots.GLASS);
+        public static final ModelTemplate KITCHEN_COUNTER_SMALL_DRAWER = getTemplate("kitchen_counter_small_drawer_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR);
+        public static final ModelTemplate KITCHEN_COUNTER_SMALL_DRAWER_OPEN = getTemplate("kitchen_counter_small_drawer_open_template", Optional.of("_open"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR);
+        public static final ModelTemplate KITCHEN_COUNTER_BIG_DRAWER = getTemplate("kitchen_counter_big_drawer_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR);
+        public static final ModelTemplate KITCHEN_COUNTER_BIG_DRAWER_OPEN = getTemplate("kitchen_counter_big_drawer_open_template", Optional.of("_open"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR);
+        public static final ModelTemplate KITCHEN_COUNTER_SINK_EMPTY = getTemplate("kitchen_counter_sink_empty_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.FAUCET);
+        public static final ModelTemplate KITCHEN_COUNTER_SINK_EMPTY_ON = getTemplate("kitchen_counter_sink_empty_on_template", Optional.of("_on"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.FAUCET, TextureSlots.STREAM);
+        public static final ModelTemplate KITCHEN_COUNTER_SINK_LEVEL_1 = getTemplate("kitchen_counter_sink_level_1_template", Optional.of("_level_1"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.FAUCET, TextureSlots.WATER);
+        public static final ModelTemplate KITCHEN_COUNTER_SINK_LEVEL_1_ON = getTemplate("kitchen_counter_sink_level_1_on_template", Optional.of("_level_1_on"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.FAUCET, TextureSlots.WATER, TextureSlots.STREAM);
+        public static final ModelTemplate KITCHEN_COUNTER_SINK_LEVEL_2 = getTemplate("kitchen_counter_sink_level_2_template", Optional.of("_level_2"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.FAUCET, TextureSlots.WATER);
+        public static final ModelTemplate KITCHEN_COUNTER_SINK_LEVEL_2_ON = getTemplate("kitchen_counter_sink_level_2_on_template", Optional.of("_level_2_on"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.FAUCET, TextureSlots.WATER, TextureSlots.STREAM);
+        public static final ModelTemplate KITCHEN_COUNTER_SINK_LEVEL_3 = getTemplate("kitchen_counter_sink_level_3_template", Optional.of("_level_3"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.FAUCET, TextureSlots.WATER);
+        public static final ModelTemplate KITCHEN_COUNTER_SINK_LEVEL_3_ON = getTemplate("kitchen_counter_sink_level_3_on_template", Optional.of("_level_3_on"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.FAUCET, TextureSlots.WATER, TextureSlots.STREAM);
+        public static final ModelTemplate KITCHEN_COUNTER_SMOKER = getTemplate("kitchen_counter_smoker_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.FURNACE);
+        public static final ModelTemplate KITCHEN_COUNTER_SMOKER_LIT = getTemplate("kitchen_counter_smoker_lit_template", Optional.of("_lit"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.FURNACE);
 
-        public static final ModelTemplate KITCHEN_CABINET = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_cabinet_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.CABINET);
-        public static final ModelTemplate KITCHEN_CABINET_INNER_CORNER = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_cabinet_inner_corner_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.CABINET);
-        public static final ModelTemplate KITCHEN_CABINET_OUTER_CORNER = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_cabinet_outer_corner_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.CABINET);
-        public static final ModelTemplate KITCHEN_CABINET_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_cabinet_open_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.CABINET);
-        public static final ModelTemplate KITCHEN_CABINET_DOOR = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_cabinet_door_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE);
-        public static final ModelTemplate KITCHEN_CABINET_DOOR_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_cabinet_door_open_template").withPrefix("block/template/")), Optional.of("_open"), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE);
-        public static final ModelTemplate KITCHEN_CABINET_GLASS_DOOR = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_cabinet_glass_door_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE, TextureSlots.GLASS);
-        public static final ModelTemplate KITCHEN_CABINET_GLASS_DOOR_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_cabinet_glass_door_open_template").withPrefix("block/template/")), Optional.of("_open"), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE, TextureSlots.GLASS);
-        public static final ModelTemplate KITCHEN_CABINET_DOOR_SIDEWAYS = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_cabinet_sideways_door_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE);
-        public static final ModelTemplate KITCHEN_CABINET_DOOR_SIDEWAYS_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_cabinet_sideways_door_open_template").withPrefix("block/template/")), Optional.of("_open"), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE);
-        public static final ModelTemplate KITCHEN_CABINET_DOOR_SIDEWAYS_MIRRORED = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_cabinet_sideways_door_mirrored_template").withPrefix("block/template/")), Optional.of("_mirrored"), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE);
-        public static final ModelTemplate KITCHEN_CABINET_DOOR_SIDEWAYS_MIRRORED_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_cabinet_sideways_door_mirrored_open_template").withPrefix("block/template/")), Optional.of("_mirrored_open"), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE);
-        public static final ModelTemplate KITCHEN_CABINET_GLASS_DOOR_SIDEWAYS = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_cabinet_sideways_glass_door_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE, TextureSlots.GLASS);
-        public static final ModelTemplate KITCHEN_CABINET_GLASS_DOOR_SIDEWAYS_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_cabinet_sideways_glass_door_open_template").withPrefix("block/template/")), Optional.of("_open"), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE, TextureSlots.GLASS);
-        public static final ModelTemplate KITCHEN_CABINET_GLASS_DOOR_SIDEWAYS_MIRRORED = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_cabinet_sideways_glass_door_mirrored_template").withPrefix("block/template/")), Optional.of("_mirrored"), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE, TextureSlots.GLASS);
-        public static final ModelTemplate KITCHEN_CABINET_GLASS_DOOR_SIDEWAYS_MIRRORED_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_cabinet_sideways_glass_door_mirrored_open_template").withPrefix("block/template/")), Optional.of("_mirrored_open"), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE, TextureSlots.GLASS);
-        public static final ModelTemplate KITCHEN_CABINET_SHELF_SINGLE = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_cabinet_shelf_single_template").withPrefix("block/template/")), Optional.of("_single"), TextureSlot.PARTICLE, TextureSlots.PLANKS, TextureSlots.CHAIN);
-        public static final ModelTemplate KITCHEN_CABINET_SHELF_RIGHT = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_cabinet_shelf_right_template").withPrefix("block/template/")), Optional.of("_right"), TextureSlot.PARTICLE, TextureSlots.PLANKS, TextureSlots.CHAIN);
-        public static final ModelTemplate KITCHEN_CABINET_SHELF_LEFT = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_cabinet_shelf_left_template").withPrefix("block/template/")), Optional.of("_left"), TextureSlot.PARTICLE, TextureSlots.PLANKS, TextureSlots.CHAIN);
-        public static final ModelTemplate KITCHEN_CABINET_SHELF_MIDDLE = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_cabinet_shelf_middle_template").withPrefix("block/template/")), Optional.of("_middle"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
+        public static final ModelTemplate KITCHEN_CABINET = getTemplate("kitchen_cabinet_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.CABINET);
+        public static final ModelTemplate KITCHEN_CABINET_INNER_CORNER = getTemplate("kitchen_cabinet_inner_corner_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.CABINET);
+        public static final ModelTemplate KITCHEN_CABINET_OUTER_CORNER = getTemplate("kitchen_cabinet_outer_corner_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.CABINET);
+        public static final ModelTemplate KITCHEN_CABINET_OPEN = getTemplate("kitchen_cabinet_open_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.CABINET);
+        public static final ModelTemplate KITCHEN_CABINET_DOOR = getTemplate("kitchen_cabinet_door_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE);
+        public static final ModelTemplate KITCHEN_CABINET_DOOR_OPEN = getTemplate("kitchen_cabinet_door_open_template", Optional.of("_open"), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE);
+        public static final ModelTemplate KITCHEN_CABINET_GLASS_DOOR = getTemplate("kitchen_cabinet_glass_door_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE, TextureSlots.GLASS);
+        public static final ModelTemplate KITCHEN_CABINET_GLASS_DOOR_OPEN = getTemplate("kitchen_cabinet_glass_door_open_template", Optional.of("_open"), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE, TextureSlots.GLASS);
+        public static final ModelTemplate KITCHEN_CABINET_DOOR_SIDEWAYS = getTemplate("kitchen_cabinet_sideways_door_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE);
+        public static final ModelTemplate KITCHEN_CABINET_DOOR_SIDEWAYS_OPEN = getTemplate("kitchen_cabinet_sideways_door_open_template", Optional.of("_open"), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE);
+        public static final ModelTemplate KITCHEN_CABINET_DOOR_SIDEWAYS_MIRRORED = getTemplate("kitchen_cabinet_sideways_door_mirrored_template", Optional.of("_mirrored"), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE);
+        public static final ModelTemplate KITCHEN_CABINET_DOOR_SIDEWAYS_MIRRORED_OPEN = getTemplate("kitchen_cabinet_sideways_door_mirrored_open_template", Optional.of("_mirrored_open"), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE);
+        public static final ModelTemplate KITCHEN_CABINET_GLASS_DOOR_SIDEWAYS = getTemplate("kitchen_cabinet_sideways_glass_door_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE, TextureSlots.GLASS);
+        public static final ModelTemplate KITCHEN_CABINET_GLASS_DOOR_SIDEWAYS_OPEN = getTemplate("kitchen_cabinet_sideways_glass_door_open_template", Optional.of("_open"), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE, TextureSlots.GLASS);
+        public static final ModelTemplate KITCHEN_CABINET_GLASS_DOOR_SIDEWAYS_MIRRORED = getTemplate("kitchen_cabinet_sideways_glass_door_mirrored_template", Optional.of("_mirrored"), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE, TextureSlots.GLASS);
+        public static final ModelTemplate KITCHEN_CABINET_GLASS_DOOR_SIDEWAYS_MIRRORED_OPEN = getTemplate("kitchen_cabinet_sideways_glass_door_mirrored_open_template", Optional.of("_mirrored_open"), TextureSlot.PARTICLE, TextureSlots.CABINET, TextureSlots.DOOR, TextureSlots.HANDLE, TextureSlots.GLASS);
+        public static final ModelTemplate KITCHEN_CABINET_SHELF_SINGLE = getTemplate("kitchen_cabinet_shelf_single_template", Optional.of("_single"), TextureSlot.PARTICLE, TextureSlots.PLANKS, TextureSlots.CHAIN);
+        public static final ModelTemplate KITCHEN_CABINET_SHELF_RIGHT = getTemplate("kitchen_cabinet_shelf_right_template", Optional.of("_right"), TextureSlot.PARTICLE, TextureSlots.PLANKS, TextureSlots.CHAIN);
+        public static final ModelTemplate KITCHEN_CABINET_SHELF_LEFT = getTemplate("kitchen_cabinet_shelf_left_template", Optional.of("_left"), TextureSlot.PARTICLE, TextureSlots.PLANKS, TextureSlots.CHAIN);
+        public static final ModelTemplate KITCHEN_CABINET_SHELF_MIDDLE = getTemplate("kitchen_cabinet_shelf_middle_template", Optional.of("_middle"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
 
-        public static final ModelTemplate FRIDGE_BOTTOM = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_fridge_bottom_template").withPrefix("block/template/")), Optional.of("_bottom"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.BARS, TextureSlots.HANDLE);
-        public static final ModelTemplate FRIDGE_BOTTOM_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_fridge_bottom_open_template").withPrefix("block/template/")), Optional.of("_bottom_open"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.BARS, TextureSlots.HANDLE);
-        public static final ModelTemplate FRIDGE_BOTTOM_MIRRORED = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_fridge_bottom_mirrored_template").withPrefix("block/template/")), Optional.of("_bottom_mirrored"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.BARS, TextureSlots.HANDLE);
-        public static final ModelTemplate FRIDGE_BOTTOM_MIRRORED_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_fridge_bottom_mirrored_open_template").withPrefix("block/template/")), Optional.of("_bottom_mirrored_open"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.BARS, TextureSlots.HANDLE);
-        public static final ModelTemplate FRIDGE_TOP = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_fridge_top_template").withPrefix("block/template/")), Optional.of("_top"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
-        public static final ModelTemplate FRIDGE_TOP_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_fridge_top_open_template").withPrefix("block/template/")), Optional.of("_top_open"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
-        public static final ModelTemplate FRIDGE_TOP_MIRRORED = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_fridge_top_mirrored_template").withPrefix("block/template/")), Optional.of("_top_mirrored"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
-        public static final ModelTemplate FRIDGE_TOP_MIRRORED_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_fridge_top_mirrored_open_template").withPrefix("block/template/")), Optional.of("_top_mirrored_open"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
+        public static final ModelTemplate FRIDGE_BOTTOM = getTemplate("kitchen_fridge_bottom_template", Optional.of("_bottom"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.BARS, TextureSlots.HANDLE);
+        public static final ModelTemplate FRIDGE_BOTTOM_OPEN = getTemplate("kitchen_fridge_bottom_open_template", Optional.of("_bottom_open"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.BARS, TextureSlots.HANDLE);
+        public static final ModelTemplate FRIDGE_BOTTOM_MIRRORED = getTemplate("kitchen_fridge_bottom_mirrored_template", Optional.of("_bottom_mirrored"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.BARS, TextureSlots.HANDLE);
+        public static final ModelTemplate FRIDGE_BOTTOM_MIRRORED_OPEN = getTemplate("kitchen_fridge_bottom_mirrored_open_template", Optional.of("_bottom_mirrored_open"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.BARS, TextureSlots.HANDLE);
+        public static final ModelTemplate FRIDGE_TOP = getTemplate("kitchen_fridge_top_template", Optional.of("_top"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
+        public static final ModelTemplate FRIDGE_TOP_OPEN = getTemplate("kitchen_fridge_top_open_template", Optional.of("_top_open"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
+        public static final ModelTemplate FRIDGE_TOP_MIRRORED = getTemplate("kitchen_fridge_top_mirrored_template", Optional.of("_top_mirrored"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
+        public static final ModelTemplate FRIDGE_TOP_MIRRORED_OPEN = getTemplate("kitchen_fridge_top_mirrored_open_template", Optional.of("_top_mirrored_open"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
 
-        public static final ModelTemplate KNIFE_BLOCK = new ModelTemplate(Optional.of(FabulousFurniture.prefix("knife_block_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.BLOCK, TextureSlots.STAND, TextureSlots.HANDLE, TextureSlots.KNIFE);
+        public static final ModelTemplate KNIFE_BLOCK = getTemplate("knife_block_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.BLOCK, TextureSlots.STAND, TextureSlots.HANDLE, TextureSlots.KNIFE);
 
-        public static final ModelTemplate CHAIR = new ModelTemplate(Optional.of(FabulousFurniture.prefix("wooden_chair_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.CHAIR, TextureSlots.DECORATION, TextureSlots.WOOL);
-        public static final ModelTemplate TABLE_SINGLE = new ModelTemplate(Optional.of(FabulousFurniture.prefix("wooden_table_single_template").withPrefix("block/template/")), Optional.of("_single"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
-        public static final ModelTemplate TABLE_MIDDLE = new ModelTemplate(Optional.of(FabulousFurniture.prefix("wooden_table_middle_template").withPrefix("block/template/")), Optional.of("_middle"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
-        public static final ModelTemplate TABLE_NORTH = new ModelTemplate(Optional.of(FabulousFurniture.prefix("wooden_table_north_template").withPrefix("block/template/")), Optional.of("_north"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
-        public static final ModelTemplate TABLE_EAST = new ModelTemplate(Optional.of(FabulousFurniture.prefix("wooden_table_east_template").withPrefix("block/template/")), Optional.of("_east"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
-        public static final ModelTemplate TABLE_SOUTH = new ModelTemplate(Optional.of(FabulousFurniture.prefix("wooden_table_south_template").withPrefix("block/template/")), Optional.of("_south"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
-        public static final ModelTemplate TABLE_WEST = new ModelTemplate(Optional.of(FabulousFurniture.prefix("wooden_table_west_template").withPrefix("block/template/")), Optional.of("_west"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
-        public static final ModelTemplate TABLE_NORTH_EAST = new ModelTemplate(Optional.of(FabulousFurniture.prefix("wooden_table_north_east_template").withPrefix("block/template/")), Optional.of("_north_east"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
-        public static final ModelTemplate TABLE_NORTH_WEST = new ModelTemplate(Optional.of(FabulousFurniture.prefix("wooden_table_north_west_template").withPrefix("block/template/")), Optional.of("_north_west"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
-        public static final ModelTemplate TABLE_SOUTH_EAST = new ModelTemplate(Optional.of(FabulousFurniture.prefix("wooden_table_south_east_template").withPrefix("block/template/")), Optional.of("_south_east"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
-        public static final ModelTemplate TABLE_SOUTH_WEST = new ModelTemplate(Optional.of(FabulousFurniture.prefix("wooden_table_south_west_template").withPrefix("block/template/")), Optional.of("_south_west"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
+        public static final ModelTemplate CHAIR = getTemplate("wooden_chair_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.CHAIR, TextureSlots.DECORATION, TextureSlots.WOOL);
+        public static final ModelTemplate TABLE_SINGLE = getTemplate("wooden_table_single_template", Optional.of("_single"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
+        public static final ModelTemplate TABLE_MIDDLE = getTemplate("wooden_table_middle_template", Optional.of("_middle"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
+        public static final ModelTemplate TABLE_NORTH = getTemplate("wooden_table_north_template", Optional.of("_north"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
+        public static final ModelTemplate TABLE_EAST = getTemplate("wooden_table_east_template", Optional.of("_east"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
+        public static final ModelTemplate TABLE_SOUTH = getTemplate("wooden_table_south_template", Optional.of("_south"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
+        public static final ModelTemplate TABLE_WEST = getTemplate("wooden_table_west_template", Optional.of("_west"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
+        public static final ModelTemplate TABLE_NORTH_EAST = getTemplate("wooden_table_north_east_template", Optional.of("_north_east"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
+        public static final ModelTemplate TABLE_NORTH_WEST = getTemplate("wooden_table_north_west_template", Optional.of("_north_west"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
+        public static final ModelTemplate TABLE_SOUTH_EAST = getTemplate("wooden_table_south_east_template", Optional.of("_south_east"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
+        public static final ModelTemplate TABLE_SOUTH_WEST = getTemplate("wooden_table_south_west_template", Optional.of("_south_west"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
 
-        public static final ModelTemplate CURTAIN_SMALL_CLOSED = new ModelTemplate(Optional.of(FabulousFurniture.prefix("curtains_small_closed_template").withPrefix("block/template/")), Optional.of("_small_closed"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
-        public static final ModelTemplate CURTAIN_SMALL_SINGLE_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("curtains_small_single_open_template").withPrefix("block/template/")), Optional.of("_small_single_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
-        public static final ModelTemplate CURTAIN_SMALL_LEFT_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("curtains_small_left_open_template").withPrefix("block/template/")), Optional.of("_small_left_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
-        public static final ModelTemplate CURTAIN_SMALL_RIGHT_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("curtains_small_right_open_template").withPrefix("block/template/")), Optional.of("_small_right_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
-        public static final ModelTemplate CURTAIN_BIG_BOTTOM_CLOSED = new ModelTemplate(Optional.of(FabulousFurniture.prefix("curtains_big_bottom_closed_template").withPrefix("block/template/")), Optional.of("_big_bottom_closed"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
-        public static final ModelTemplate CURTAIN_BIG_TOP_CLOSED = new ModelTemplate(Optional.of(FabulousFurniture.prefix("curtains_big_top_closed_template").withPrefix("block/template/")), Optional.of("_big_top_closed"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
-        public static final ModelTemplate CURTAIN_BIG_TOP_SINGLE_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("curtains_big_top_single_open_template").withPrefix("block/template/")), Optional.of("_big_top_single_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
-        public static final ModelTemplate CURTAIN_BIG_BOTTOM_SINGLE_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("curtains_big_bottom_single_open_template").withPrefix("block/template/")), Optional.of("_big_bottom_single_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
-        public static final ModelTemplate CURTAIN_BIG_BOTTOM_LEFT_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("curtains_big_bottom_left_open_template").withPrefix("block/template/")), Optional.of("_big_bottom_left_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
-        public static final ModelTemplate CURTAIN_BIG_BOTTOM_RIGHT_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("curtains_big_bottom_right_open_template").withPrefix("block/template/")), Optional.of("_big_bottom_right_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
-        public static final ModelTemplate CURTAIN_BIG_BOTTOM_MIDDLE_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("curtains_big_bottom_middle_open_template").withPrefix("block/template/")), Optional.of("_big_bottom_middle_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
-        public static final ModelTemplate CURTAIN_BIG_TOP_LEFT_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("curtains_big_top_left_open_template").withPrefix("block/template/")), Optional.of("_big_top_left_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
-        public static final ModelTemplate CURTAIN_BIG_TOP_RIGHT_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("curtains_big_top_right_open_template").withPrefix("block/template/")), Optional.of("_big_top_right_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
-        public static final ModelTemplate CURTAIN_BIG_TOP_MIDDLE_OPEN = new ModelTemplate(Optional.of(FabulousFurniture.prefix("curtains_big_top_middle_open_template").withPrefix("block/template/")), Optional.of("_big_top_middle_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
+        public static final ModelTemplate CURTAIN_SMALL_CLOSED = getTemplate("curtains_small_closed_template", Optional.of("_small_closed"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
+        public static final ModelTemplate CURTAIN_SMALL_SINGLE_OPEN = getTemplate("curtains_small_single_open_template", Optional.of("_small_single_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
+        public static final ModelTemplate CURTAIN_SMALL_LEFT_OPEN = getTemplate("curtains_small_left_open_template", Optional.of("_small_left_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
+        public static final ModelTemplate CURTAIN_SMALL_RIGHT_OPEN = getTemplate("curtains_small_right_open_template", Optional.of("_small_right_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
+        public static final ModelTemplate CURTAIN_BIG_BOTTOM_CLOSED = getTemplate("curtains_big_bottom_closed_template", Optional.of("_big_bottom_closed"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
+        public static final ModelTemplate CURTAIN_BIG_TOP_CLOSED = getTemplate("curtains_big_top_closed_template", Optional.of("_big_top_closed"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
+        public static final ModelTemplate CURTAIN_BIG_TOP_SINGLE_OPEN = getTemplate("curtains_big_top_single_open_template", Optional.of("_big_top_single_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
+        public static final ModelTemplate CURTAIN_BIG_BOTTOM_SINGLE_OPEN = getTemplate("curtains_big_bottom_single_open_template", Optional.of("_big_bottom_single_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
+        public static final ModelTemplate CURTAIN_BIG_BOTTOM_LEFT_OPEN = getTemplate("curtains_big_bottom_left_open_template", Optional.of("_big_bottom_left_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
+        public static final ModelTemplate CURTAIN_BIG_BOTTOM_RIGHT_OPEN = getTemplate("curtains_big_bottom_right_open_template", Optional.of("_big_bottom_right_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
+        public static final ModelTemplate CURTAIN_BIG_BOTTOM_MIDDLE_OPEN = getTemplate("curtains_big_bottom_middle_open_template", Optional.of("_big_bottom_middle_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
+        public static final ModelTemplate CURTAIN_BIG_TOP_LEFT_OPEN = getTemplate("curtains_big_top_left_open_template", Optional.of("_big_top_left_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
+        public static final ModelTemplate CURTAIN_BIG_TOP_RIGHT_OPEN = getTemplate("curtains_big_top_right_open_template", Optional.of("_big_top_right_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
+        public static final ModelTemplate CURTAIN_BIG_TOP_MIDDLE_OPEN = getTemplate("curtains_big_top_middle_open_template", Optional.of("_big_top_middle_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
 
-        public static final ModelTemplate KITCHEN_TILES = new ModelTemplate(Optional.of(FabulousFurniture.prefix("kitchen_tiles_template").withPrefix("block/template/")), Optional.empty(), TextureSlot.PARTICLE, TextureSlots.TILE_BASE, TextureSlots.TILE_2);
+        public static final ModelTemplate KITCHEN_TILES = getTemplate("kitchen_tiles_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.TILE_BASE, TextureSlots.TILE_2);
+
+        public static final ModelTemplate TABLE_LAMP = getTemplate("table_lamp_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.LOG, TextureSlots.STRIPPED_LOG, TextureSlots.LOG_TOP, TextureSlots.PLANKS, TextureSlots.WOOL, TextureSlots.LAMP);
+        public static final ModelTemplate TABLE_LAMP_ON = getTemplate("table_lamp_template", Optional.of("_on"), TextureSlot.PARTICLE, TextureSlots.LOG, TextureSlots.STRIPPED_LOG, TextureSlots.LOG_TOP, TextureSlots.PLANKS, TextureSlots.WOOL, TextureSlots.LAMP);
+
+        private static ModelTemplate getTemplate(String name, Optional<String> suffix, TextureSlot... slots) {
+            return new ModelTemplate(Optional.of(FabulousFurniture.prefix(name).withPrefix("block/template/")), suffix, slots);
+        }
     }
 }

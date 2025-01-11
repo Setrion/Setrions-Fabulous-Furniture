@@ -9,11 +9,13 @@ import java.util.Map;
 public class FurnitureFamily {
     private final Block basePlanks;
     private final Block baseLog;
+    private final Block baseStrippedLog;
     final Map<Variant, Map<Block, Block>> variants = Maps.newHashMap();
 
-    FurnitureFamily(Block basePlanks, Block baseLog) {
+    FurnitureFamily(Block basePlanks, Block baseLog, Block baseStrippedLog) {
         this.basePlanks = basePlanks;
         this.baseLog = baseLog;
+        this.baseStrippedLog = baseStrippedLog;
     }
 
     public Block getBasePlanks() {
@@ -22,6 +24,10 @@ public class FurnitureFamily {
 
     public Block getBaseLog() {
         return baseLog;
+    }
+
+    public Block getBaseStrippedLog() {
+        return baseStrippedLog;
     }
 
     public Map<Variant, Map<Block, Block>> getVariants() {
@@ -55,7 +61,8 @@ public class FurnitureFamily {
         KITCHEN_CABINET_SIDEWAYS_GLASS_DOOR("kitchen_cabinet_sideways_glass_door"),
         KNIFE_BLOCK("knife_block"),
         CHAIR("chair"),
-        TABLE("table");
+        TABLE("table"),
+        TABLE_LAMP("table_lamp");
 
         private Variant(String variantName) {
         }
@@ -64,8 +71,8 @@ public class FurnitureFamily {
     public static class Builder {
         private final FurnitureFamily family;
 
-        public Builder(Block basePlanks, Block baseLog) {
-            this.family = new FurnitureFamily(basePlanks, baseLog);
+        public Builder(Block basePlanks, Block baseLog, Block baseStrippedLog) {
+            this.family = new FurnitureFamily(basePlanks, baseLog, baseStrippedLog);
         }
 
         public FurnitureFamily getFamily() {
@@ -230,6 +237,13 @@ public class FurnitureFamily {
             Map<Block, Block> map = getOrCreateMap(Variant.TABLE);
             map.put(Blocks.AIR, block);
             this.family.variants.put(Variant.TABLE, map);
+            return this;
+        }
+
+        public FurnitureFamily.Builder table_lamp(Block block, Block wool) {
+            Map<Block, Block> map = getOrCreateMap(Variant.TABLE_LAMP);
+            map.put(wool, block);
+            this.family.variants.put(Variant.TABLE_LAMP, map);
             return this;
         }
 

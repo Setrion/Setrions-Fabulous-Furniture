@@ -2757,6 +2757,24 @@ public class SFFBlocks {
     public static final DeferredBlock<Block> WHITE_MAGENTA_KITCHEN_TILES = registerBlockWithItem("white_magenta_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
     public static final DeferredBlock<Block> WHITE_PINK_KITCHEN_TILES = registerBlockWithItem("white_pink_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
 
+    //Bedroom
+    public static final DeferredBlock<Block> OAK_WHITE_TABLE_LAMP = registerBlockWithItem("oak_white_table_lamp", LampBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS));
+    public static final DeferredBlock<Block> OAK_LIGHT_GRAY_TABLE_LAMP = registerBlockWithItem("oak_light_gray_table_lamp", LampBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS));
+    public static final DeferredBlock<Block> OAK_GRAY_TABLE_LAMP = registerBlockWithItem("oak_gray_table_lamp", LampBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS));
+    public static final DeferredBlock<Block> OAK_BLACK_TABLE_LAMP = registerBlockWithItem("oak_black_table_lamp", LampBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS));
+    public static final DeferredBlock<Block> OAK_BROWN_TABLE_LAMP = registerBlockWithItem("oak_brown_table_lamp", LampBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS));
+    public static final DeferredBlock<Block> OAK_RED_TABLE_LAMP = registerBlockWithItem("oak_red_table_lamp", LampBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS));
+    public static final DeferredBlock<Block> OAK_ORANGE_TABLE_LAMP = registerBlockWithItem("oak_orange_table_lamp", LampBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS));
+    public static final DeferredBlock<Block> OAK_YELLOW_TABLE_LAMP = registerBlockWithItem("oak_yellow_table_lamp", LampBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS));
+    public static final DeferredBlock<Block> OAK_LIME_TABLE_LAMP = registerBlockWithItem("oak_lime_table_lamp", LampBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS));
+    public static final DeferredBlock<Block> OAK_GREEN_TABLE_LAMP = registerBlockWithItem("oak_green_table_lamp", LampBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS));
+    public static final DeferredBlock<Block> OAK_CYAN_TABLE_LAMP = registerBlockWithItem("oak_cyan_table_lamp", LampBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS));
+    public static final DeferredBlock<Block> OAK_LIGHT_BLUE_TABLE_LAMP = registerBlockWithItem("oak_light_blue_table_lamp", LampBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS));
+    public static final DeferredBlock<Block> OAK_BLUE_TABLE_LAMP = registerBlockWithItem("oak_blue_table_lamp", LampBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS));
+    public static final DeferredBlock<Block> OAK_PURPLE_TABLE_LAMP = registerBlockWithItem("oak_purple_table_lamp", LampBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS));
+    public static final DeferredBlock<Block> OAK_MAGENTA_TABLE_LAMP = registerBlockWithItem("oak_magenta_table_lamp", LampBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS));
+    public static final DeferredBlock<Block> OAK_PINK_TABLE_LAMP = registerBlockWithItem("oak_pink_table_lamp", LampBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS));
+
     public static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
         return BLOCKS.register(name, () -> block.apply(properties.get().setId(ResourceKey.create(Registries.BLOCK, FabulousFurniture.prefix(name)))));
     }
