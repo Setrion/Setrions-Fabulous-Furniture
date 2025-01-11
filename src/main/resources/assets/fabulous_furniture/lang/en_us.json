@@ -1,5 +1,10 @@
 {
   "itemGroup.fabulous_furniture.main": "Setrion's Fabulous Furniture",
   "container.crate": "Crate",
-  "stat.fabulous_furniture.open_crate": "Crates Opened"
+  "container.kitchen_counter": "Kitchen Counter",
+  "container.fridge": "Fridge",
+  "stat.fabulous_furniture.open_crate": "Crates Opened",
+  "stat.fabulous_furniture.open_kitchen_counter": "Kitchen Counters Opened",
+  "stat.fabulous_furniture.open_fridge": "Fridges Opened",
+  "stat.fabulous_furniture.activate_kitchen_sink": "Sinks activated"
 }

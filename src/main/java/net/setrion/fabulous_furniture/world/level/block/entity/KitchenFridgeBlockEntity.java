@@ -33,14 +33,14 @@ public class KitchenFridgeBlockEntity extends RandomizableContainerBlockEntity {
         this.items = NonNullList.withSize(54, ItemStack.EMPTY);
         this.openersCounter = new ContainerOpenersCounter() {
             protected void onOpen(Level level, BlockPos pos, BlockState state) {
-                if (state.getBlock() instanceof KitchenFridgeBlock) {
+                if (!state.getValue(KitchenFridgeBlock.OPEN) && state.getBlock() instanceof KitchenFridgeBlock) {
                     KitchenFridgeBlockEntity.this.playSound(SoundEvents.IRON_DOOR_OPEN);
                     KitchenFridgeBlockEntity.this.updateBlockState(state, true);
                 }
             }
 
             protected void onClose(Level level, BlockPos pos, BlockState state) {
-                if (state.getBlock() instanceof KitchenFridgeBlock) {
+                if (state.getValue(KitchenFridgeBlock.OPEN) && state.getBlock() instanceof KitchenFridgeBlock) {
                     KitchenFridgeBlockEntity.this.playSound(SoundEvents.IRON_DOOR_CLOSE);
                     KitchenFridgeBlockEntity.this.updateBlockState(state, false);
                 }
@@ -67,19 +67,21 @@ public class KitchenFridgeBlockEntity extends RandomizableContainerBlockEntity {
 
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.loadAdditional(tag, provider);
-        this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        if (!this.tryLoadLootTable(tag)) {
-            ContainerHelper.loadAllItems(tag, this.items, provider);
+        if (getBlockState().getValue(KitchenFridgeBlock.HALF).equals(DoubleBlockHalf.LOWER)) {
+            items = NonNullList.withSize(getContainerSize(), ItemStack.EMPTY);
+            if (!this.tryLoadLootTable(tag)) {
+                ContainerHelper.loadAllItems(tag, items, provider);
+            }
         }
-
     }
 
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.saveAdditional(tag, provider);
-        if (!this.trySaveLootTable(tag)) {
-            ContainerHelper.saveAllItems(tag, this.items, provider);
+        if (getBlockState().getValue(KitchenFridgeBlock.HALF).equals(DoubleBlockHalf.LOWER)) {
+            if (!this.trySaveLootTable(tag)) {
+                ContainerHelper.saveAllItems(tag, items, provider);
+            }
         }
-
     }
 
     @Override
@@ -103,37 +105,37 @@ public class KitchenFridgeBlockEntity extends RandomizableContainerBlockEntity {
     }
 
     public void startOpen(Player player) {
-        if (!this.remove && !player.isSpectator()) {
-            this.openersCounter.incrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState());
+        if (!remove && !player.isSpectator()) {
+            openersCounter.incrementOpeners(player, getLevel(), getBlockPos(), getBlockState());
         }
     }
 
     public void stopOpen(Player player) {
-        if (!this.remove && !player.isSpectator()) {
-            this.openersCounter.decrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState());
+        if (!remove && !player.isSpectator()) {
+            openersCounter.decrementOpeners(player, getLevel(), getBlockPos(), getBlockState());
         }
     }
 
     public void recheckOpen() {
-        if (!this.remove) {
-            this.openersCounter.recheckOpeners(this.getLevel(), this.getBlockPos(), this.getBlockState());
+        if (!remove) {
+            openersCounter.recheckOpeners(getLevel(), getBlockPos(), getBlockState());
         }
     }
 
     void updateBlockState(BlockState state, boolean open) {
         if (state.getValue(KitchenFridgeBlock.HALF) == DoubleBlockHalf.LOWER) {
-            this.level.setBlock(this.getBlockPos(), state.setValue(KitchenFridgeBlock.OPEN, open), 3);
-            this.level.setBlock(this.getBlockPos().above(), state.setValue(KitchenFridgeBlock.OPEN, open).setValue(KitchenFridgeBlock.HALF, DoubleBlockHalf.UPPER), 3);
+            level.setBlock(getBlockPos(), state.setValue(KitchenFridgeBlock.OPEN, open), 3);
+            level.setBlock(getBlockPos().above(), state.setValue(KitchenFridgeBlock.OPEN, open).setValue(KitchenFridgeBlock.HALF, DoubleBlockHalf.UPPER), 3);
         } else {
-            this.level.setBlock(this.getBlockPos(), state.setValue(KitchenFridgeBlock.OPEN, open), 3);
-            this.level.setBlock(this.getBlockPos().below(), state.setValue(KitchenFridgeBlock.OPEN, open).setValue(KitchenFridgeBlock.HALF, DoubleBlockHalf.LOWER), 3);
+            level.setBlock(getBlockPos(), state.setValue(KitchenFridgeBlock.OPEN, open), 3);
+            level.setBlock(getBlockPos().below(), state.setValue(KitchenFridgeBlock.OPEN, open).setValue(KitchenFridgeBlock.HALF, DoubleBlockHalf.LOWER), 3);
         }
     }
 
     void playSound(SoundEvent sound) {
-        double d0 = (double)this.worldPosition.getX() + 0.5 / 2.0;
-        double d1 = (double)this.worldPosition.getY() + 0.5 / 2.0;
-        double d2 = (double)this.worldPosition.getZ() + 0.5 / 2.0;
-        this.level.playSound(null, d0, d1, d2, sound, SoundSource.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
+        double d0 = worldPosition.getX() + 0.5 / 2.0;
+        double d1 = worldPosition.getY() + 0.5 / 2.0;
+        double d2 = worldPosition.getZ() + 0.5 / 2.0;
+        level.playSound(null, d0, d1, d2, sound, SoundSource.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
     }
 }
