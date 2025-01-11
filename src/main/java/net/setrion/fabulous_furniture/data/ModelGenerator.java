@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SmokerBlock;
 import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.block.state.properties.WoodType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.setrion.fabulous_furniture.FabulousFurniture;
 import net.setrion.fabulous_furniture.registry.SFFBlocks;
@@ -29,6 +30,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ModelGenerator extends ModelProvider {
+
+    /*
+    helpermethods for generating models
+    WoodenFurniture(Block planks, Block log)
+    createChair(Block block, WoodenFurniture) -> planks = WoodenFurniture.getPlanks()
+     */
 
     public ModelGenerator(PackOutput output) {
         super(output, FabulousFurniture.MOD_ID);
@@ -1297,6 +1304,46 @@ public class ModelGenerator extends ModelProvider {
         blockModels.blockStateOutput.accept(createKitchenCounterBigDrawer(SFFBlocks.WARPED_QUARTZ_KITCHEN_COUNTER_BIG_DRAWER.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), TextureMapping.getBlockTexture(Blocks.QUARTZ_BLOCK, "_top"), TextureMapping.getBlockTexture(Blocks.WARPED_STEM), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCounterBigDrawer(SFFBlocks.WARPED_CALCITE_KITCHEN_COUNTER_BIG_DRAWER.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), TextureMapping.getBlockTexture(Blocks.CALCITE), TextureMapping.getBlockTexture(Blocks.WARPED_STEM), blockModels));
 
+        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.IRON_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.IRON_BLOCK), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
+        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.GOLD_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.GOLD_BLOCK), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
+        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.NETHERITE_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.NETHERITE_BLOCK), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
+        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.COPPER_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.COPPER_BLOCK), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
+        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.EXPOSED_COPPER_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.EXPOSED_COPPER), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
+        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.WEATHERED_COPPER_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.WEATHERED_COPPER), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
+        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.OXIDIZED_COPPER_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.OXIDIZED_COPPER), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
+        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.WAXED_COPPER_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.COPPER_BLOCK), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
+        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.WAXED_EXPOSED_COPPER_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.EXPOSED_COPPER), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
+        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.WAXED_WEATHERED_COPPER_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.WEATHERED_COPPER), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
+        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.WAXED_OXIDIZED_COPPER_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.OXIDIZED_COPPER), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
+
+        createKitchenCounterSinks(blockModels);
+        createKitchenCounterSmokers(blockModels);
+        createKitchenCabinets(blockModels);
+        createKitchenCabinetDoors(blockModels);
+        createKitchenCabinetGlassDoors(blockModels);
+        createKitchenCabinetSidewaysDoors(blockModels);
+        createKitchenCabinetSidewaysGlassDoors(blockModels);
+        createKnifeBlocks(blockModels);
+        createChairs(blockModels);
+        createTables(blockModels);
+        createCurtains(blockModels);
+        createKitchenTiles(blockModels);
+
+        Collection<Block> blocks = SFFBlocks.BLOCKS.getEntries().stream().map(DeferredHolder::get).collect(Collectors.toList());
+        blocks.forEach((block -> {
+            if (!(block instanceof TableBlock || block instanceof KitchenCabinetShelfBlock || block instanceof CurtainBlock)) {
+                registerBasicBlockModel(blockModels.itemModelOutput, block);
+            } else {
+                if (block instanceof CurtainBlock) {
+                    registerBasicBlockModel(blockModels.itemModelOutput, block, "_small_single_open");
+                } else {
+                    registerBasicBlockModel(blockModels.itemModelOutput, block, "_single");
+                }
+            }
+        }));
+    }
+
+    private void createKitchenCounterSinks(BlockModelGenerators blockModels) {
         blockModels.blockStateOutput.accept(createKitchenCounterSink(SFFBlocks.OAK_POLISHED_GRANITE_KITCHEN_COUNTER_SINK.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), TextureMapping.getBlockTexture(Blocks.POLISHED_GRANITE), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCounterSink(SFFBlocks.OAK_POLISHED_DIORITE_KITCHEN_COUNTER_SINK.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), TextureMapping.getBlockTexture(Blocks.POLISHED_DIORITE), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCounterSink(SFFBlocks.OAK_POLISHED_ANDESITE_KITCHEN_COUNTER_SINK.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), TextureMapping.getBlockTexture(Blocks.POLISHED_ANDESITE), blockModels));
@@ -1452,7 +1499,9 @@ public class ModelGenerator extends ModelProvider {
         blockModels.blockStateOutput.accept(createKitchenCounterSink(SFFBlocks.WARPED_SMOOTH_BASALT_KITCHEN_COUNTER_SINK.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), TextureMapping.getBlockTexture(Blocks.SMOOTH_BASALT), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCounterSink(SFFBlocks.WARPED_QUARTZ_KITCHEN_COUNTER_SINK.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), TextureMapping.getBlockTexture(Blocks.QUARTZ_BLOCK, "_top"), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCounterSink(SFFBlocks.WARPED_CALCITE_KITCHEN_COUNTER_SINK.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), TextureMapping.getBlockTexture(Blocks.CALCITE), blockModels));
+    }
 
+    private void createKitchenCounterSmokers(BlockModelGenerators blockModels) {
         blockModels.blockStateOutput.accept(createKitchenCounterSmoker(SFFBlocks.OAK_POLISHED_GRANITE_KITCHEN_COUNTER_SMOKER.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), TextureMapping.getBlockTexture(Blocks.POLISHED_GRANITE), TextureMapping.getBlockTexture(Blocks.SMOKER).withSuffix("_front"), TextureMapping.getBlockTexture(Blocks.SMOKER).withSuffix("_front_on"), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCounterSmoker(SFFBlocks.OAK_POLISHED_DIORITE_KITCHEN_COUNTER_SMOKER.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), TextureMapping.getBlockTexture(Blocks.POLISHED_DIORITE), TextureMapping.getBlockTexture(Blocks.SMOKER).withSuffix("_front"), TextureMapping.getBlockTexture(Blocks.SMOKER).withSuffix("_front_on"), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCounterSmoker(SFFBlocks.OAK_POLISHED_ANDESITE_KITCHEN_COUNTER_SMOKER.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), TextureMapping.getBlockTexture(Blocks.POLISHED_ANDESITE), TextureMapping.getBlockTexture(Blocks.SMOKER).withSuffix("_front"), TextureMapping.getBlockTexture(Blocks.SMOKER).withSuffix("_front_on"), blockModels));
@@ -1608,7 +1657,9 @@ public class ModelGenerator extends ModelProvider {
         blockModels.blockStateOutput.accept(createKitchenCounterSmoker(SFFBlocks.WARPED_SMOOTH_BASALT_KITCHEN_COUNTER_SMOKER.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), TextureMapping.getBlockTexture(Blocks.SMOOTH_BASALT), TextureMapping.getBlockTexture(Blocks.SMOKER).withSuffix("_front"), TextureMapping.getBlockTexture(Blocks.SMOKER).withSuffix("_front_on"), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCounterSmoker(SFFBlocks.WARPED_QUARTZ_KITCHEN_COUNTER_SMOKER.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), TextureMapping.getBlockTexture(Blocks.QUARTZ_BLOCK, "_top"), TextureMapping.getBlockTexture(Blocks.SMOKER).withSuffix("_front"), TextureMapping.getBlockTexture(Blocks.SMOKER).withSuffix("_front_on"), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCounterSmoker(SFFBlocks.WARPED_CALCITE_KITCHEN_COUNTER_SMOKER.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), TextureMapping.getBlockTexture(Blocks.CALCITE), TextureMapping.getBlockTexture(Blocks.SMOKER).withSuffix("_front"), TextureMapping.getBlockTexture(Blocks.SMOKER).withSuffix("_front_on"), blockModels));
+    }
 
+    private void createKitchenCabinets(BlockModelGenerators blockModels) {
         blockModels.blockStateOutput.accept(createKitchenCabinet(SFFBlocks.OAK_KITCHEN_CABINET.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCabinetInnerCorner(SFFBlocks.OAK_KITCHEN_CABINET_INNER_CORNER.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCabinetOuterCorner(SFFBlocks.OAK_KITCHEN_CABINET_OUTER_CORNER.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), blockModels));
@@ -1680,7 +1731,9 @@ public class ModelGenerator extends ModelProvider {
         blockModels.blockStateOutput.accept(createKitchenCabinetOuterCorner(SFFBlocks.WARPED_KITCHEN_CABINET_OUTER_CORNER.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), blockModels));
         blockModels.blockStateOutput.accept(createOpenKitchenCabinet(SFFBlocks.WARPED_KITCHEN_CABINET_OPEN.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCabinetShelf(SFFBlocks.WARPED_KITCHEN_CABINET_SHELF.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), TextureMapping.getBlockTexture(Blocks.CHAIN), blockModels));
+    }
 
+    private void createKitchenCabinetDoors(BlockModelGenerators blockModels) {
         blockModels.blockStateOutput.accept(createKitchenCabinetDoor(SFFBlocks.OAK_POLISHED_GRANITE_KITCHEN_CABINET_DOOR.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), TextureMapping.getBlockTexture(Blocks.OAK_LOG), TextureMapping.getBlockTexture(Blocks.POLISHED_GRANITE), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCabinetDoor(SFFBlocks.OAK_POLISHED_DIORITE_KITCHEN_CABINET_DOOR.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), TextureMapping.getBlockTexture(Blocks.OAK_LOG), TextureMapping.getBlockTexture(Blocks.POLISHED_DIORITE), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCabinetDoor(SFFBlocks.OAK_POLISHED_ANDESITE_KITCHEN_CABINET_DOOR.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), TextureMapping.getBlockTexture(Blocks.OAK_LOG), TextureMapping.getBlockTexture(Blocks.POLISHED_ANDESITE), blockModels));
@@ -1836,7 +1889,9 @@ public class ModelGenerator extends ModelProvider {
         blockModels.blockStateOutput.accept(createKitchenCabinetDoor(SFFBlocks.WARPED_SMOOTH_BASALT_KITCHEN_CABINET_DOOR.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), TextureMapping.getBlockTexture(Blocks.WARPED_STEM), TextureMapping.getBlockTexture(Blocks.SMOOTH_BASALT), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCabinetDoor(SFFBlocks.WARPED_QUARTZ_KITCHEN_CABINET_DOOR.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), TextureMapping.getBlockTexture(Blocks.WARPED_STEM), TextureMapping.getBlockTexture(Blocks.QUARTZ_BLOCK, "_top"), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCabinetDoor(SFFBlocks.WARPED_CALCITE_KITCHEN_CABINET_DOOR.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), TextureMapping.getBlockTexture(Blocks.WARPED_STEM), TextureMapping.getBlockTexture(Blocks.CALCITE), blockModels));
+    }
 
+    private void createKitchenCabinetGlassDoors(BlockModelGenerators blockModels) {
         blockModels.blockStateOutput.accept(createKitchenCabinetGlassDoor(SFFBlocks.OAK_POLISHED_GRANITE_KITCHEN_CABINET_GLASS_DOOR.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), TextureMapping.getBlockTexture(Blocks.OAK_LOG), TextureMapping.getBlockTexture(Blocks.POLISHED_GRANITE), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCabinetGlassDoor(SFFBlocks.OAK_POLISHED_DIORITE_KITCHEN_CABINET_GLASS_DOOR.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), TextureMapping.getBlockTexture(Blocks.OAK_LOG), TextureMapping.getBlockTexture(Blocks.POLISHED_DIORITE), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCabinetGlassDoor(SFFBlocks.OAK_POLISHED_ANDESITE_KITCHEN_CABINET_GLASS_DOOR.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), TextureMapping.getBlockTexture(Blocks.OAK_LOG), TextureMapping.getBlockTexture(Blocks.POLISHED_ANDESITE), blockModels));
@@ -1992,7 +2047,9 @@ public class ModelGenerator extends ModelProvider {
         blockModels.blockStateOutput.accept(createKitchenCabinetGlassDoor(SFFBlocks.WARPED_SMOOTH_BASALT_KITCHEN_CABINET_GLASS_DOOR.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), TextureMapping.getBlockTexture(Blocks.WARPED_STEM), TextureMapping.getBlockTexture(Blocks.SMOOTH_BASALT), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCabinetGlassDoor(SFFBlocks.WARPED_QUARTZ_KITCHEN_CABINET_GLASS_DOOR.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), TextureMapping.getBlockTexture(Blocks.WARPED_STEM), TextureMapping.getBlockTexture(Blocks.QUARTZ_BLOCK, "_top"), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCabinetGlassDoor(SFFBlocks.WARPED_CALCITE_KITCHEN_CABINET_GLASS_DOOR.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), TextureMapping.getBlockTexture(Blocks.WARPED_STEM), TextureMapping.getBlockTexture(Blocks.CALCITE), blockModels));
+    }
 
+    private void createKitchenCabinetSidewaysDoors(BlockModelGenerators blockModels) {
         blockModels.blockStateOutput.accept(createKitchenCabinetSidewaysDoor(SFFBlocks.OAK_POLISHED_GRANITE_KITCHEN_CABINET_SIDEWAYS_DOOR.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), TextureMapping.getBlockTexture(Blocks.OAK_LOG), TextureMapping.getBlockTexture(Blocks.POLISHED_GRANITE), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCabinetSidewaysDoor(SFFBlocks.OAK_POLISHED_DIORITE_KITCHEN_CABINET_SIDEWAYS_DOOR.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), TextureMapping.getBlockTexture(Blocks.OAK_LOG), TextureMapping.getBlockTexture(Blocks.POLISHED_DIORITE), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCabinetSidewaysDoor(SFFBlocks.OAK_POLISHED_ANDESITE_KITCHEN_CABINET_SIDEWAYS_DOOR.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), TextureMapping.getBlockTexture(Blocks.OAK_LOG), TextureMapping.getBlockTexture(Blocks.POLISHED_ANDESITE), blockModels));
@@ -2148,7 +2205,9 @@ public class ModelGenerator extends ModelProvider {
         blockModels.blockStateOutput.accept(createKitchenCabinetSidewaysDoor(SFFBlocks.WARPED_SMOOTH_BASALT_KITCHEN_CABINET_SIDEWAYS_DOOR.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), TextureMapping.getBlockTexture(Blocks.WARPED_STEM), TextureMapping.getBlockTexture(Blocks.SMOOTH_BASALT), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCabinetSidewaysDoor(SFFBlocks.WARPED_QUARTZ_KITCHEN_CABINET_SIDEWAYS_DOOR.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), TextureMapping.getBlockTexture(Blocks.WARPED_STEM), TextureMapping.getBlockTexture(Blocks.QUARTZ_BLOCK, "_top"), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCabinetSidewaysDoor(SFFBlocks.WARPED_CALCITE_KITCHEN_CABINET_SIDEWAYS_DOOR.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), TextureMapping.getBlockTexture(Blocks.WARPED_STEM), TextureMapping.getBlockTexture(Blocks.CALCITE), blockModels));
+    }
 
+    private void createKitchenCabinetSidewaysGlassDoors(BlockModelGenerators blockModels) {
         blockModels.blockStateOutput.accept(createKitchenCabinetSidewaysGlassDoor(SFFBlocks.OAK_POLISHED_GRANITE_KITCHEN_CABINET_SIDEWAYS_GLASS_DOOR.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), TextureMapping.getBlockTexture(Blocks.OAK_LOG), TextureMapping.getBlockTexture(Blocks.POLISHED_GRANITE), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCabinetSidewaysGlassDoor(SFFBlocks.OAK_POLISHED_DIORITE_KITCHEN_CABINET_SIDEWAYS_GLASS_DOOR.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), TextureMapping.getBlockTexture(Blocks.OAK_LOG), TextureMapping.getBlockTexture(Blocks.POLISHED_DIORITE), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCabinetSidewaysGlassDoor(SFFBlocks.OAK_POLISHED_ANDESITE_KITCHEN_CABINET_SIDEWAYS_GLASS_DOOR.get(), TextureMapping.getBlockTexture(Blocks.OAK_PLANKS), TextureMapping.getBlockTexture(Blocks.OAK_LOG), TextureMapping.getBlockTexture(Blocks.POLISHED_ANDESITE), blockModels));
@@ -2305,30 +2364,6 @@ public class ModelGenerator extends ModelProvider {
         blockModels.blockStateOutput.accept(createKitchenCabinetSidewaysGlassDoor(SFFBlocks.WARPED_QUARTZ_KITCHEN_CABINET_SIDEWAYS_GLASS_DOOR.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), TextureMapping.getBlockTexture(Blocks.WARPED_STEM), TextureMapping.getBlockTexture(Blocks.QUARTZ_BLOCK, "_top"), blockModels));
         blockModels.blockStateOutput.accept(createKitchenCabinetSidewaysGlassDoor(SFFBlocks.WARPED_CALCITE_KITCHEN_CABINET_SIDEWAYS_GLASS_DOOR.get(), TextureMapping.getBlockTexture(Blocks.WARPED_PLANKS), TextureMapping.getBlockTexture(Blocks.WARPED_STEM), TextureMapping.getBlockTexture(Blocks.CALCITE), blockModels));
 
-        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.IRON_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.IRON_BLOCK), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
-        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.GOLD_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.GOLD_BLOCK), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
-        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.NETHERITE_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.NETHERITE_BLOCK), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
-        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.COPPER_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.COPPER_BLOCK), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
-        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.EXPOSED_COPPER_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.EXPOSED_COPPER), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
-        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.WEATHERED_COPPER_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.WEATHERED_COPPER), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
-        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.OXIDIZED_COPPER_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.OXIDIZED_COPPER), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
-        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.WAXED_COPPER_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.COPPER_BLOCK), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
-        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.WAXED_EXPOSED_COPPER_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.EXPOSED_COPPER), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
-        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.WAXED_WEATHERED_COPPER_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.WEATHERED_COPPER), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
-        blockModels.blockStateOutput.accept(createFridge(SFFBlocks.WAXED_OXIDIZED_COPPER_FRIDGE.get(), TextureMapping.getBlockTexture(Blocks.OXIDIZED_COPPER), TextureMapping.getBlockTexture(Blocks.IRON_BARS), TextureMapping.getBlockTexture(Blocks.ANVIL), blockModels));
-
-        Collection<Block> blocks = SFFBlocks.BLOCKS.getEntries().stream().map(DeferredHolder::get).collect(Collectors.toList());
-        blocks.forEach((block -> {
-            if (!(block instanceof TableBlock || block instanceof KitchenCabinetShelfBlock || block instanceof CurtainBlock)) {
-                registerBasicBlockModel(blockModels.itemModelOutput, block);
-            } else {
-                if (block instanceof CurtainBlock) {
-                    registerBasicBlockModel(blockModels.itemModelOutput, block, "_small_single_open");
-                } else {
-                    registerBasicBlockModel(blockModels.itemModelOutput, block, "_single");
-                }
-            }
-        }));
     }
 
     private void createKnifeBlocks(BlockModelGenerators blockModels) {
@@ -2973,11 +3008,11 @@ public class ModelGenerator extends ModelProvider {
         ).with(BlockModelGenerators.createHorizontalFacingDispatch());
     }
 
-    private MultiVariantGenerator createKitchenCabinetShelf(Block block, ResourceLocation cabinet, ResourceLocation chain, BlockModelGenerators blockModels) {
-        ResourceLocation single = ModelTemplates.KITCHEN_CABINET_SHELF_SINGLE.create(block, new TextureMapping().put(TextureSlot.PARTICLE, cabinet).put(TextureSlots.CABINET, cabinet).put(TextureSlots.CHAIN, chain), blockModels.modelOutput);
-        ResourceLocation left = ModelTemplates.KITCHEN_CABINET_SHELF_LEFT.create(block, new TextureMapping().put(TextureSlot.PARTICLE, cabinet).put(TextureSlots.CABINET, cabinet).put(TextureSlots.CHAIN, chain), blockModels.modelOutput);
-        ResourceLocation right = ModelTemplates.KITCHEN_CABINET_SHELF_RIGHT.create(block, new TextureMapping().put(TextureSlot.PARTICLE, cabinet).put(TextureSlots.CABINET, cabinet).put(TextureSlots.CHAIN, chain), blockModels.modelOutput);
-        ResourceLocation middle = ModelTemplates.KITCHEN_CABINET_SHELF_MIDDLE.create(block, new TextureMapping().put(TextureSlot.PARTICLE, cabinet).put(TextureSlots.CABINET, cabinet).put(TextureSlots.CHAIN, chain), blockModels.modelOutput);
+    private MultiVariantGenerator createKitchenCabinetShelf(Block block, ResourceLocation planks, ResourceLocation chain, BlockModelGenerators blockModels) {
+        ResourceLocation single = ModelTemplates.KITCHEN_CABINET_SHELF_SINGLE.create(block, new TextureMapping().put(TextureSlot.PARTICLE, planks).put(TextureSlots.PLANKS, planks).put(TextureSlots.CHAIN, chain), blockModels.modelOutput);
+        ResourceLocation left = ModelTemplates.KITCHEN_CABINET_SHELF_LEFT.create(block, new TextureMapping().put(TextureSlot.PARTICLE, planks).put(TextureSlots.PLANKS, planks).put(TextureSlots.CHAIN, chain), blockModels.modelOutput);
+        ResourceLocation right = ModelTemplates.KITCHEN_CABINET_SHELF_RIGHT.create(block, new TextureMapping().put(TextureSlot.PARTICLE, planks).put(TextureSlots.PLANKS, planks).put(TextureSlots.CHAIN, chain), blockModels.modelOutput);
+        ResourceLocation middle = ModelTemplates.KITCHEN_CABINET_SHELF_MIDDLE.create(block, new TextureMapping().put(TextureSlot.PARTICLE, planks).put(TextureSlots.PLANKS, planks).put(TextureSlots.CHAIN, chain), blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, single)).with(
                 PropertyDispatch.property(KitchenCabinetShelfBlock.SHAPE)
                         .select(ShelfShape.SINGLE, Variant.variant().with(VariantProperties.MODEL, single))

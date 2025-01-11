@@ -27,7 +27,11 @@ public class FabulousFurniture {
     }
 
     public void addBlockEntityTypes(BlockEntityTypeAddBlocksEvent event) {
-        event.modify(BlockEntityType.SMOKER, SFFBlocks.OAK_POLISHED_TUFF_KITCHEN_COUNTER_SMOKER.get());
+        for (DeferredHolder<Block, ? extends Block> block : SFFBlocks.BLOCKS.getEntries()) {
+            if (block.get() instanceof KitchenCounterSmokerBlock) {
+                event.modify(BlockEntityType.SMOKER, block.get());
+            }
+        }
         for (DeferredHolder<Block, ? extends Block> block : SFFBlocks.BLOCKS.getEntries()) {
             if (block.get() instanceof KitchenCounterContainerBlock || block.get() instanceof KitchenCounterContainerDoorBlock || block.get() instanceof KitchenCounterContainerDrawerBlock || block.get() instanceof KitchenCabinetContainerBlock || block.get() instanceof KitchenCabinetContainerDoorBlock || block.get() instanceof KitchenCabinetContainerSidewaysDoorBlock || block.get() instanceof KitchenCabinetShelfBlock) {
                 event.modify(SFFBlockEntityTypes.KITCHEN_COUNTER.get(), block.get());
