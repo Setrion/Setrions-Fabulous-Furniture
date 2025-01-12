@@ -26,7 +26,7 @@ import net.setrion.fabulous_furniture.registry.SFFStats;
 import net.setrion.fabulous_furniture.world.level.block.entity.KitchenCounterBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
-public class KitchenCabinetContainerBlock extends BaseEntityBlock {
+public class KitchenCabinetContainerBlock extends KitchenCounterContainerBlock {
 
     public static final MapCodec<KitchenCabinetContainerBlock> CODEC = simpleCodec(KitchenCabinetContainerBlock::new);
 
@@ -78,30 +78,10 @@ public class KitchenCabinetContainerBlock extends BaseEntityBlock {
         return rotate(blockState, mirror.getRotation(blockState.getValue(FACING)));
     }
 
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new KitchenCounterBlockEntity(blockPos, blockState);
-    }
-
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         Containers.dropContentsOnDestroy(state, newState, level, pos);
         super.onRemove(state, level, pos, newState, isMoving);
-    }
-
-    @Override
-    protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult) {
-        if (level instanceof ServerLevel serverlevel) {
-            MenuProvider menuprovider = this.getMenuProvider(blockState, level, blockPos);
-            if (menuprovider != null) {
-                player.openMenu(menuprovider);
-                player.awardStat(Stats.CUSTOM.get(SFFStats.OPEN_KITCHEN_COUNTER.get()));
-                PiglinAi.angerNearbyPiglins(serverlevel, player, true);
-            }
-        }
-
-        return InteractionResult.SUCCESS;
     }
 
     static {

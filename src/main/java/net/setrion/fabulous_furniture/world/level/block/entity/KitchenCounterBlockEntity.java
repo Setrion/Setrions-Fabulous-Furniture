@@ -32,14 +32,14 @@ public class KitchenCounterBlockEntity extends RandomizableContainerBlockEntity 
         this.items = NonNullList.withSize(27, ItemStack.EMPTY);
         this.openersCounter = new ContainerOpenersCounter() {
             protected void onOpen(Level level, BlockPos pos, BlockState state) {
-                if (!state.getValue(KitchenCounterContainerDoorBlock.OPEN) && (state.getBlock() instanceof KitchenCounterContainerDoorBlock || state.getBlock() instanceof KitchenCounterContainerDrawerBlock || state.getBlock() instanceof KitchenCabinetContainerDoorBlock || state.getBlock() instanceof KitchenCabinetContainerSidewaysDoorBlock)) {
+                if ((state.getBlock() instanceof KitchenCounterContainerDoorBlock || state.getBlock() instanceof KitchenCounterContainerDrawerBlock || state.getBlock() instanceof KitchenCabinetContainerDoorBlock || state.getBlock() instanceof KitchenCabinetContainerSidewaysDoorBlock) && !state.getValue(KitchenCounterContainerDoorBlock.OPEN)) {
                     KitchenCounterBlockEntity.this.playSound(SoundEvents.BARREL_OPEN);
                     KitchenCounterBlockEntity.this.updateBlockState(state, true);
                 }
             }
 
             protected void onClose(Level level, BlockPos pos, BlockState state) {
-                if (state.getValue(KitchenCounterContainerDoorBlock.OPEN) && (state.getBlock() instanceof KitchenCounterContainerDoorBlock || state.getBlock() instanceof KitchenCounterContainerDrawerBlock || state.getBlock() instanceof KitchenCabinetContainerDoorBlock || state.getBlock() instanceof KitchenCabinetContainerSidewaysDoorBlock)) {
+                if ((state.getBlock() instanceof KitchenCounterContainerDoorBlock || state.getBlock() instanceof KitchenCounterContainerDrawerBlock || state.getBlock() instanceof KitchenCabinetContainerDoorBlock || state.getBlock() instanceof KitchenCabinetContainerSidewaysDoorBlock) && state.getValue(KitchenCounterContainerDoorBlock.OPEN)) {
                     KitchenCounterBlockEntity.this.playSound(SoundEvents.BARREL_CLOSE);
                     KitchenCounterBlockEntity.this.updateBlockState(state, false);
                 }

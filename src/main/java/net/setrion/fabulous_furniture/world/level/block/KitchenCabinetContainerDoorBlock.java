@@ -30,7 +30,7 @@ import net.setrion.fabulous_furniture.registry.SFFStats;
 import net.setrion.fabulous_furniture.world.level.block.entity.KitchenCounterBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
-public class KitchenCabinetContainerDoorBlock extends BaseEntityBlock {
+public class KitchenCabinetContainerDoorBlock extends KitchenCabinetContainerBlock {
 
     public static final MapCodec<KitchenCabinetContainerDoorBlock> CODEC = simpleCodec(KitchenCabinetContainerDoorBlock::new);
 
@@ -81,12 +81,6 @@ public class KitchenCabinetContainerDoorBlock extends BaseEntityBlock {
     @Override
     public BlockState mirror(BlockState blockState, Mirror mirror) {
         return rotate(blockState, mirror.getRotation(blockState.getValue(FACING)));
-    }
-
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new KitchenCounterBlockEntity(blockPos, blockState);
     }
 
     @Override

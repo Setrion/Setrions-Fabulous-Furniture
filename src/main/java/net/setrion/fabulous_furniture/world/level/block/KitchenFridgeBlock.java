@@ -28,7 +28,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.setrion.fabulous_furniture.registry.SFFBlocks;
 import net.setrion.fabulous_furniture.registry.SFFStats;
 import net.setrion.fabulous_furniture.registry.SFFTags;
 import net.setrion.fabulous_furniture.world.level.block.entity.KitchenFridgeBlockEntity;
@@ -146,7 +145,6 @@ public class KitchenFridgeBlock extends BaseEntityBlock {
     private void playSound(@Nullable Entity source, BlockState state, Level level, BlockPos pos, boolean isOpening) {
         SoundEvent open = state.is(SFFTags.Blocks.COPPER_FRIDGES) ? SoundEvents.COPPER_DOOR_OPEN : SoundEvents.IRON_DOOR_OPEN;
         SoundEvent close = state.is(SFFTags.Blocks.COPPER_FRIDGES) ? SoundEvents.COPPER_DOOR_CLOSE : SoundEvents.IRON_DOOR_CLOSE;
-        System.out.println(state.getBlock());
         level.playSound(source, pos, isOpening ? open : close, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
     }
 

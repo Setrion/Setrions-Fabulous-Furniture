@@ -1,9 +1,11 @@
 package net.setrion.fabulous_furniture.data;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.WoodType;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.setrion.fabulous_furniture.FabulousFurniture;
 import net.setrion.fabulous_furniture.registry.SFFBlocks;
@@ -33,20 +35,9 @@ public class TagGenerator {
 
         @Override
         protected void addTags(HolderLookup.Provider provider) {
-            tag(SFFTags.Blocks.CRATES).add(
-                    SFFBlocks.OAK_CRATE.get(),
-                    SFFBlocks.SPRUCE_CRATE.get(),
-                    SFFBlocks.BIRCH_CRATE.get(),
-                    SFFBlocks.JUNGLE_CRATE.get(),
-                    SFFBlocks.ACACIA_CRATE.get(),
-                    SFFBlocks.CHERRY_CRATE.get(),
-                    SFFBlocks.DARK_OAK_CRATE.get(),
-                    SFFBlocks.PALE_OAK_CRATE.get(),
-                    SFFBlocks.BAMBOO_CRATE.get(),
-                    SFFBlocks.MANGROVE_CRATE.get(),
-                    SFFBlocks.CRIMSON_CRATE.get(),
-                    SFFBlocks.WARPED_CRATE.get()
-            );
+            for (WoodType type : WoodType.values().toList()) {
+                tag(SFFTags.Blocks.CRATES).add(BuiltInRegistries.BLOCK.getValue(FabulousFurniture.prefix(type.name()+"_crate")));
+            }
 
             tag(SFFTags.Blocks.COPPER_FRIDGES).add(
                     SFFBlocks.COPPER_FRIDGE.get(),

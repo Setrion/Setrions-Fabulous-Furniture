@@ -16,7 +16,6 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
@@ -26,10 +25,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.setrion.fabulous_furniture.registry.SFFStats;
-import net.setrion.fabulous_furniture.world.level.block.entity.KitchenCounterBlockEntity;
-import org.jetbrains.annotations.Nullable;
 
-public class KitchenCounterContainerDoorBlock extends BaseEntityBlock {
+public class KitchenCounterContainerDoorBlock extends KitchenCounterContainerBlock {
 
     public static final MapCodec<KitchenCounterContainerDoorBlock> CODEC = simpleCodec(KitchenCounterContainerDoorBlock::new);
 
@@ -116,12 +113,6 @@ public class KitchenCounterContainerDoorBlock extends BaseEntityBlock {
     @Override
     public BlockState mirror(BlockState blockState, Mirror mirror) {
         return rotate(blockState, mirror.getRotation(blockState.getValue(FACING)));
-    }
-
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new KitchenCounterBlockEntity(blockPos, blockState);
     }
 
     @Override
