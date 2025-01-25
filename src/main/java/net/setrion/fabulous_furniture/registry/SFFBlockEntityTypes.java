@@ -17,7 +17,7 @@ public class SFFBlockEntityTypes {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CrateBlockEntity>> CRATE = BLOCK_ENTITY_TYPES.register("crate", () -> new BlockEntityType<>(CrateBlockEntity::new, BuiltInRegistries.BLOCK.get(FabulousFurniture.prefix("oak_crate")).get().value()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<KitchenCounterBlockEntity>> KITCHEN_COUNTER = BLOCK_ENTITY_TYPES.register("kitchen_counter", () -> new BlockEntityType<>(KitchenCounterBlockEntity::new,
-            BuiltInRegistries.BLOCK.get(FabulousFurniture.prefix("oak_polished_tuff_kitchen_counter_open")).get().value()));
+            BuiltInRegistries.BLOCK.get(FabulousFurniture.prefix("oak_polished_tuff_kitchen_counter_shelf")).get().value()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<KitchenFridgeBlockEntity>> FRIDGE = BLOCK_ENTITY_TYPES.register("fridge", () -> new BlockEntityType<>(KitchenFridgeBlockEntity::new,
             SFFBlocks.IRON_FRIDGE.get(), SFFBlocks.GOLD_FRIDGE.get(), SFFBlocks.NETHERITE_FRIDGE.get(), SFFBlocks.COPPER_FRIDGE.get(), SFFBlocks.EXPOSED_COPPER_FRIDGE.get(), SFFBlocks.WEATHERED_COPPER_FRIDGE.get(), SFFBlocks.OXIDIZED_COPPER_FRIDGE.get(), SFFBlocks.WAXED_COPPER_FRIDGE.get(), SFFBlocks.WAXED_EXPOSED_COPPER_FRIDGE.get(), SFFBlocks.WAXED_WEATHERED_COPPER_FRIDGE.get(), SFFBlocks.WAXED_OXIDIZED_COPPER_FRIDGE.get()));

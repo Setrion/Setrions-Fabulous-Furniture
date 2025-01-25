@@ -28,6 +28,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.setrion.fabulous_furniture.registry.SFFBlocks;
 import net.setrion.fabulous_furniture.registry.SFFStats;
 import net.setrion.fabulous_furniture.registry.SFFTags;
 import net.setrion.fabulous_furniture.world.level.block.entity.KitchenFridgeBlockEntity;
@@ -153,6 +154,7 @@ public class KitchenFridgeBlock extends BaseEntityBlock {
         if (level instanceof ServerLevel serverlevel) {
             if (player.isShiftKeyDown()) {
                 blockState = blockState.cycle(OPEN);
+                System.out.println(SFFBlocks.BLOCKS.getEntries().size());
                 level.setBlock(blockPos, blockState, 10);
                 this.playSound(null, blockState, level, blockPos, blockState.getValue(OPEN));
                 level.gameEvent(player, this.isOpen(blockState) ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, blockPos);

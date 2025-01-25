@@ -30,16 +30,10 @@ public class FabulousFurniture {
         for (DeferredHolder<Block, ? extends Block> block : SFFBlocks.BLOCKS.getEntries()) {
             if (block.get() instanceof KitchenCounterSmokerBlock) {
                 event.modify(BlockEntityType.SMOKER, block.get());
-            }
-        }
-        for (DeferredHolder<Block, ? extends Block> block : SFFBlocks.BLOCKS.getEntries()) {
-            if (block.get() instanceof CrateBlock) {
-                event.modify(SFFBlockEntityTypes.CRATE.get(), block.get());
-            }
-        }
-        for (DeferredHolder<Block, ? extends Block> block : SFFBlocks.BLOCKS.getEntries()) {
-            if (block.get() instanceof KitchenCounterContainerBlock || block.get() instanceof KitchenCounterContainerDoorBlock || block.get() instanceof KitchenCounterContainerDrawerBlock || block.get() instanceof KitchenCabinetContainerBlock || block.get() instanceof KitchenCabinetContainerDoorBlock || block.get() instanceof KitchenCabinetContainerSidewaysDoorBlock || block.get() instanceof KitchenCabinetShelfBlock) {
+            } else if (block.get() instanceof KitchenCounterContainerBlock || block.get() instanceof KitchenCounterContainerDoorBlock || block.get() instanceof KitchenCounterContainerDrawerBlock || block.get() instanceof KitchenCabinetContainerBlock || block.get() instanceof KitchenCabinetContainerDoorBlock || block.get() instanceof KitchenCabinetContainerSidewaysDoorBlock || block.get() instanceof KitchenCabinetShelfBlock) {
                 event.modify(SFFBlockEntityTypes.KITCHEN_COUNTER.get(), block.get());
+            } else if (block.get() instanceof CrateBlock) {
+                event.modify(SFFBlockEntityTypes.CRATE.get(), block.get());
             }
         }
     }

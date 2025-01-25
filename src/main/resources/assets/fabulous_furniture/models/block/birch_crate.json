@@ -1,8 +1,0 @@
-{
-  "parent": "fabulous_furniture:block/template/crate_template",
-  "textures": {
-    "log": "minecraft:block/birch_log",
-    "particle": "minecraft:block/birch_log_top",
-    "planks": "minecraft:block/birch_planks"
-  }
-}

@@ -18,7 +18,7 @@ public class ColorHandler {
     public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
         for (DeferredHolder<Block, ? extends Block> block : SFFBlocks.BLOCKS.getEntries()) {
             if (block.get() instanceof KitchenCounterSinkBlock) {
-                event.register((state, getter, pos, tintIndex) -> getter != null && pos != null ? BiomeColors.getAverageWaterColor(getter, pos) : -1, block.get());
+                event.register((state, getter, pos, tintIndex) -> tintIndex == 1 && getter != null && pos != null ? BiomeColors.getAverageWaterColor(getter, pos) : -1, block.get());
             }
         }
     }
