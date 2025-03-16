@@ -16,6 +16,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.setrion.fabulous_furniture.FabulousFurniture;
 import net.setrion.fabulous_furniture.world.level.block.*;
+import net.setrion.fabulous_furniture.world.level.block.state.properties.LampPart;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -131,7 +132,7 @@ public class SFFBlocks {
                 registerBlockWithItem(color.getName()+"_"+type.name()+"_chair", ChairBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
                 registerBlockWithItem(color.getName()+"_"+type.name()+log_suffix+"_chair", ChairBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
                 registerBlockWithItem(color.getName()+"_stripped_"+type.name()+log_suffix+"_chair", ChairBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
-                registerBlockWithItem(type.name()+"_"+color.getName()+"_table_lamp", LampBlock::new, () -> lampProperties(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem(color.getName()+"_"+type.name()+"_lamp", LampBlock::new, () -> lampProperties(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
                 registerBlockWithItem(color.getName()+"_"+type.name()+"_bed", WoodenBedBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
                 registerBlockWithItem(color.getName()+"_"+type.name()+log_suffix+"_bed", WoodenBedBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
                 registerBlockWithItem(color.getName()+"_stripped_"+type.name()+log_suffix+"_bed", WoodenBedBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
@@ -178,7 +179,7 @@ public class SFFBlocks {
     public static final DeferredBlock<Block> WHITE_PINK_KITCHEN_TILES = registerBlockWithItem("white_pink_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
 
     private static BlockBehaviour.Properties lampProperties(Block block) {
-        return BlockBehaviour.Properties.ofFullCopy(block).lightLevel((state) -> state.getValue(LampBlock.ON) ? 15 : 0);
+        return BlockBehaviour.Properties.ofFullCopy(block).lightLevel((state) -> state.getValue(LampBlock.ON) && (state.getValue(LampBlock.PART) == LampPart.TOP || state.getValue(LampBlock.PART) == LampPart.SINGLE) ? 15 : 0);
     }
     
     public static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {

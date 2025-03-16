@@ -16,15 +16,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SmokerBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.*;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.setrion.fabulous_furniture.FabulousFurniture;
 import net.setrion.fabulous_furniture.world.level.block.*;
-import net.setrion.fabulous_furniture.world.level.block.state.properties.BedShape;
-import net.setrion.fabulous_furniture.world.level.block.state.properties.CounterShape;
-import net.setrion.fabulous_furniture.world.level.block.state.properties.CurtainShape;
-import net.setrion.fabulous_furniture.world.level.block.state.properties.ShelfShape;
+import net.setrion.fabulous_furniture.world.level.block.state.properties.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -182,7 +178,7 @@ public class ModelGenerator extends ModelProvider {
                 createModel(blockModels, createChairBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(color+"_"+type.name()+"_chair")), planks, TextureMapping.getBlockTexture(blockFamily.get(BlockFamily.Variant.TRAPDOOR)), TextureMapping.getBlockTexture(block), blockModels));
                 createModel(blockModels, createChairBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(color+"_"+type.name()+log_suffix+"_chair")), log, TextureMapping.getBlockTexture(blockFamily.get(BlockFamily.Variant.TRAPDOOR)), TextureMapping.getBlockTexture(block), blockModels));
                 createModel(blockModels, createChairBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(color+"_stripped_"+type.name()+log_suffix+"_chair")), strippedLog, TextureMapping.getBlockTexture(blockFamily.get(BlockFamily.Variant.TRAPDOOR)), TextureMapping.getBlockTexture(block), blockModels));
-                createModel(blockModels, createTableLampBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_"+color+"_table_lamp")), planks, TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(log, "_top"), TextureMapping.getBlockTexture(strippedLog), TextureMapping.getBlockTexture(REDSTONE_LAMP), TextureMapping.getBlockTexture(REDSTONE_LAMP, "_on"), TextureMapping.getBlockTexture(block), blockModels));
+                createModel(blockModels, createLampBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(color+"_"+type.name()+"_lamp")), planks, TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(log, "_top"), TextureMapping.getBlockTexture(strippedLog), TextureMapping.getBlockTexture(REDSTONE_LAMP), TextureMapping.getBlockTexture(REDSTONE_LAMP, "_on"), TextureMapping.getBlockTexture(block), blockModels));
                 createModel(blockModels, createWoodenBedBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(color+"_"+type.name()+"_bed")), TextureMapping.getBlockTexture(planks), TextureMapping.getBlockTexture(block), TextureMapping.getBlockTexture(blockFamily.get(BlockFamily.Variant.TRAPDOOR)), blockModels));
                 createModel(blockModels, createWoodenBedBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(color+"_"+type.name()+log_suffix+"_bed")), TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(block), TextureMapping.getBlockTexture(blockFamily.get(BlockFamily.Variant.TRAPDOOR)), blockModels));
                 createModel(blockModels, createWoodenBedBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(color+"_stripped_"+type.name()+log_suffix+"_bed")), TextureMapping.getBlockTexture(strippedLog), TextureMapping.getBlockTexture(block), TextureMapping.getBlockTexture(blockFamily.get(BlockFamily.Variant.TRAPDOOR)), blockModels));
@@ -522,13 +518,23 @@ public class ModelGenerator extends ModelProvider {
         ).with(createUVLockedHorizontalFacingDispatch());
     }
 
-    private MultiVariantGenerator createTableLampBlock(Block block, Block planks, ResourceLocation log, ResourceLocation log_top, ResourceLocation stripped_log, ResourceLocation lamp, ResourceLocation lamp_on, ResourceLocation wool, BlockModelGenerators blockModels) {
-        ResourceLocation model = ModelTemplates.TABLE_LAMP.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)).put(TextureSlots.LOG, log).put(TextureSlots.LOG_TOP, log_top).put(TextureSlots.STRIPPED_LOG, stripped_log).put(TextureSlots.LAMP, lamp).put(TextureSlots.WOOL, wool), blockModels.modelOutput);
-        ResourceLocation model_on = ModelTemplates.TABLE_LAMP_ON.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)).put(TextureSlots.LOG, log).put(TextureSlots.LOG_TOP, log_top).put(TextureSlots.STRIPPED_LOG, stripped_log).put(TextureSlots.LAMP, lamp_on).put(TextureSlots.WOOL, wool), blockModels.modelOutput);
-        return MultiVariantGenerator.multiVariant(block, Variant.variant().with(MODEL, model)).with(
-                PropertyDispatch.property(LampBlock.ON)
-                        .select(true, Variant.variant().with(MODEL, model_on))
-                        .select(false, Variant.variant().with(MODEL, model))
+    private MultiVariantGenerator createLampBlock(Block block, Block planks, ResourceLocation log, ResourceLocation log_top, ResourceLocation stripped_log, ResourceLocation lamp, ResourceLocation lamp_on, ResourceLocation wool, BlockModelGenerators blockModels) {
+        ResourceLocation model_single = ModelTemplates.LAMP_SINGLE.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)).put(TextureSlots.LOG, log).put(TextureSlots.LOG_TOP, log_top).put(TextureSlots.STRIPPED_LOG, stripped_log).put(TextureSlots.LAMP, lamp).put(TextureSlots.WOOL, wool), blockModels.modelOutput);
+        ResourceLocation model_single_on = ModelTemplates.LAMP_SINGLE_ON.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)).put(TextureSlots.LOG, log).put(TextureSlots.LOG_TOP, log_top).put(TextureSlots.STRIPPED_LOG, stripped_log).put(TextureSlots.LAMP, lamp_on).put(TextureSlots.WOOL, wool), blockModels.modelOutput);
+        ResourceLocation model_top = ModelTemplates.LAMP_TOP.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)).put(TextureSlots.LOG, log).put(TextureSlots.LAMP, lamp).put(TextureSlots.WOOL, wool), blockModels.modelOutput);
+        ResourceLocation model_top_on = ModelTemplates.LAMP_TOP_ON.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)).put(TextureSlots.LOG, log).put(TextureSlots.LAMP, lamp_on).put(TextureSlots.WOOL, wool), blockModels.modelOutput);
+        ResourceLocation model_middle = ModelTemplates.LAMP_MIDDLE.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)).put(TextureSlots.LOG, log), blockModels.modelOutput);
+        ResourceLocation model_bottom = ModelTemplates.LAMP_BOTTOM.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.LOG, log).put(TextureSlots.LOG_TOP, log_top).put(TextureSlots.STRIPPED_LOG, stripped_log), blockModels.modelOutput);
+        return MultiVariantGenerator.multiVariant(block, Variant.variant().with(MODEL, model_single)).with(
+                PropertyDispatch.properties(LampBlock.ON, LampBlock.PART)
+                        .select(true, LampPart.SINGLE, Variant.variant().with(MODEL, model_single_on))
+                        .select(false, LampPart.SINGLE, Variant.variant().with(MODEL, model_single))
+                        .select(true, LampPart.TOP, Variant.variant().with(MODEL, model_top_on))
+                        .select(false, LampPart.TOP, Variant.variant().with(MODEL, model_top))
+                        .select(true, LampPart.MIDDLE, Variant.variant().with(MODEL, model_middle))
+                        .select(false, LampPart.MIDDLE, Variant.variant().with(MODEL, model_middle))
+                        .select(true, LampPart.BOTTOM, Variant.variant().with(MODEL, model_bottom))
+                        .select(false, LampPart.BOTTOM, Variant.variant().with(MODEL, model_bottom))
         );
     }
 
@@ -717,8 +723,12 @@ public class ModelGenerator extends ModelProvider {
 
         public static final ModelTemplate KITCHEN_TILES = getTemplate("kitchen_tiles_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.TILE_BASE, TextureSlots.TILE_2);
 
-        public static final ModelTemplate TABLE_LAMP = getTemplate("table_lamp_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.LOG, TextureSlots.STRIPPED_LOG, TextureSlots.LOG_TOP, TextureSlots.PLANKS, TextureSlots.WOOL, TextureSlots.LAMP);
-        public static final ModelTemplate TABLE_LAMP_ON = getTemplate("table_lamp_template", Optional.of("_on"), TextureSlot.PARTICLE, TextureSlots.LOG, TextureSlots.STRIPPED_LOG, TextureSlots.LOG_TOP, TextureSlots.PLANKS, TextureSlots.WOOL, TextureSlots.LAMP);
+        public static final ModelTemplate LAMP_SINGLE = getTemplate("lamp_single_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.LOG, TextureSlots.STRIPPED_LOG, TextureSlots.LOG_TOP, TextureSlots.PLANKS, TextureSlots.WOOL, TextureSlots.LAMP);
+        public static final ModelTemplate LAMP_SINGLE_ON = getTemplate("lamp_single_template", Optional.of("_on"), TextureSlot.PARTICLE, TextureSlots.LOG, TextureSlots.STRIPPED_LOG, TextureSlots.LOG_TOP, TextureSlots.PLANKS, TextureSlots.WOOL, TextureSlots.LAMP);
+        public static final ModelTemplate LAMP_TOP = getTemplate("lamp_top_template", Optional.of("_top"), TextureSlot.PARTICLE, TextureSlots.LOG, TextureSlots.PLANKS, TextureSlots.WOOL, TextureSlots.LAMP);
+        public static final ModelTemplate LAMP_TOP_ON = getTemplate("lamp_top_template", Optional.of("top_on"), TextureSlot.PARTICLE, TextureSlots.LOG, TextureSlots.PLANKS, TextureSlots.WOOL, TextureSlots.LAMP);
+        public static final ModelTemplate LAMP_MIDDLE = getTemplate("lamp_middle_template", Optional.of("_middle"), TextureSlot.PARTICLE, TextureSlots.LOG);
+        public static final ModelTemplate LAMP_BOTTOM = getTemplate("lamp_bottom_template", Optional.of("_bottom"), TextureSlot.PARTICLE, TextureSlots.LOG, TextureSlots.STRIPPED_LOG, TextureSlots.LOG_TOP);
 
         public static final ModelTemplate WOODEN_BED_HEAD_SINGLE = getTemplate("wooden_bed_head_single_template", Optional.of("_head_single"), TextureSlot.PARTICLE, TextureSlots.WOOD, TextureSlots.WOOL, TextureSlots.DECORATION);
         public static final ModelTemplate WOODEN_BED_HEAD_LEFT = getTemplate("wooden_bed_head_left_template", Optional.of("_head_left"), TextureSlot.PARTICLE, TextureSlots.WOOD, TextureSlots.WOOL, TextureSlots.DECORATION);

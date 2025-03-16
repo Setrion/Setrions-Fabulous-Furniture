@@ -131,11 +131,46 @@ public class WoodenBedBlock extends Block {
         }
     }
 
-    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess scheduledTickAccess, BlockPos pos, Direction direction, BlockPos neighbourPos, BlockState neighbourState, RandomSource random) {
-        if (direction != getNeighbourDirection(state.getValue(PART), state.getValue(FACING))) {
-            return super.updateShape(state, level, scheduledTickAccess, pos, direction, neighbourPos, neighbourState, random);
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
+        BlockState state = this.defaultBlockState().setValue(FACING, blockPlaceContext.getHorizontalDirection());
+        BlockState state1 = blockPlaceContext.getLevel().getBlockState(blockPlaceContext.getClickedPos().relative(state.getValue(FACING).getClockWise()));
+        BlockState state2 = blockPlaceContext.getLevel().getBlockState(blockPlaceContext.getClickedPos().relative(state.getValue(FACING).getClockWise().getOpposite()));
+        if (isSameBed(state, state1) && isSameBed(state, state2)) {
+            return state.setValue(SHAPE, BedShape.MIDDLE);
+        } else if (isSameBed(state, state1)) {
+            return state.setValue(SHAPE, BedShape.LEFT);
+        } else if (isSameBed(state, state2)) {
+            return state.setValue(SHAPE, BedShape.RIGHT);
         } else {
-            return neighbourState.is(this) && neighbourState.getValue(PART) != state.getValue(PART) ? state.setValue(OCCUPIED, neighbourState.getValue(OCCUPIED)) : Blocks.AIR.defaultBlockState();
+            return state.setValue(SHAPE, BedShape.SINGLE);
+        }
+    }
+
+    public boolean isSameBed(BlockState state, BlockState state2) {
+        if (state2.getBlock() == state.getBlock()) {
+            return state.getValue(FACING).equals(state2.getValue(FACING)) && state.getValue(PART).equals(state2.getValue(PART));
+        }
+        return false;
+    }
+
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess tickAccess, BlockPos blockPos, Direction direction, BlockPos newPos, BlockState newState, RandomSource random) {
+        if (direction == Direction.UP && !this.canSurvive(state, level, blockPos)) {
+            return Blocks.AIR.defaultBlockState();
+        } else if (direction == getNeighbourDirection(state.getValue(PART), state.getValue(FACING))) {
+            return newState.is(this) && newState.getValue(PART) != state.getValue(PART) ? state.setValue(OCCUPIED, newState.getValue(OCCUPIED)) : Blocks.AIR.defaultBlockState();
+        } else {
+            BlockState state1 = level.getBlockState(blockPos.relative(state.getValue(FACING).getClockWise()));
+            BlockState state2 = level.getBlockState(blockPos.relative(state.getValue(FACING).getClockWise().getOpposite()));
+            if (isSameBed(state, state1) && isSameBed(state, state2)) {
+                return state.setValue(SHAPE, BedShape.MIDDLE);
+            } else if (isSameBed(state, state1)) {
+                return state.setValue(SHAPE, BedShape.LEFT);
+            } else if (isSameBed(state, state2)) {
+                return state.setValue(SHAPE, BedShape.RIGHT);
+            } else {
+                return state.setValue(SHAPE, BedShape.SINGLE);
+            }
         }
     }
 
@@ -157,27 +192,6 @@ public class WoodenBedBlock extends Block {
         }
 
         return super.playerWillDestroy(level, pos, state, player);
-    }
-
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        Direction direction = context.getHorizontalDirection();
-        BlockPos blockpos = context.getClickedPos();
-        BlockPos blockpos1 = blockpos.relative(direction);
-        Level level = context.getLevel();
-        BlockState state = defaultBlockState().setValue(FACING, direction);
-        BlockState leftState = level.getBlockState(blockpos.relative(direction.getClockWise()));
-        BlockState rightState = level.getBlockState(blockpos.relative(direction.getCounterClockWise()));
-        if (leftState.is(this) && leftState.getValue(PART) == defaultBlockState().getValue(PART) && rightState.is(this) && rightState.getValue(PART) == defaultBlockState().getValue(PART)) {
-            state = state.setValue(SHAPE, BedShape.MIDDLE);
-        } else if (leftState.is(this) && leftState.getValue(PART) == defaultBlockState().getValue(PART)) {
-            state = state.setValue(SHAPE, BedShape.LEFT);
-        } else if (rightState.is(this) && rightState.getValue(PART) == defaultBlockState().getValue(PART)) {
-            state = state.setValue(SHAPE, BedShape.RIGHT);
-        } else {
-            state = state.setValue(SHAPE, BedShape.SINGLE);
-        }
-        return level.getBlockState(blockpos1).canBeReplaced(context) && level.getWorldBorder().isWithinBounds(blockpos1) ? state : null;
     }
 
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
