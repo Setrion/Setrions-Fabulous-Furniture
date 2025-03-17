@@ -101,7 +101,7 @@ public class CarpentryTableScreen extends AbstractContainerScreen<CarpentryTable
             addWidget(box);
         }
         name = new EditBox(font, i + 149, j + 13, 70, 10, Component.literal(""));
-        name.setCanLoseFocus(false);
+        name.setCanLoseFocus(true);
         name.setTextColor(-1);
         name.setTextColorUneditable(-1);
         name.setBordered(false);

@@ -26,7 +26,6 @@ public class CarpentryTableMenu extends AbstractContainerMenu {
     final DataSlot selectedRecipeIndex;
     private final Level level;
     private List<RecipeHolder<CarpentryTableRecipe>> recipesForInput;
-    private ItemStack input;
     long lastSoundTime;
     final Slot resultSlot;
     Runnable slotUpdateListener;
@@ -40,7 +39,6 @@ public class CarpentryTableMenu extends AbstractContainerMenu {
     public CarpentryTableMenu(int containerId, Inventory playerInventory, final ContainerLevelAccess access) {
         super(SFFMenuTypes.CARPENTRY_TABLE.get(), containerId);
         this.selectedRecipeIndex = DataSlot.standalone();
-        this.input = ItemStack.EMPTY;
         this.slotUpdateListener = () -> {
         };
         this.container = new SimpleContainer(6) {
@@ -107,7 +105,8 @@ public class CarpentryTableMenu extends AbstractContainerMenu {
 
     public boolean clickMenuButton(Player player, int id) {
         if (isRecipeCraftable(recipesForInput.get(id))) {
-            craftRecipe(recipesForInput.get(id));
+            selectedRecipeIndex.set(id);
+            craftRecipe(recipesForInput.get(selectedRecipeIndex.get()));
             return true;
         }
         return false;
@@ -119,8 +118,20 @@ public class CarpentryTableMenu extends AbstractContainerMenu {
     }
 
     void craftRecipe(RecipeHolder<CarpentryTableRecipe> recipe) {
-        resultSlot.set(recipe.value().getResult());
-        broadcastChanges();
+        this.resultContainer.setRecipeUsed(recipe);
+        if (resultSlot.hasItem()) {
+            if (resultSlot.getItem().getItem() == recipe.value().getResult().getItem()) {
+                ItemStack stack = recipe.value().getResult().copy();
+                int count = resultSlot.getItem().getCount() + recipe.value().getResult().copy().getCount();
+                if (count <= 64) {
+                    stack.setCount(count);
+                    resultSlot.set(stack);
+                }
+            }
+        } else {
+            resultSlot.set(recipe.value().getResult().copy());
+        }
+        this.broadcastChanges();
     }
 
     public List<RecipeHolder<CarpentryTableRecipe>> getRecipes() {
