@@ -3,51 +3,42 @@ package net.setrion.fabulous_furniture.world.level.block;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.stats.Stats;
 import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.monster.piglin.PiglinAi;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.setrion.fabulous_furniture.registry.SFFStats;
-import net.setrion.fabulous_furniture.world.level.block.entity.KitchenCounterBlockEntity;
-import org.jetbrains.annotations.Nullable;
 
-public class KitchenCabinetContainerSidewaysDoorBlock extends KitchenCabinetContainerBlock {
+public class KitchenCabinetContainerBaseBlock extends KitchenCounterContainerBaseBlock {
 
-    public static final MapCodec<KitchenCabinetContainerSidewaysDoorBlock> CODEC = simpleCodec(KitchenCabinetContainerSidewaysDoorBlock::new);
+    public static final MapCodec<KitchenCabinetContainerBaseBlock> CODEC = simpleCodec(KitchenCabinetContainerBaseBlock::new);
 
     public static final EnumProperty<Direction> FACING;
-    public static final BooleanProperty OPEN;
-    public static final EnumProperty<DoorHingeSide> HINGE;
     protected static final VoxelShape COUNTER_NORTH;
     protected static final VoxelShape COUNTER_EAST;
     protected static final VoxelShape COUNTER_SOUTH;
     protected static final VoxelShape COUNTER_WEST;
 
+    private boolean canBeOpened;
+    private boolean hasHinge;
 
-    public KitchenCabinetContainerSidewaysDoorBlock(Properties properties) {
-        super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(OPEN, false));
+    protected KitchenCabinetContainerBaseBlock(Properties properties) {
+        this(properties, false, false);
+    }
+
+    public KitchenCabinetContainerBaseBlock(Properties properties, boolean canBeOpened, boolean hasHinge) {
+        super(properties, canBeOpened, hasHinge);
+        this.canBeOpened = canBeOpened;
+        this.hasHinge = hasHinge;
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
     @Override
@@ -68,12 +59,21 @@ public class KitchenCabinetContainerSidewaysDoorBlock extends KitchenCabinetCont
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, HINGE, OPEN);
+        builder.add(FACING);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
-        return this.defaultBlockState().setValue(FACING, blockPlaceContext.getHorizontalDirection().getOpposite()).setValue(HINGE, this.getHinge(blockPlaceContext)).setValue(OPEN, false);
+        BlockState state = defaultBlockState();
+        if (canBeOpened) {
+            state = state.setValue(OPEN, false);
+        }
+        if (hasHinge) {
+            state = state.setValue(FACING, blockPlaceContext.getHorizontalDirection().getOpposite()).setValue(HINGE, this.getHinge(blockPlaceContext));
+        } else {
+            state = state.setValue(FACING, blockPlaceContext.getHorizontalDirection().getOpposite());
+        }
+        return state;
     }
 
     private DoorHingeSide getHinge(BlockPlaceContext context) {
@@ -92,8 +92,8 @@ public class KitchenCabinetContainerSidewaysDoorBlock extends KitchenCabinetCont
         BlockPos blockpos5 = blockpos1.relative(direction2);
         BlockState blockstate3 = blockgetter.getBlockState(blockpos5);
         int i = (blockstate.isCollisionShapeFullBlock(blockgetter, blockpos2) ? -1 : 0) + (blockstate1.isCollisionShapeFullBlock(blockgetter, blockpos3) ? -1 : 0) + (blockstate2.isCollisionShapeFullBlock(blockgetter, blockpos4) ? 1 : 0) + (blockstate3.isCollisionShapeFullBlock(blockgetter, blockpos5) ? 1 : 0);
-        boolean flag = blockstate.getBlock() instanceof KitchenCabinetContainerSidewaysDoorBlock;
-        boolean flag1 = blockstate2.getBlock() instanceof KitchenCabinetContainerSidewaysDoorBlock;
+        boolean flag = blockstate.getBlock() instanceof KitchenCabinetContainerBaseBlock;
+        boolean flag1 = blockstate2.getBlock() instanceof KitchenCabinetContainerBaseBlock;
         if ((!flag || flag1) && i <= 0) {
             if ((!flag1 || flag) && i == 0) {
                 int j = direction.getStepX();
@@ -126,34 +126,8 @@ public class KitchenCabinetContainerSidewaysDoorBlock extends KitchenCabinetCont
         super.onRemove(state, level, pos, newState, isMoving);
     }
 
-    @Override
-    protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult) {
-        if (level instanceof ServerLevel serverlevel) {
-            if (player.isShiftKeyDown()) {
-                if (blockState.getValue(OPEN)) {
-                    level.setBlock(blockPos, blockState.setValue(OPEN, !blockState.getValue(OPEN)), 3);
-                    level.playSound(null, blockPos, SoundEvents.BARREL_CLOSE, SoundSource.BLOCKS);
-                } else {
-                    level.setBlock(blockPos, blockState.setValue(OPEN, !blockState.getValue(OPEN)), 3);
-                    level.playSound(null, blockPos, SoundEvents.BARREL_OPEN, SoundSource.BLOCKS);
-                }
-            } else {
-                MenuProvider menuprovider = this.getMenuProvider(blockState, level, blockPos);
-                if (menuprovider != null) {
-                    player.openMenu(menuprovider);
-                    player.awardStat(Stats.CUSTOM.get(SFFStats.OPEN_KITCHEN_COUNTER.get()));
-                    PiglinAi.angerNearbyPiglins(serverlevel, player, true);
-                }
-            }
-        }
-
-        return InteractionResult.SUCCESS;
-    }
-
     static {
         FACING = HorizontalDirectionalBlock.FACING;
-        OPEN = BlockStateProperties.OPEN;
-        HINGE = BlockStateProperties.DOOR_HINGE;
 
         COUNTER_NORTH = Shapes.or(Block.box(0, 0, 6, 16, 2, 16), Block.box(0, 2, 4, 16, 4, 16), Block.box(0, 4, 2, 16, 14, 16));
         COUNTER_EAST = Shapes.or(Block.box(0, 0, 0, 10, 2, 16), Block.box(0, 2, 0, 12, 4, 16), Block.box(0, 4, 0, 14, 14, 16));

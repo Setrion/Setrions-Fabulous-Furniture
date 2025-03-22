@@ -1,6 +1,5 @@
 package net.setrion.fabulous_furniture.registry;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -19,7 +18,7 @@ public class SFFCreativeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, FabulousFurniture.MOD_ID);
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> MAIN = CREATIVE_MODE_TABS.register("main", () -> new CreativeModeTab.Builder(CreativeModeTab.Row.TOP, 1)
-            .withTabsBefore(CreativeModeTabs.SPAWN_EGGS).icon(() -> new ItemStack(BuiltInRegistries.BLOCK.get(FabulousFurniture.prefix("oak_crate")).get().value()))
+            .withTabsBefore(CreativeModeTabs.SPAWN_EGGS).icon(() -> new ItemStack(SFFBlocks.CARPENTRY_TABLE.get()))
             .title(Component.translatable("itemGroup.fabulous_furniture.main"))
             .displayItems((parameters, output) -> {
                 Collection<Block> blocks = SFFBlocks.BLOCKS.getEntries().stream().map(DeferredHolder::get).collect(Collectors.toList());

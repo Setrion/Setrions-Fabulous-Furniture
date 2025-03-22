@@ -19,7 +19,6 @@ import net.minecraft.network.Utf8String;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -36,7 +35,6 @@ import net.setrion.fabulous_furniture.world.level.block.state.properties.Materia
 
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.function.Function;
 
 public class CarpentryTableRecipe implements Recipe<SingleRecipeInput> {
 
@@ -114,7 +112,7 @@ public class CarpentryTableRecipe implements Recipe<SingleRecipeInput> {
 
     @Override
     public RecipeBookCategory recipeBookCategory() {
-        return RecipeBookCategories.CRAFTING_MISC;
+        return RecipeBookCategories.SMITHING;
     }
 
     public FurnitureCategory getCategory() {
@@ -137,8 +135,8 @@ public class CarpentryTableRecipe implements Recipe<SingleRecipeInput> {
         return result;
     }
 
-    public static Builder builder(HolderLookup.RegistryLookup<Item> items, ItemLike result, int count, FurnitureCategory category, Function<ItemLike, Criterion<?>> hasItem, Function<TagKey<Item>, Criterion<?>> hasTag) {
-        return new Builder(items, result.asItem(), count, category, hasItem, hasTag);
+    public static Builder builder(ItemLike result, int count, FurnitureCategory category) {
+        return new Builder(result.asItem(), count, category);
     }
 
     public static class Serializer implements RecipeSerializer<CarpentryTableRecipe> {
@@ -176,24 +174,18 @@ public class CarpentryTableRecipe implements Recipe<SingleRecipeInput> {
     }
 
     public static class Builder implements RecipeBuilder {
-        private final HolderLookup.RegistryLookup<Item> items;
         private final Item result;
         private final int count;
         private final FurnitureCategory furnitureCategory;
         private NonNullList<MaterialType> materials = NonNullList.create();
-        private final Function<ItemLike, Criterion<?>> hasItem;
-        private final Function<TagKey<Item>, Criterion<?>> hasTag;
         private final NonNullList<StackedIngredient> ingredients = NonNullList.create();
         private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
         private RecipeCategory category = RecipeCategory.MISC;
 
-        private Builder(HolderLookup.RegistryLookup<Item> items, Item result, int count, FurnitureCategory furnitureCategory, Function<ItemLike, Criterion<?>> hasItem, Function<TagKey<Item>, Criterion<?>> hasTag) {
-            this.items = items;
+        private Builder(Item result, int count, FurnitureCategory furnitureCategory) {
             this.result = result;
             this.count = count;
             this.furnitureCategory = furnitureCategory;
-            this.hasItem = hasItem;
-            this.hasTag = hasTag;
         }
 
         @Override

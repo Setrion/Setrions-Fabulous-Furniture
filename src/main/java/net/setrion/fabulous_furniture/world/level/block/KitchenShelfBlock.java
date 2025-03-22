@@ -19,9 +19,9 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.setrion.fabulous_furniture.world.level.block.state.properties.ShelfShape;
 
-public class KitchenCabinetShelfBlock extends KitchenCabinetContainerBlock {
+public class KitchenShelfBlock extends KitchenCabinetContainerBaseBlock {
 
-    public static final MapCodec<KitchenCabinetShelfBlock> CODEC = simpleCodec(KitchenCabinetShelfBlock::new);
+    public static final MapCodec<KitchenShelfBlock> CODEC = simpleCodec(KitchenShelfBlock::new);
 
     public static final EnumProperty<Direction> FACING;
     public static final EnumProperty<ShelfShape> SHAPE;
@@ -32,7 +32,7 @@ public class KitchenCabinetShelfBlock extends KitchenCabinetContainerBlock {
     protected static final VoxelShape COUNTER_WEST;
 
 
-    public KitchenCabinetShelfBlock(Properties properties) {
+    public KitchenShelfBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
@@ -75,7 +75,7 @@ public class KitchenCabinetShelfBlock extends KitchenCabinetContainerBlock {
     }
 
     public boolean isSameShelf(BlockState state, BlockState state2) {
-        if (state2.getBlock() instanceof KitchenCabinetShelfBlock) {
+        if (state2.getBlock() instanceof KitchenShelfBlock) {
             return state.getValue(FACING).equals(state2.getValue(FACING));
         }
         return false;
@@ -104,7 +104,7 @@ public class KitchenCabinetShelfBlock extends KitchenCabinetContainerBlock {
         BlockPos below = blockPos.below();
         BlockState aboveState = level.getBlockState(above);
         BlockState belowState = level.getBlockState(below);
-        return aboveState.isFaceSturdy(level, above, Direction.DOWN) || belowState.isFaceSturdy(level, below, Direction.UP) || (aboveState.getBlock() instanceof KitchenCabinetShelfBlock && aboveState.getValue(FACING) == state.getValue(FACING));
+        return aboveState.isFaceSturdy(level, above, Direction.DOWN) || belowState.isFaceSturdy(level, below, Direction.UP) || (aboveState.getBlock() instanceof KitchenShelfBlock && aboveState.getValue(FACING) == state.getValue(FACING));
     }
 
     @Override

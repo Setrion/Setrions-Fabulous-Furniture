@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 
-public class WeatheringKitchenFridgeBlock extends KitchenFridgeBlock implements WeatheringCopper {
+public class WeatheringKitchenFridgeBlock extends FridgeBlock implements WeatheringCopper {
 
     public static final MapCodec<WeatheringKitchenFridgeBlock> CODEC = RecordCodecBuilder.mapCodec((instance) -> {
         return instance.group(WeatherState.CODEC.fieldOf("weathering_state").forGetter(WeatheringKitchenFridgeBlock::getAge), propertiesCodec()).apply(instance, WeatheringKitchenFridgeBlock::new);
@@ -27,7 +27,7 @@ public class WeatheringKitchenFridgeBlock extends KitchenFridgeBlock implements 
 
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (state.getValue(KitchenFridgeBlock.HALF) == DoubleBlockHalf.LOWER) {
+        if (state.getValue(FridgeBlock.HALF) == DoubleBlockHalf.LOWER) {
             changeOverTime(state, level, pos, random);
         }
     }

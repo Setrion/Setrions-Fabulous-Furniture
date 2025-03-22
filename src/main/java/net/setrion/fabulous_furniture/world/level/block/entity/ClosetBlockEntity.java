@@ -10,12 +10,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.setrion.fabulous_furniture.registry.SFFBlockEntityTypes;
-import net.setrion.fabulous_furniture.world.level.block.*;
+import net.setrion.fabulous_furniture.world.level.block.FridgeBlock;
 
-public class KitchenFridgeBlockEntity extends SFFBaseContainerBlockEntity {
+public class ClosetBlockEntity extends SFFBaseContainerBlockEntity {
 
-    public KitchenFridgeBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(SFFBlockEntityTypes.FRIDGE.get(), true, "container.fridge", 6, SoundEvents.IRON_DOOR_OPEN, SoundEvents.IRON_DOOR_CLOSE, blockPos, blockState);
+    public ClosetBlockEntity(BlockPos blockPos, BlockState blockState) {
+        super(SFFBlockEntityTypes.CLOSET.get(), true, "container.closet", 6, SoundEvents.IRON_DOOR_OPEN, SoundEvents.IRON_DOOR_CLOSE, blockPos, blockState);
     }
 
     @Override

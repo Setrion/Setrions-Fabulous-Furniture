@@ -12,13 +12,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
+import net.setrion.fabulous_furniture.registry.SFFBlocks;
 import net.setrion.fabulous_furniture.registry.SFFMenuTypes;
 import net.setrion.fabulous_furniture.registry.SFFRecipeTypes;
 import net.setrion.fabulous_furniture.world.item.crafting.CarpentryTableRecipe;
 import net.setrion.fabulous_furniture.world.item.crafting.StackedIngredient;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CarpentryTableMenu extends AbstractContainerMenu {
 
@@ -55,6 +56,7 @@ public class CarpentryTableMenu extends AbstractContainerMenu {
             this.addSlot(new Slot(this.container, i, 8+(i*18), 102));
         }
         this.resultSlot = this.addSlot(new Slot(this.resultContainer, 6, 134, 102) {
+
             public boolean mayPlace(ItemStack stack) {
                 return false;
             }
@@ -103,13 +105,25 @@ public class CarpentryTableMenu extends AbstractContainerMenu {
         return b;
     }
 
+    @Override
+    public MenuType<?> getType() {
+        return SFFMenuTypes.CARPENTRY_TABLE.get();
+    }
+
+    private boolean isValidRecipeIndex(int recipeIndex) {
+        return recipeIndex >= 0 && recipeIndex < this.recipesForInput.size();
+    }
+
     public boolean clickMenuButton(Player player, int id) {
-        if (isRecipeCraftable(recipesForInput.get(id))) {
-            selectedRecipeIndex.set(id);
-            craftRecipe(recipesForInput.get(selectedRecipeIndex.get()));
-            return true;
+        if (isValidRecipeIndex(id)) {
+            if (isRecipeCraftable(recipesForInput.get(id))) {
+                selectedRecipeIndex.set(id);
+                craftRecipe(recipesForInput.get(selectedRecipeIndex.get()));
+                return true;
+            }
         }
-        return false;
+        broadcastChanges();
+        return super.clickMenuButton(player, id);
     }
 
     @Override
@@ -119,19 +133,50 @@ public class CarpentryTableMenu extends AbstractContainerMenu {
 
     void craftRecipe(RecipeHolder<CarpentryTableRecipe> recipe) {
         this.resultContainer.setRecipeUsed(recipe);
+        ItemStack stack = recipe.value().getResult().copy();
         if (resultSlot.hasItem()) {
-            if (resultSlot.getItem().getItem() == recipe.value().getResult().getItem()) {
-                ItemStack stack = recipe.value().getResult().copy();
-                int count = resultSlot.getItem().getCount() + recipe.value().getResult().copy().getCount();
-                if (count <= 64) {
-                    stack.setCount(count);
-                    resultSlot.set(stack);
+            if (resultSlot.getItem().getItem() == stack.getItem()) {
+                int count = resultSlot.getItem().getCount() + stack.getCount();
+                if (count <= stack.getMaxStackSize()) {
+
+                    if (removeItems(recipe)) {
+                        stack.setCount(count);
+                        resultSlot.set(stack);
+                    }
                 }
             }
         } else {
-            resultSlot.set(recipe.value().getResult().copy());
+            if (removeItems(recipe)) {
+                resultSlot.set(stack);
+            }
         }
         this.broadcastChanges();
+    }
+
+    private boolean removeItems(RecipeHolder<CarpentryTableRecipe> recipe) {
+        AtomicBoolean removed = new AtomicBoolean(true);
+        recipe.value().getMaterials().forEach(ingredient -> {
+            if (!removeItem(ingredient.ingredient().getValues().get(0).value(), ingredient.count())) {
+                removed.set(false);
+            }
+        });
+        return removed.get();
+    }
+
+    private boolean removeItem(Item item, int amount) {
+        for (int i = 0; i < 7; i++) {
+            if (!container.getItem(i).isEmpty() && container.getItem(i).getItem() == item) {
+                ItemStack stack = container.getItem(i);
+                if (stack.getCount() < amount) {
+                    amount -= stack.getCount();
+                    stack.setCount(0);
+                } else {
+                    stack.shrink(amount);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public List<RecipeHolder<CarpentryTableRecipe>> getRecipes() {
@@ -195,7 +240,7 @@ public class CarpentryTableMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return true;
+        return stillValid(this.access, player, SFFBlocks.CARPENTRY_TABLE.get());
     }
 
     public void removed(Player player) {

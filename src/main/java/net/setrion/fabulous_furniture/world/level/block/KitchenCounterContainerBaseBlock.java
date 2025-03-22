@@ -16,19 +16,25 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DoorHingeSide;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.setrion.fabulous_furniture.registry.SFFStats;
+import net.setrion.fabulous_furniture.world.level.block.entity.KitchenStorageBaseBlockEntity;
+import org.jetbrains.annotations.Nullable;
 
-public class KitchenCounterContainerDoorBlock extends KitchenCounterContainerBlock {
+public class KitchenCounterContainerBaseBlock extends BaseEntityBlock {
 
-    public static final MapCodec<KitchenCounterContainerDoorBlock> CODEC = simpleCodec(KitchenCounterContainerDoorBlock::new);
+    public static final MapCodec<KitchenCounterContainerBaseBlock> CODEC = simpleCodec(KitchenCounterContainerBaseBlock::new);
 
     public static final EnumProperty<Direction> FACING;
     public static final BooleanProperty OPEN;
@@ -38,11 +44,17 @@ public class KitchenCounterContainerDoorBlock extends KitchenCounterContainerBlo
     protected static final VoxelShape COUNTER_SOUTH;
     protected static final VoxelShape COUNTER_WEST;
     protected static final VoxelShape TOP;
+    private boolean canBeOpened;
+    private boolean hasHinge;
 
+    protected KitchenCounterContainerBaseBlock(Properties properties) {
+        this(properties, false, false);
+    }
 
-    public KitchenCounterContainerDoorBlock(Properties properties) {
+    public KitchenCounterContainerBaseBlock(Properties properties, boolean canBeOpened, boolean hasHinge) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(OPEN, false));
+        this.canBeOpened = canBeOpened;
+        this.hasHinge = hasHinge;
     }
 
     @Override
@@ -62,13 +74,17 @@ public class KitchenCounterContainerDoorBlock extends KitchenCounterContainerBlo
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, HINGE, OPEN);
-    }
-
-    @Override
     public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
-        return this.defaultBlockState().setValue(FACING, blockPlaceContext.getHorizontalDirection().getOpposite()).setValue(HINGE, this.getHinge(blockPlaceContext)).setValue(OPEN, false);
+        BlockState state = defaultBlockState();
+        if (canBeOpened) {
+            state = state.setValue(OPEN, false);
+        }
+        if (hasHinge) {
+            state = state.setValue(FACING, blockPlaceContext.getHorizontalDirection().getOpposite()).setValue(HINGE, this.getHinge(blockPlaceContext));
+        } else {
+            state = state.setValue(FACING, blockPlaceContext.getHorizontalDirection().getOpposite());
+        }
+        return state;
     }
 
     private DoorHingeSide getHinge(BlockPlaceContext context) {
@@ -87,8 +103,8 @@ public class KitchenCounterContainerDoorBlock extends KitchenCounterContainerBlo
         BlockPos blockpos5 = blockpos1.relative(direction2);
         BlockState blockstate3 = blockgetter.getBlockState(blockpos5);
         int i = (blockstate.isCollisionShapeFullBlock(blockgetter, blockpos2) ? -1 : 0) + (blockstate1.isCollisionShapeFullBlock(blockgetter, blockpos3) ? -1 : 0) + (blockstate2.isCollisionShapeFullBlock(blockgetter, blockpos4) ? 1 : 0) + (blockstate3.isCollisionShapeFullBlock(blockgetter, blockpos5) ? 1 : 0);
-        boolean flag = blockstate.getBlock() instanceof KitchenCounterContainerDoorBlock;
-        boolean flag1 = blockstate2.getBlock() instanceof KitchenCounterContainerDoorBlock;
+        boolean flag = blockstate.getBlock() instanceof KitchenCounterContainerBaseBlock;
+        boolean flag1 = blockstate2.getBlock() instanceof KitchenCounterContainerBaseBlock;
         if ((!flag || flag1) && i <= 0) {
             if ((!flag1 || flag) && i == 0) {
                 int j = direction.getStepX();
@@ -121,10 +137,21 @@ public class KitchenCounterContainerDoorBlock extends KitchenCounterContainerBlo
         super.onRemove(state, level, pos, newState, isMoving);
     }
 
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new KitchenStorageBaseBlockEntity(canBeOpened, blockPos, blockState);
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING);
+    }
+
     @Override
     protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult) {
         if (level instanceof ServerLevel serverlevel) {
-            if (player.isShiftKeyDown()) {
+            if (canBeOpened && blockState.hasProperty(OPEN) && player.isShiftKeyDown()) {
                 if (blockState.getValue(OPEN)) {
                     level.setBlock(blockPos, blockState.setValue(OPEN, !blockState.getValue(OPEN)), 3);
                     level.playSound(null, blockPos, SoundEvents.BARREL_CLOSE, SoundSource.BLOCKS);

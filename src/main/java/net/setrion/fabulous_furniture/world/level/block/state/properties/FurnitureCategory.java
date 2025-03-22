@@ -50,7 +50,11 @@ public record FurnitureCategory(String name, Item item) {
     }
 
     public Component getTranslatedName() {
-        return Component.translatable("category."+name+".name");
+        return Component.translatable(getTranslatableName());
+    }
+
+    public String getTranslatableName() {
+        return "category."+name+".name";
     }
 
     static {

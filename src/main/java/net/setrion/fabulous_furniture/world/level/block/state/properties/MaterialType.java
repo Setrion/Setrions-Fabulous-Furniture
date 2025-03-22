@@ -66,7 +66,11 @@ public record MaterialType(String name, Item item) {
     }
 
     public Component getTranslatedName() {
-        return Component.translatable("material."+name+".name");
+        return Component.translatable(getTranslatableName());
+    }
+
+    public String getTranslatableName() {
+        return "material."+name+".name";
     }
 
     static {

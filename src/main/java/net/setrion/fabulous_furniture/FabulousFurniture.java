@@ -38,10 +38,14 @@ public class FabulousFurniture {
         for (DeferredHolder<Block, ? extends Block> block : SFFBlocks.BLOCKS.getEntries()) {
             if (block.get() instanceof KitchenCounterSmokerBlock) {
                 event.modify(BlockEntityType.SMOKER, block.get());
-            } else if (block.get() instanceof KitchenCounterContainerBlock || block.get() instanceof KitchenCounterContainerDoorBlock || block.get() instanceof KitchenCounterContainerDrawerBlock || block.get() instanceof KitchenCabinetContainerBlock || block.get() instanceof KitchenCabinetContainerDoorBlock || block.get() instanceof KitchenCabinetContainerSidewaysDoorBlock || block.get() instanceof KitchenCabinetShelfBlock) {
-                event.modify(SFFBlockEntityTypes.KITCHEN_COUNTER.get(), block.get());
+            } else if (block.get() instanceof KitchenCounterContainerBaseBlock || block.get() instanceof KitchenCabinetContainerBaseBlock || block.get() instanceof KitchenShelfBlock) {
+                event.modify(SFFBlockEntityTypes.KITCHEN_STORAGE.get(), block.get());
             } else if (block.get() instanceof CrateBlock) {
                 event.modify(SFFBlockEntityTypes.CRATE.get(), block.get());
+            } else if (block.get() instanceof BedsideTableBlock) {
+                event.modify(SFFBlockEntityTypes.BEDSIDE_TABLE.get(), block.get());
+            } else if (block.get() instanceof ClosetBlock) {
+                event.modify(SFFBlockEntityTypes.CLOSET.get(), block.get());
             }
         }
     }

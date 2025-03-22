@@ -2,15 +2,17 @@ package net.setrion.fabulous_furniture.data;
 
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.BlockFamilies;
 import net.minecraft.data.BlockFamily;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -21,8 +23,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.setrion.fabulous_furniture.FabulousFurniture;
 import net.setrion.fabulous_furniture.registry.SFFBlocks;
-import net.setrion.fabulous_furniture.world.level.block.state.properties.FurnitureCategory;
 import net.setrion.fabulous_furniture.world.item.crafting.CarpentryTableRecipe;
+import net.setrion.fabulous_furniture.world.level.block.state.properties.FurnitureCategory;
 import net.setrion.fabulous_furniture.world.level.block.state.properties.MaterialType;
 
 import javax.annotation.Nullable;
@@ -40,6 +42,7 @@ public class RecipeGenerator extends RecipeProvider {
 
     @Override
     public void buildRecipes() {
+        ShapedRecipeBuilder.shaped(items, RecipeCategory.DECORATIONS, CARPENTRY_TABLE.get()).define('#', ItemTags.PLANKS).define('X', Items.COPPER_INGOT).pattern("XX").pattern("##").pattern("##").unlockedBy("has_copper", this.has(Items.COPPER_INGOT)).save(this.output);
         createFridgeRecipes();
         createCurtainRecipes();
         createKitchenTileRecipes();
@@ -171,6 +174,14 @@ public class RecipeGenerator extends RecipeProvider {
         carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_table")), 2, FurnitureCategory.TABLES, materialType, new ItemStack(log, 1));
         carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_table")), 2, FurnitureCategory.TABLES, materialType, new ItemStack(strippedLog, 1));
 
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_bedside_table")), 2, FurnitureCategory.TABLES, materialType, new ItemStack(planks, 2), new ItemStack(log, 1));
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_bedside_table")), 2, FurnitureCategory.TABLES, materialType, new ItemStack(log, 2), new ItemStack(strippedLog, 1));
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_bedside_table")), 2, FurnitureCategory.TABLES, materialType, new ItemStack(strippedLog, 2), new ItemStack(log, 1));
+
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_closet")), 1, FurnitureCategory.TABLES, materialType, new ItemStack(planks, 2), new ItemStack(log, 1));
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_closet")), 1, FurnitureCategory.TABLES, materialType, new ItemStack(log, 2), new ItemStack(strippedLog, 1));
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_closet")), 1, FurnitureCategory.TABLES, materialType, new ItemStack(strippedLog, 2), new ItemStack(log, 1));
+
         WOOL_COLORS.forEach((block, color) -> BlockFamilies.getAllFamilies().toList().forEach(blockFamily -> {
             if (blockFamily.getBaseBlock() == planks) {
                 carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(color+"_"+type.name()+"_chair")), 2, FurnitureCategory.CHAIRS, materialType, new ItemStack(planks, 1), new ItemStack(blockFamily.get(BlockFamily.Variant.TRAPDOOR), 2), new ItemStack(block, 1));
@@ -233,7 +244,7 @@ public class RecipeGenerator extends RecipeProvider {
     }
 
     private void carpentryTableCrafting(String name, ItemLike result, int count, FurnitureCategory category, MaterialType main, @Nullable MaterialType additional, ItemStack ... ingredients) {
-        CarpentryTableRecipe.Builder builder = CarpentryTableRecipe.builder(this.items, result, count, category, this::has, this::has);
+        CarpentryTableRecipe.Builder builder = CarpentryTableRecipe.builder(result, count, category);
         for(ItemStack stack : ingredients) {
             builder.requiresMaterial(stack);
             builder.unlockedBy("has_"+BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath(), has(MinMaxBounds.Ints.atLeast(stack.getCount()), stack.getItem()));

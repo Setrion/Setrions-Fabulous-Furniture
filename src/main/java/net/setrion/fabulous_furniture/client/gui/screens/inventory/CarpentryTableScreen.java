@@ -6,7 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
@@ -17,11 +16,9 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.StonecutterMenu;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import net.setrion.fabulous_furniture.FabulousFurniture;
@@ -35,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class CarpentryTableScreen extends AbstractContainerScreen<CarpentryTableMenu> implements RecipeUpdateListener {
+public class CarpentryTableScreen extends AbstractContainerScreen<CarpentryTableMenu> {
     private static final ResourceLocation SCROLLER_SPRITE = FabulousFurniture.prefix("container/carpentry_table/scroller");
     private static final ResourceLocation SCROLLER_DISABLED_SPRITE = FabulousFurniture.prefix("container/carpentry_table/scroller_disabled");
     private static final ResourceLocation SCROLLER_FILTER_SPRITE = FabulousFurniture.prefix("container/carpentry_table/scroller_filter");
@@ -131,12 +128,13 @@ public class CarpentryTableScreen extends AbstractContainerScreen<CarpentryTable
     private void onRecipeReload(boolean nameChanged, String name) {
         recipesForInput = new ArrayList<>();
         recipesForInput.addAll(allRecipes);
+        recipesForInput.sort(Comparator.comparing(holder -> holder.value().getResultId()));
         if (nameChanged || !name.isEmpty()) {
             if (!name.isEmpty()) {
                 recipesForInput = allRecipes.stream().filter(filter -> org.apache.commons.lang3.StringUtils.containsIgnoreCase(Component.translatable(filter.value().getResult().getItem().getDescriptionId()).getString(), name)).toList();
             }
         }
-        if (!isEmpty(materialList)) {
+        if (isFilterEnabled(materialList)) {
             recipesForInput = recipesForInput.stream().filter(filter -> {
                 List<MaterialType> mats = MaterialType.values().toList();
                 for (int x = 0; x < mats.size(); x++) {
@@ -147,7 +145,7 @@ public class CarpentryTableScreen extends AbstractContainerScreen<CarpentryTable
                 return false;
             }).toList();
         }
-        if (!isEmpty(categoryList)) {
+        if (isFilterEnabled(categoryList)) {
             recipesForInput = recipesForInput.stream().filter(filter -> {
                 List<FurnitureCategory> cats = FurnitureCategory.values().toList();
                 for (int x = 0; x < cats.size(); x++) {
@@ -161,16 +159,16 @@ public class CarpentryTableScreen extends AbstractContainerScreen<CarpentryTable
         if (filterEnabled) {
             recipesForInput = recipesForInput.stream().filter(this::isRecipeCraftable).toList();
         }
-        menu.setRecipes(recipesForInput);
         recipeListScrollOffs = 0.0F;
         recipeListStartIndex = 0;
     }
 
-    private boolean isEmpty(List<Checkbox> list) {
-        boolean checked = true;
+    private boolean isFilterEnabled(List<Checkbox> list) {
+        boolean checked = false;
         for (Checkbox box : list) {
             if (box.selected()) {
-                checked = false;
+                checked = true;
+                break;
             }
         }
         return checked;
@@ -180,12 +178,8 @@ public class CarpentryTableScreen extends AbstractContainerScreen<CarpentryTable
         onRecipeReload(true, s);
     }
 
-    protected void setInitialFocus() {
-        setInitialFocus(name);
-    }
-
     private void updateFilterButtonTooltip() {
-        filterButton.setTooltip(filterButton.isStateTriggered() ? Tooltip.create(Component.literal("Showing All")) : Tooltip.create(Component.literal("Showing Craftable")));
+        filterButton.setTooltip(filterButton.isStateTriggered() ? Tooltip.create(Component.translatable("gui.recipebook.toggleRecipes.craftable")) : Tooltip.create(Component.translatable("gui.recipebook.toggleRecipes.all")));
     }
 
     private void initFilterButtonTextures() {
@@ -207,8 +201,8 @@ public class CarpentryTableScreen extends AbstractContainerScreen<CarpentryTable
 
     public void render(GuiGraphics guiGraphics, int p_282517_, int p_282840_, float p_282389_) {
         super.render(guiGraphics, p_282517_, p_282840_, p_282389_);
-        guiGraphics.drawString(font, Component.literal("Category"), leftPos-73, topPos-34, 4210752, false);
-        guiGraphics.drawString(font, Component.literal("Material"), leftPos-73, topPos+76, 4210752, false);
+        guiGraphics.drawString(font, Component.translatable("carpentry_table.categories"), leftPos-73, topPos-34, 4210752, false);
+        guiGraphics.drawString(font, Component.translatable("carpentry_table.materials"), leftPos-73, topPos+76, 4210752, false);
         renderFg(guiGraphics, p_282517_, p_282840_, p_282389_);
         filterButton.render(guiGraphics, p_282517_, p_282840_, p_282389_);
         renderTooltip(guiGraphics, p_282517_, p_282840_);
@@ -287,8 +281,9 @@ public class CarpentryTableScreen extends AbstractContainerScreen<CarpentryTable
                     SlotDisplay slotdisplay = recipesForInput.get(l).value().display().get(0).result();
                     List<Either<FormattedText, TooltipComponent>> components = new ArrayList<>();
                     components.add(Either.left(FormattedText.of(Component.translatable(slotdisplay.resolveForFirstStack(contextmap).getItemName().getString()).getString())));
+                    components.add(Either.left(FormattedText.of(Component.translatable("carpentry_table.amount").getString()+slotdisplay.resolveForFirstStack(contextmap).getCount(), Style.EMPTY.withColor(ChatFormatting.BLUE))));
                     components.add(Either.left(FormattedText.of("")));
-                    components.add(Either.left(FormattedText.of("Ingredients:")));
+                    components.add(Either.left(FormattedText.of(Component.translatable("carpentry_table.ingredients").getString())));
                     recipesForInput.get(l).value().getMaterials().forEach(material -> components.add(Either.left(FormattedText.of(material.count()+"x "+Component.translatable(material.ingredient().getValues().get(0).value().getDescriptionId()).getString(), Style.EMPTY.withColor(ChatFormatting.BLUE)))));
                     guiGraphics.renderComponentTooltipFromElements(this.font, components, x, y, slotdisplay.resolveForFirstStack(contextmap));
                 }
@@ -357,32 +352,27 @@ public class CarpentryTableScreen extends AbstractContainerScreen<CarpentryTable
         name.render(p_283449_, p_283263_, p_281526_, p_282957_);
     }
 
-    @Override
-    public void recipesUpdated() {}
-
     public static void setRecipes(List<RecipeHolder<CarpentryTableRecipe>> recipes) {
-        recipes.sort(Comparator.comparing(holder -> holder.value().getResultId()));
         allRecipes = recipes;
         recipesForInput = recipes;
     }
 
-    @Override
-    public void fillGhostRecipe(RecipeDisplay recipeDisplay) {}
-
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (!recipesForInput.isEmpty()) {
-            int i = this.leftPos + 7;
-            int j = this.topPos - 10;
-            int k = this.recipeListStartIndex + 24;
+            int i = leftPos + 7;
+            int j = topPos - 10;
+            int k = recipeListStartIndex + 24;
 
-            for(int l = this.recipeListStartIndex; l < k; ++l) {
+            for(int l = recipeListStartIndex; l < k; ++l) {
                 if (l < recipesForInput.size() && isRecipeCraftable(recipesForInput.get(l))) {
-                    int i1 = l - this.recipeListStartIndex;
+                    int i1 = l - recipeListStartIndex;
                     double d0 = mouseX - (double) (i + i1 % 6 * 25);
                     double d1 = mouseY - (double) (j + i1 / 6 * 25);
-                    if (d0 >= 0.0 && d1 >= 0.0 && d0 < 25.0 && d1 < 25.0 && (this.menu).clickMenuButton(this.minecraft.player, l)) {
+                    int id = allRecipes.indexOf(recipesForInput.get(l));
+                    menu.setRecipes(allRecipes);
+                    if (d0 >= 0.0 && d1 >= 0.0 && d0 < 25.0 && d1 < 25.0 && (menu).clickMenuButton(minecraft.player, id)) {
                         Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_STONECUTTER_SELECT_RECIPE, 1.0F));
-                        this.minecraft.gameMode.handleInventoryButtonClick((this.menu).containerId, l);
+                        minecraft.gameMode.handleInventoryButtonClick((menu).containerId, id);
                         return true;
                     }
                 }
@@ -400,6 +390,18 @@ public class CarpentryTableScreen extends AbstractContainerScreen<CarpentryTable
         if (mouseX >= (double)i && mouseX < (double)(i + 11) && mouseY >= (double)j && mouseY < (double)(j + 100)) {
             recipeListScrolling = true;
         }
+        categoryListScrolling = false;
+        int i1 = leftPos-80+61;
+        int j1 = topPos-40+14;
+        if (mouseX >= (double)i1 && mouseX < (double)(i1 + 12) && mouseY >= (double)j1 && mouseY < (double)(j1 + 93)) {
+            categoryListScrolling = true;
+        }
+        materialListScrolling = false;
+        int i2 = leftPos-80+61;
+        int j2 = topPos-40+123;
+        if (mouseX >= (double)i2 && mouseX < (double)(i2 + 12) && mouseY >= (double)j2 && mouseY < (double)(j2 + 93)) {
+            materialListScrolling = true;
+        }
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
@@ -410,6 +412,20 @@ public class CarpentryTableScreen extends AbstractContainerScreen<CarpentryTable
             recipeListScrollOffs = ((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F);
             recipeListScrollOffs = Mth.clamp(recipeListScrollOffs, 0.0F, 1.0F);
             recipeListStartIndex = (int)((double)(recipeListScrollOffs * (float) getOffscreenRecipeRows()) + 0.5) * 6;
+            return true;
+        } else if (categoryListScrolling && this.isCategoryScrollBarActive()) {
+            int i = topPos-21;
+            int j = i + 93;
+            categoryListScrollOffs = ((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F);
+            categoryListScrollOffs = Mth.clamp(categoryListScrollOffs, 0.0F, 1.0F);
+            categoryListStartIndex = (int)((double)(categoryListScrollOffs * (float) getOffscreenCategories()) + 0.5);
+            return true;
+        } else if (materialListScrolling && this.isMaterialTypeScrollBarActive()) {
+            int i = topPos+88;
+            int j = i + 93;
+            materialListScrollOffs = ((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F);
+            materialListScrollOffs = Mth.clamp(materialListScrollOffs, 0.0F, 1.0F);
+            materialListStartIndex = (int)((double)(materialListScrollOffs * (float) getOffScreenMaterials()) + 0.5);
             return true;
         } else {
             return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);

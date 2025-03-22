@@ -117,7 +117,7 @@ public class KitchenCounterBlock extends Block {
     }
 
     public static boolean isKitchenCounter(BlockState state) {
-        return state.getBlock() instanceof KitchenCounterBlock || state.getBlock() instanceof KitchenCounterContainerBlock || state.getBlock() instanceof KitchenCounterSinkBlock || state.getBlock() instanceof KitchenCounterSmokerBlock;
+        return state.getBlock() instanceof KitchenCounterBlock || state.getBlock() instanceof KitchenCounterContainerBaseBlock || state.getBlock() instanceof KitchenCounterSinkBlock || state.getBlock() instanceof KitchenCounterSmokerBlock;
     }
 
     @Override

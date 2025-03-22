@@ -45,6 +45,8 @@ public class ModelGenerator extends ModelProvider {
         createCurtains(blockModels);
         createKitchenTiles(blockModels);
 
+        blockModels.createCraftingTableLike(CARPENTRY_TABLE.get(), MANGROVE_PLANKS, TextureMapping::craftingTable);
+
         createModel(blockModels, createFridge(IRON_FRIDGE.get(), TextureMapping.getBlockTexture(IRON_BLOCK), TextureMapping.getBlockTexture(IRON_BARS), TextureMapping.getBlockTexture(ANVIL), blockModels));
         createModel(blockModels, createFridge(GOLD_FRIDGE.get(), TextureMapping.getBlockTexture(GOLD_BLOCK), TextureMapping.getBlockTexture(IRON_BARS), TextureMapping.getBlockTexture(ANVIL), blockModels));
         createModel(blockModels, createFridge(NETHERITE_FRIDGE.get(), TextureMapping.getBlockTexture(NETHERITE_BLOCK), TextureMapping.getBlockTexture(IRON_BARS), TextureMapping.getBlockTexture(ANVIL), blockModels));
@@ -59,12 +61,12 @@ public class ModelGenerator extends ModelProvider {
 
         Collection<Block> blocks = BLOCKS.getEntries().stream().map(DeferredHolder::get).collect(Collectors.toList());
         blocks.forEach((block -> {
-            if (!(block instanceof TableBlock || block instanceof KitchenCabinetShelfBlock || block instanceof CurtainBlock || block instanceof WoodenBedBlock)) {
+            if (!(block instanceof TableBlock || block instanceof KitchenShelfBlock || block instanceof CurtainBlock || block instanceof WoodenBedBlock || block instanceof FridgeBlock || block instanceof ClosetBlock)) {
                 registerBasicBlockModel(blockModels.itemModelOutput, block);
             } else {
                 if (block instanceof CurtainBlock) {
                     registerBasicBlockModel(blockModels.itemModelOutput, block, "_small_single_open");
-                } else if (!(block instanceof WoodenBedBlock)) {
+                } else if (!(block instanceof WoodenBedBlock || block instanceof FridgeBlock || block instanceof ClosetBlock)) {
                     registerBasicBlockModel(blockModels.itemModelOutput, block, "_single");
                 }
             }
@@ -173,6 +175,14 @@ public class ModelGenerator extends ModelProvider {
         createModel(blockModels, createTableBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_table")), log, blockModels));
         createModel(blockModels, createTableBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_table")), strippedLog, blockModels));
 
+        createModel(blockModels, createBedsideTableBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_bedside_table")), planks, TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(log), blockModels));
+        createModel(blockModels, createBedsideTableBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_bedside_table")), log, TextureMapping.getBlockTexture(strippedLog), TextureMapping.getBlockTexture(strippedLog), blockModels));
+        createModel(blockModels, createBedsideTableBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_bedside_table")), strippedLog, TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(log), blockModels));
+
+        createModel(blockModels, createCloset(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_closet")), TextureMapping.getBlockTexture(planks), TextureMapping.getBlockTexture(log), blockModels));
+        createModel(blockModels, createCloset(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_closet")), TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(strippedLog), blockModels));
+        createModel(blockModels, createCloset(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_closet")), TextureMapping.getBlockTexture(strippedLog), TextureMapping.getBlockTexture(log), blockModels));
+
         WOOL_COLORS.forEach((block, color) -> BlockFamilies.getAllFamilies().toList().forEach(blockFamily -> {
             if (blockFamily.getBaseBlock() == planks) {
                 createModel(blockModels, createChairBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(color+"_"+type.name()+"_chair")), planks, TextureMapping.getBlockTexture(blockFamily.get(BlockFamily.Variant.TRAPDOOR)), TextureMapping.getBlockTexture(block), blockModels));
@@ -240,7 +250,7 @@ public class ModelGenerator extends ModelProvider {
         ResourceLocation closed_mirrored = ModelTemplates.KITCHEN_COUNTER_DOOR_MIRRORED.create(block, mapping, blockModels.modelOutput);
         ResourceLocation open_mirrored = ModelTemplates.KITCHEN_COUNTER_DOOR_MIRRORED_OPEN.create(block, mapping, blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(MODEL, closed)).with(
-                PropertyDispatch.properties(KitchenCounterContainerDoorBlock.HINGE, KitchenCounterContainerDoorBlock.OPEN)
+                PropertyDispatch.properties(KitchenCounterContainerBaseBlock.HINGE, KitchenCounterContainerBaseBlock.OPEN)
                         .select(DoorHingeSide.LEFT, false, Variant.variant().with(MODEL, closed_mirrored))
                         .select(DoorHingeSide.LEFT, true, Variant.variant().with(MODEL, open_mirrored))
                         .select(DoorHingeSide.RIGHT, false, Variant.variant().with(MODEL, closed))
@@ -253,7 +263,7 @@ public class ModelGenerator extends ModelProvider {
         ResourceLocation closed = ModelTemplates.KITCHEN_COUNTER_SMALL_DRAWER.create(block, mapping, blockModels.modelOutput);
         ResourceLocation open = ModelTemplates.KITCHEN_COUNTER_SMALL_DRAWER_OPEN.create(block, mapping, blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(MODEL, closed)).with(
-                PropertyDispatch.property(KitchenCounterContainerDrawerBlock.OPEN)
+                PropertyDispatch.property(KitchenCounterContainerBaseBlock.OPEN)
                         .select(false, Variant.variant().with(MODEL, closed))
                         .select(true, Variant.variant().with(MODEL, open))
         ).with(createUVLockedHorizontalFacingDispatch());
@@ -264,7 +274,7 @@ public class ModelGenerator extends ModelProvider {
         ResourceLocation closed = ModelTemplates.KITCHEN_COUNTER_BIG_DRAWER.create(block, mapping, blockModels.modelOutput);
         ResourceLocation open = ModelTemplates.KITCHEN_COUNTER_BIG_DRAWER_OPEN.create(block, mapping, blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(MODEL, closed)).with(
-                PropertyDispatch.property(KitchenCounterContainerDrawerBlock.OPEN)
+                PropertyDispatch.property(KitchenCounterContainerBaseBlock.OPEN)
                         .select(false, Variant.variant().with(MODEL, closed))
                         .select(true, Variant.variant().with(MODEL, open))
         ).with(createUVLockedHorizontalFacingDispatch());
@@ -342,7 +352,7 @@ public class ModelGenerator extends ModelProvider {
         ResourceLocation closed = ModelTemplates.KITCHEN_CABINET_DOOR.create(block, mapping, blockModels.modelOutput);
         ResourceLocation open = ModelTemplates.KITCHEN_CABINET_DOOR_OPEN.create(block, mapping, blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(MODEL, closed)).with(
-                PropertyDispatch.property(KitchenCabinetContainerDoorBlock.OPEN)
+                PropertyDispatch.property(KitchenCounterContainerBaseBlock.OPEN)
                         .select(false, Variant.variant().with(MODEL, closed))
                         .select(true, Variant.variant().with(MODEL, open))
         ).with(createUVLockedHorizontalFacingDispatch());
@@ -353,7 +363,7 @@ public class ModelGenerator extends ModelProvider {
         ResourceLocation closed = ModelTemplates.KITCHEN_CABINET_GLASS_DOOR.create(block, mapping, blockModels.modelOutput);
         ResourceLocation open = ModelTemplates.KITCHEN_CABINET_GLASS_DOOR_OPEN.create(block, mapping, blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(MODEL, closed)).with(
-                PropertyDispatch.property(KitchenCabinetContainerDoorBlock.OPEN)
+                PropertyDispatch.property(KitchenCounterContainerBaseBlock.OPEN)
                         .select(false, Variant.variant().with(MODEL, closed))
                         .select(true, Variant.variant().with(MODEL, open))
         ).with(createUVLockedHorizontalFacingDispatch());
@@ -366,7 +376,7 @@ public class ModelGenerator extends ModelProvider {
         ResourceLocation closed_mirrored = ModelTemplates.KITCHEN_CABINET_DOOR_SIDEWAYS_MIRRORED.create(block, mapping, blockModels.modelOutput);
         ResourceLocation open_mirrored = ModelTemplates.KITCHEN_CABINET_DOOR_SIDEWAYS_MIRRORED_OPEN.create(block, mapping, blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(MODEL, closed)).with(
-                PropertyDispatch.properties(KitchenCabinetContainerSidewaysDoorBlock.HINGE, KitchenCabinetContainerSidewaysDoorBlock.OPEN)
+                PropertyDispatch.properties(KitchenCounterContainerBaseBlock.HINGE, KitchenCounterContainerBaseBlock.OPEN)
                         .select(DoorHingeSide.LEFT, false, Variant.variant().with(MODEL, closed_mirrored))
                         .select(DoorHingeSide.LEFT, true, Variant.variant().with(MODEL, open_mirrored))
                         .select(DoorHingeSide.RIGHT, false, Variant.variant().with(MODEL, closed))
@@ -381,7 +391,7 @@ public class ModelGenerator extends ModelProvider {
         ResourceLocation closed_mirrored = ModelTemplates.KITCHEN_CABINET_GLASS_DOOR_SIDEWAYS_MIRRORED.create(block, mapping, blockModels.modelOutput);
         ResourceLocation open_mirrored = ModelTemplates.KITCHEN_CABINET_GLASS_DOOR_SIDEWAYS_MIRRORED_OPEN.create(block, mapping, blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(MODEL, closed)).with(
-                PropertyDispatch.properties(KitchenCabinetContainerSidewaysDoorBlock.HINGE, KitchenCabinetContainerSidewaysDoorBlock.OPEN)
+                PropertyDispatch.properties(KitchenCounterContainerBaseBlock.HINGE, KitchenCounterContainerBaseBlock.OPEN)
                         .select(DoorHingeSide.LEFT, false, Variant.variant().with(MODEL, closed_mirrored))
                         .select(DoorHingeSide.LEFT, true, Variant.variant().with(MODEL, open_mirrored))
                         .select(DoorHingeSide.RIGHT, false, Variant.variant().with(MODEL, closed))
@@ -396,7 +406,7 @@ public class ModelGenerator extends ModelProvider {
         ResourceLocation right = ModelTemplates.KITCHEN_SHELF_RIGHT.create(block, mapping, blockModels.modelOutput);
         ResourceLocation middle = ModelTemplates.KITCHEN_SHELF_MIDDLE.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(planks)).put(TextureSlots.PLANKS, TextureMapping.getBlockTexture(planks)), blockModels.modelOutput);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(MODEL, single)).with(
-                PropertyDispatch.property(KitchenCabinetShelfBlock.SHAPE)
+                PropertyDispatch.property(KitchenShelfBlock.SHAPE)
                         .select(ShelfShape.SINGLE, Variant.variant().with(MODEL, single))
                         .select(ShelfShape.LEFT, Variant.variant().with(MODEL, left))
                         .select(ShelfShape.RIGHT, Variant.variant().with(MODEL, right))
@@ -415,8 +425,10 @@ public class ModelGenerator extends ModelProvider {
         ResourceLocation top_open = ModelTemplates.FRIDGE_TOP_OPEN.create(block, mapping_top, blockModels.modelOutput);
         ResourceLocation top_mirrored = ModelTemplates.FRIDGE_TOP_MIRRORED.create(block, mapping_top, blockModels.modelOutput);
         ResourceLocation top_mirrored_open = ModelTemplates.FRIDGE_TOP_MIRRORED_OPEN.create(block, mapping_top, blockModels.modelOutput);
+        ResourceLocation item = ModelTemplates.FRIDGE_ITEM.create(block, mapping_top, blockModels.modelOutput);
+        blockModels.registerSimpleItemModel(block, item);
         return MultiVariantGenerator.multiVariant(block, Variant.variant().with(MODEL, bottom)).with(
-                PropertyDispatch.properties(KitchenFridgeBlock.HALF, KitchenFridgeBlock.HINGE, KitchenFridgeBlock.OPEN)
+                PropertyDispatch.properties(FridgeBlock.HALF, FridgeBlock.HINGE, FridgeBlock.OPEN)
                         .select(DoubleBlockHalf.UPPER, DoorHingeSide.LEFT, false, Variant.variant().with(MODEL, top_mirrored))
                         .select(DoubleBlockHalf.UPPER, DoorHingeSide.LEFT, true, Variant.variant().with(MODEL, top_mirrored_open))
                         .select(DoubleBlockHalf.UPPER, DoorHingeSide.RIGHT, false, Variant.variant().with(MODEL, top))
@@ -515,6 +527,35 @@ public class ModelGenerator extends ModelProvider {
                         .select(CurtainShape.BOTTOM, true, false, true, Variant.variant().with(MODEL, big_bottom_left_open))
                         .select(CurtainShape.BOTTOM, false, true, true, Variant.variant().with(MODEL, big_bottom_right_open))
                         .select(CurtainShape.BOTTOM, true, true, true, Variant.variant().with(MODEL, big_bottom_middle_open))
+        ).with(createUVLockedHorizontalFacingDispatch());
+    }
+
+    private MultiVariantGenerator createBedsideTableBlock(Block block, Block counter, ResourceLocation top, ResourceLocation door, BlockModelGenerators blockModels) {
+        TextureMapping mapping = new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(counter)).put(TextureSlots.COUNTER, TextureMapping.getBlockTexture(counter)).put(TextureSlots.TOP, top).put(TextureSlots.DOOR, door);
+        ResourceLocation closed = ModelTemplates.BEDSITE_TABLE.create(block, mapping, blockModels.modelOutput);
+        ResourceLocation open = ModelTemplates.BEDSITE_TABLE_OPEN.create(block, mapping, blockModels.modelOutput);
+        return MultiVariantGenerator.multiVariant(block, Variant.variant().with(MODEL, closed)).with(
+                PropertyDispatch.property(BedsideTableBlock.OPEN)
+                        .select(false, Variant.variant().with(MODEL, closed))
+                        .select(true, Variant.variant().with(MODEL, open))
+        ).with(createUVLockedHorizontalFacingDispatch());
+    }
+
+    private MultiVariantGenerator createCloset(Block block, ResourceLocation closet, ResourceLocation door, BlockModelGenerators blockModels) {
+        TextureMapping mapping_bottom = new TextureMapping().put(TextureSlot.PARTICLE, closet).put(TextureSlots.CLOSET, closet).put(TextureSlots.DOOR, door);
+        TextureMapping mapping_top = new TextureMapping().put(TextureSlot.PARTICLE, closet).put(TextureSlots.CLOSET, closet).put(TextureSlots.DOOR, door);
+        ResourceLocation bottom = ModelTemplates.CLOSET_BOTTOM.create(block, mapping_bottom, blockModels.modelOutput);
+        ResourceLocation bottom_open = ModelTemplates.CLOSET_BOTTOM_OPEN.create(block, mapping_bottom, blockModels.modelOutput);
+        ResourceLocation top = ModelTemplates.CLOSET_TOP.create(block, mapping_top, blockModels.modelOutput);
+        ResourceLocation top_open = ModelTemplates.CLOSET_TOP_OPEN.create(block, mapping_top, blockModels.modelOutput);
+        ResourceLocation item = ModelTemplates.CLOSET_ITEM.create(block, mapping_top, blockModels.modelOutput);
+        blockModels.registerSimpleItemModel(block, item);
+        return MultiVariantGenerator.multiVariant(block, Variant.variant().with(MODEL, bottom)).with(
+                PropertyDispatch.properties(ClosetBlock.HALF, ClosetBlock.OPEN)
+                        .select(DoubleBlockHalf.UPPER, false, Variant.variant().with(MODEL, top))
+                        .select(DoubleBlockHalf.UPPER, true, Variant.variant().with(MODEL, top_open))
+                        .select(DoubleBlockHalf.LOWER, false, Variant.variant().with(MODEL, bottom))
+                        .select(DoubleBlockHalf.LOWER, true, Variant.variant().with(MODEL, bottom_open))
         ).with(createUVLockedHorizontalFacingDispatch());
     }
 
@@ -618,6 +659,7 @@ public class ModelGenerator extends ModelProvider {
         public static final TextureSlot COUNTER = TextureSlot.create("counter");
         public static final TextureSlot CABINET = TextureSlot.create("cabinet");
         public static final TextureSlot FRIDGE = TextureSlot.create("fridge");
+        public static final TextureSlot CLOSET = TextureSlot.create("closet");
         public static final TextureSlot TOP = TextureSlot.create("top");
         public static final TextureSlot WOOL = TextureSlot.create("wool");
         public static final TextureSlot CURTAIN_ROD = TextureSlot.create("curtain_rod");
@@ -683,14 +725,15 @@ public class ModelGenerator extends ModelProvider {
         public static final ModelTemplate KITCHEN_SHELF_LEFT = getTemplate("kitchen_shelf_left_template", Optional.of("_left"), TextureSlot.PARTICLE, TextureSlots.PLANKS, TextureSlots.CHAIN);
         public static final ModelTemplate KITCHEN_SHELF_MIDDLE = getTemplate("kitchen_shelf_middle_template", Optional.of("_middle"), TextureSlot.PARTICLE, TextureSlots.PLANKS);
 
-        public static final ModelTemplate FRIDGE_BOTTOM = getTemplate("kitchen_fridge_bottom_template", Optional.of("_bottom"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.BARS, TextureSlots.HANDLE);
-        public static final ModelTemplate FRIDGE_BOTTOM_OPEN = getTemplate("kitchen_fridge_bottom_open_template", Optional.of("_bottom_open"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.BARS, TextureSlots.HANDLE);
-        public static final ModelTemplate FRIDGE_BOTTOM_MIRRORED = getTemplate("kitchen_fridge_bottom_mirrored_template", Optional.of("_bottom_mirrored"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.BARS, TextureSlots.HANDLE);
-        public static final ModelTemplate FRIDGE_BOTTOM_MIRRORED_OPEN = getTemplate("kitchen_fridge_bottom_mirrored_open_template", Optional.of("_bottom_mirrored_open"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.BARS, TextureSlots.HANDLE);
-        public static final ModelTemplate FRIDGE_TOP = getTemplate("kitchen_fridge_top_template", Optional.of("_top"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
-        public static final ModelTemplate FRIDGE_TOP_OPEN = getTemplate("kitchen_fridge_top_open_template", Optional.of("_top_open"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
-        public static final ModelTemplate FRIDGE_TOP_MIRRORED = getTemplate("kitchen_fridge_top_mirrored_template", Optional.of("_top_mirrored"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
-        public static final ModelTemplate FRIDGE_TOP_MIRRORED_OPEN = getTemplate("kitchen_fridge_top_mirrored_open_template", Optional.of("_top_mirrored_open"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
+        public static final ModelTemplate FRIDGE_BOTTOM = getTemplate("fridge_bottom_template", Optional.of("_bottom"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.BARS, TextureSlots.HANDLE);
+        public static final ModelTemplate FRIDGE_BOTTOM_OPEN = getTemplate("fridge_bottom_open_template", Optional.of("_bottom_open"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.BARS, TextureSlots.HANDLE);
+        public static final ModelTemplate FRIDGE_BOTTOM_MIRRORED = getTemplate("fridge_bottom_mirrored_template", Optional.of("_bottom_mirrored"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.BARS, TextureSlots.HANDLE);
+        public static final ModelTemplate FRIDGE_BOTTOM_MIRRORED_OPEN = getTemplate("fridge_bottom_mirrored_open_template", Optional.of("_bottom_mirrored_open"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.BARS, TextureSlots.HANDLE);
+        public static final ModelTemplate FRIDGE_TOP = getTemplate("fridge_top_template", Optional.of("_top"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
+        public static final ModelTemplate FRIDGE_TOP_OPEN = getTemplate("fridge_top_open_template", Optional.of("_top_open"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
+        public static final ModelTemplate FRIDGE_TOP_MIRRORED = getTemplate("fridge_top_mirrored_template", Optional.of("_top_mirrored"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
+        public static final ModelTemplate FRIDGE_TOP_MIRRORED_OPEN = getTemplate("fridge_top_mirrored_open_template", Optional.of("_top_mirrored_open"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
+        public static final ModelTemplate FRIDGE_ITEM = getTemplate("fridge_item_template", Optional.of("_item"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
 
         public static final ModelTemplate KNIFE_BLOCK = getTemplate("knife_block_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.BLOCK, TextureSlots.STAND, TextureSlots.HANDLE, TextureSlots.KNIFE);
 
@@ -722,6 +765,15 @@ public class ModelGenerator extends ModelProvider {
         public static final ModelTemplate CURTAIN_BIG_TOP_MIDDLE_OPEN = getTemplate("curtains_big_top_middle_open_template", Optional.of("_big_top_middle_open"), TextureSlot.PARTICLE, TextureSlots.WOOL, TextureSlots.CURTAIN_ROD);
 
         public static final ModelTemplate KITCHEN_TILES = getTemplate("kitchen_tiles_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.TILE_BASE, TextureSlots.TILE_2);
+
+        public static final ModelTemplate BEDSITE_TABLE = getTemplate("bedside_table_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR);
+        public static final ModelTemplate BEDSITE_TABLE_OPEN = getTemplate("bedside_table_open_template", Optional.of("_open"), TextureSlot.PARTICLE, TextureSlots.COUNTER, TextureSlots.TOP, TextureSlots.DOOR);
+
+        public static final ModelTemplate CLOSET_BOTTOM = getTemplate("closet_bottom_template", Optional.of("_bottom"), TextureSlot.PARTICLE, TextureSlots.CLOSET, TextureSlots.DOOR);
+        public static final ModelTemplate CLOSET_BOTTOM_OPEN = getTemplate("closet_bottom_open_template", Optional.of("_bottom_open"), TextureSlot.PARTICLE, TextureSlots.CLOSET, TextureSlots.DOOR);
+        public static final ModelTemplate CLOSET_TOP = getTemplate("closet_top_template", Optional.of("_top"), TextureSlot.PARTICLE, TextureSlots.CLOSET, TextureSlots.DOOR);
+        public static final ModelTemplate CLOSET_TOP_OPEN = getTemplate("closet_top_open_template", Optional.of("_top_open"), TextureSlot.PARTICLE, TextureSlots.CLOSET, TextureSlots.DOOR);
+        public static final ModelTemplate CLOSET_ITEM = getTemplate("closet_item_template", Optional.of("_item"), TextureSlot.PARTICLE, TextureSlots.CLOSET, TextureSlots.DOOR);
 
         public static final ModelTemplate LAMP_SINGLE = getTemplate("lamp_single_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.LOG, TextureSlots.STRIPPED_LOG, TextureSlots.LOG_TOP, TextureSlots.PLANKS, TextureSlots.WOOL, TextureSlots.LAMP);
         public static final ModelTemplate LAMP_SINGLE_ON = getTemplate("lamp_single_template", Optional.of("_on"), TextureSlot.PARTICLE, TextureSlots.LOG, TextureSlots.STRIPPED_LOG, TextureSlots.LOG_TOP, TextureSlots.PLANKS, TextureSlots.WOOL, TextureSlots.LAMP);

@@ -8,6 +8,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.setrion.fabulous_furniture.FabulousFurniture;
+import net.setrion.fabulous_furniture.world.level.block.state.properties.FurnitureCategory;
+import net.setrion.fabulous_furniture.world.level.block.state.properties.MaterialType;
+
 import static net.setrion.fabulous_furniture.registry.SFFBlocks.*;
 
 public class LangGenerator extends LanguageProvider {
@@ -18,8 +21,29 @@ public class LangGenerator extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
+        MaterialType.values().toList().forEach(material -> {
+            add(material.getTranslatableName(), createTranslatedName(material.name()));
+        });
+
+        FurnitureCategory.values().toList().forEach(category -> {
+            add(category.getTranslatableName(), createTranslatedName(category.name()));
+        });
+
+        add("itemGroup.fabulous_furniture.main", "Setrion's Fabulous Furniture");
+
+        add("carpentry_table.amount", "Amount: ");
+        add("carpentry_table.ingredients", "Ingredients:");
+        add("carpentry_table.categories", "Categories");
+        add("carpentry_table.materials", "Materials");
+
+        add("container.carpentry_table", "Carpentry");
+        add("container.kitchen_counter", "Kitchen Counter");
+        add("container.fridge", "Fridge");
+
         translateCurtains();
         WoodType.values().toList().forEach(this::translateWoodenFurniture);
+
+        add(CARPENTRY_TABLE.asItem(), "Carpentry Table");
 
         add(COPPER_FRIDGE.asItem(), "Copper Fridge");
         add(EXPOSED_COPPER_FRIDGE.asItem(), "Exposed Copper Fridge");
@@ -125,6 +149,14 @@ public class LangGenerator extends LanguageProvider {
         translate(type.name()+"_table");
         translate(type.name()+log_suffix+"_table");
         translate("stripped_"+type.name()+log_suffix+"_table");
+
+        translate(type.name()+"_bedside_table");
+        translate(type.name()+log_suffix+"_bedside_table");
+        translate("stripped_"+type.name()+log_suffix+"_bedside_table");
+
+        translate(type.name()+"_closet");
+        translate(type.name()+log_suffix+"_closet");
+        translate("stripped_"+type.name()+log_suffix+"_closet");
 
         WOOL_COLORS.forEach((block, color) -> BlockFamilies.getAllFamilies().toList().forEach(blockFamily -> {
             if (blockFamily.getBaseBlock() == planks) {

@@ -8,7 +8,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 import net.neoforged.neoforge.network.handling.MainThreadPayloadHandler;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.setrion.fabulous_furniture.data.*;
@@ -52,6 +51,7 @@ public class RegistryEvents {
 
         generator.addProvider(true, new DataMapGenerator(output, newLookup));
         TagGenerator.Blocks blockTags = new TagGenerator.Blocks(output, newLookup);
+        generator.addProvider(true, new LootTableGenerator(output, newLookup));
         generator.addProvider(true, blockTags);
         generator.addProvider(true, new LangGenerator(output));
         generator.addProvider(true, new RecipeRunner(output, newLookup));
@@ -67,6 +67,7 @@ public class RegistryEvents {
 
         generator.addProvider(true, new DataMapGenerator(output, newLookup));
         TagGenerator.Blocks blockTags = new TagGenerator.Blocks(output, newLookup);
+        generator.addProvider(true, new LootTableGenerator(output, newLookup));
         generator.addProvider(true, new LangGenerator(output));
         generator.addProvider(true, blockTags);
         generator.addProvider(true, new RecipeRunner(output, newLookup));
