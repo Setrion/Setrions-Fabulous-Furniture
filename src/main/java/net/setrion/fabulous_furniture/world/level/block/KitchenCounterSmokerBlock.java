@@ -4,6 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -13,7 +15,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class KitchenCounterSmokerBlock extends SmokerBlock {
+import java.util.List;
+
+public class KitchenCounterSmokerBlock extends SmokerBlock implements BlockTagSupplier {
 
     protected static final VoxelShape COUNTER_NORTH;
     protected static final VoxelShape COUNTER_EAST;
@@ -47,6 +51,11 @@ public class KitchenCounterSmokerBlock extends SmokerBlock {
                 level.playLocalSound(d0, d1, d2, SoundEvents.SMOKER_SMOKE, SoundSource.BLOCKS, 1.0F, 1.0F, false);
             }
         }
+    }
+
+    @Override
+    public List<TagKey<Block>> getTags() {
+        return List.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.MINEABLE_WITH_PICKAXE);
     }
 
     static {

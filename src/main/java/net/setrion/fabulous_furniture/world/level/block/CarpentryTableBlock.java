@@ -4,6 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
@@ -27,7 +29,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CarpentryTableBlock extends Block {
+public class CarpentryTableBlock extends Block implements BlockTagSupplier {
 
     private static final Component CONTAINER_TITLE = Component.translatable("container.carpentry_table");
 
@@ -59,5 +61,10 @@ public class CarpentryTableBlock extends Block {
     @Nullable
     public MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
         return new SimpleMenuProvider((id, inventory, player) -> new CarpentryTableMenu(id, inventory, ContainerLevelAccess.create(level, pos)), CONTAINER_TITLE);
+    }
+
+    @Override
+    public List<TagKey<Block>> getTags() {
+        return List.of(BlockTags.MINEABLE_WITH_AXE);
     }
 }

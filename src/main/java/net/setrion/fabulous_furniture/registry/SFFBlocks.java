@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.setrion.fabulous_furniture.FabulousFurniture;
@@ -29,9 +28,10 @@ public class SFFBlocks {
 
     public static final DeferredBlock<CarpentryTableBlock> CARPENTRY_TABLE;
 
-    public static final Map<Block, String> COUNTER_TOPS = new HashMap<>(12);
-    public static final Map<Block, DyeColor> WOOL_COLORS = new HashMap<>(12);
-    public static final Map<Block, String> CURTAIN_RODS = new HashMap<>(12);
+    public static final Map<Block, String> COUNTER_TOPS = new HashMap<>();
+    public static final Map<Block, DyeColor> WOOL_COLORS = new HashMap<>();
+    public static final Map<Block, String> METALS = new HashMap<>();
+    public static final Map<Block, String> TABLEWARE_MATERIALS = new HashMap<>();
 
     static {
         COUNTER_TOPS.put(Blocks.POLISHED_GRANITE, "");
@@ -64,10 +64,45 @@ public class SFFBlocks {
         WOOL_COLORS.put(Blocks.MAGENTA_WOOL, DyeColor.MAGENTA);
         WOOL_COLORS.put(Blocks.PINK_WOOL, DyeColor.PINK);
 
-        CURTAIN_RODS.put(Blocks.COPPER_BLOCK, "copper");
-        CURTAIN_RODS.put(Blocks.IRON_BLOCK, "iron");
-        CURTAIN_RODS.put(Blocks.GOLD_BLOCK, "gold");
-        CURTAIN_RODS.put(Blocks.NETHERITE_BLOCK, "netherite");
+        METALS.put(Blocks.COPPER_BLOCK, "copper");
+        METALS.put(Blocks.IRON_BLOCK, "iron");
+        METALS.put(Blocks.GOLD_BLOCK, "gold");
+        METALS.put(Blocks.NETHERITE_BLOCK, "netherite");
+
+        TABLEWARE_MATERIALS.put(Blocks.QUARTZ_BLOCK, "_top");
+        TABLEWARE_MATERIALS.put(Blocks.TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.WHITE_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.LIGHT_GRAY_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.GRAY_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.BLACK_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.BROWN_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.RED_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.ORANGE_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.YELLOW_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.LIME_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.GREEN_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.CYAN_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.LIGHT_BLUE_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.BLUE_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.PURPLE_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.MAGENTA_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.PINK_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.WHITE_GLAZED_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.LIGHT_GRAY_GLAZED_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.GRAY_GLAZED_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.BLACK_GLAZED_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.BROWN_GLAZED_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.RED_GLAZED_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.ORANGE_GLAZED_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.YELLOW_GLAZED_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.LIME_GLAZED_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.GREEN_GLAZED_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.CYAN_GLAZED_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.LIGHT_BLUE_GLAZED_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.BLUE_GLAZED_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.PURPLE_GLAZED_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.MAGENTA_GLAZED_TERRACOTTA, "");
+        TABLEWARE_MATERIALS.put(Blocks.PINK_GLAZED_TERRACOTTA, "");
 
         CARPENTRY_TABLE = registerBlockWithItem("carpentry_table", CarpentryTableBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CRAFTING_TABLE));
         for (WoodType type : WoodType.values().toList()) {
@@ -118,7 +153,7 @@ public class SFFBlocks {
                 registerBlockWithItem("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_cabinet_sideways_door", KitchenCabinetOpenableHingeContainerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
                 registerBlockWithItem("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_cabinet_sideways_glass_door", KitchenCabinetOpenableHingeContainerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
 
-                registerBlockWithItem(type.name()+"_"+top_name+"_knife_block", properties -> new RotatableBlock(properties, new VoxelShape[] {Block.box(4, 0, 4, 12, 14, 12), Block.box(4, 0, 4, 12, 14, 12), Block.box(4, 0, 4, 12, 14, 12), Block.box(4, 0, 4, 12, 14, 12)}), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem(type.name()+"_"+top_name+"_knife_block", properties -> new RotatableBlock(properties, Block.box(4, 0, 4, 12, 14, 12)), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
             }));
 
             registerBlockWithItem(type.name()+"_kitchen_cabinet", KitchenCabinetBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
@@ -156,11 +191,19 @@ public class SFFBlocks {
             registerBlockWithItem("stripped_"+type.name()+log_suffix+"_closet", ClosetBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
         }
 
+        TABLEWARE_MATERIALS.forEach((block, suffix) -> {
+            String top_name = block.getDescriptionId().replaceFirst("block.minecraft.", "").replaceFirst("quartz_block", "quartz");
+            registerBlockWithItem(top_name+"_tableware", TablewareBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(block));
+        });
 
         WOOL_COLORS.forEach((block, color) -> {
-            CURTAIN_RODS.forEach((rod, name) -> {
+            METALS.forEach((metal, name) -> {
                 registerBlockWithItem(color+"_"+name+"_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(block).noOcclusion());
             });
+        });
+
+        METALS.forEach((metal, name) -> {
+            registerBlockWithItem(name+"_toaster", properties -> new RotatableBlock(properties, Block.box(2, 0, 2, 14, 4, 14)), () -> BlockBehaviour.Properties.ofFullCopy(metal));
         });
     }
 
@@ -176,21 +219,21 @@ public class SFFBlocks {
     public static final DeferredBlock<Block> WAXED_WEATHERED_COPPER_FRIDGE = registerBlockWithItem("waxed_weathered_copper_fridge", FridgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WAXED_WEATHERED_COPPER).pushReaction(PushReaction.BLOCK));
     public static final DeferredBlock<Block> WAXED_OXIDIZED_COPPER_FRIDGE = registerBlockWithItem("waxed_oxidized_copper_fridge", FridgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WAXED_OXIDIZED_COPPER).pushReaction(PushReaction.BLOCK));
 
-    public static final DeferredBlock<Block> WHITE_LIGHT_GRAY_KITCHEN_TILES = registerBlockWithItem("white_light_gray_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
-    public static final DeferredBlock<Block> WHITE_GRAY_KITCHEN_TILES = registerBlockWithItem("white_gray_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
-    public static final DeferredBlock<Block> WHITE_BLACK_KITCHEN_TILES = registerBlockWithItem("white_black_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
-    public static final DeferredBlock<Block> WHITE_BROWN_KITCHEN_TILES = registerBlockWithItem("white_brown_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
-    public static final DeferredBlock<Block> WHITE_RED_KITCHEN_TILES = registerBlockWithItem("white_red_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
-    public static final DeferredBlock<Block> WHITE_ORANGE_KITCHEN_TILES = registerBlockWithItem("white_orange_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
-    public static final DeferredBlock<Block> WHITE_YELLOW_KITCHEN_TILES = registerBlockWithItem("white_yellow_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
-    public static final DeferredBlock<Block> WHITE_LIME_KITCHEN_TILES = registerBlockWithItem("white_lime_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
-    public static final DeferredBlock<Block> WHITE_GREEN_KITCHEN_TILES = registerBlockWithItem("white_green_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
-    public static final DeferredBlock<Block> WHITE_CYAN_KITCHEN_TILES = registerBlockWithItem("white_cyan_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
-    public static final DeferredBlock<Block> WHITE_LIGHT_BLUE_KITCHEN_TILES = registerBlockWithItem("white_light_blue_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
-    public static final DeferredBlock<Block> WHITE_BLUE_KITCHEN_TILES = registerBlockWithItem("white_blue_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
-    public static final DeferredBlock<Block> WHITE_PURPLE_KITCHEN_TILES = registerBlockWithItem("white_purple_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
-    public static final DeferredBlock<Block> WHITE_MAGENTA_KITCHEN_TILES = registerBlockWithItem("white_magenta_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
-    public static final DeferredBlock<Block> WHITE_PINK_KITCHEN_TILES = registerBlockWithItem("white_pink_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
+    public static final DeferredBlock<Block> WHITE_LIGHT_GRAY_KITCHEN_TILES = registerBlockWithItem("white_light_gray_kitchen_tiles", KitchenTileBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
+    public static final DeferredBlock<Block> WHITE_GRAY_KITCHEN_TILES = registerBlockWithItem("white_gray_kitchen_tiles", KitchenTileBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
+    public static final DeferredBlock<Block> WHITE_BLACK_KITCHEN_TILES = registerBlockWithItem("white_black_kitchen_tiles", KitchenTileBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
+    public static final DeferredBlock<Block> WHITE_BROWN_KITCHEN_TILES = registerBlockWithItem("white_brown_kitchen_tiles", KitchenTileBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
+    public static final DeferredBlock<Block> WHITE_RED_KITCHEN_TILES = registerBlockWithItem("white_red_kitchen_tiles", KitchenTileBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
+    public static final DeferredBlock<Block> WHITE_ORANGE_KITCHEN_TILES = registerBlockWithItem("white_orange_kitchen_tiles", KitchenTileBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
+    public static final DeferredBlock<Block> WHITE_YELLOW_KITCHEN_TILES = registerBlockWithItem("white_yellow_kitchen_tiles", KitchenTileBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
+    public static final DeferredBlock<Block> WHITE_LIME_KITCHEN_TILES = registerBlockWithItem("white_lime_kitchen_tiles", KitchenTileBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
+    public static final DeferredBlock<Block> WHITE_GREEN_KITCHEN_TILES = registerBlockWithItem("white_green_kitchen_tiles", KitchenTileBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
+    public static final DeferredBlock<Block> WHITE_CYAN_KITCHEN_TILES = registerBlockWithItem("white_cyan_kitchen_tiles", KitchenTileBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
+    public static final DeferredBlock<Block> WHITE_LIGHT_BLUE_KITCHEN_TILES = registerBlockWithItem("white_light_blue_kitchen_tiles", KitchenTileBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
+    public static final DeferredBlock<Block> WHITE_BLUE_KITCHEN_TILES = registerBlockWithItem("white_blue_kitchen_tiles", KitchenTileBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
+    public static final DeferredBlock<Block> WHITE_PURPLE_KITCHEN_TILES = registerBlockWithItem("white_purple_kitchen_tiles", KitchenTileBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
+    public static final DeferredBlock<Block> WHITE_MAGENTA_KITCHEN_TILES = registerBlockWithItem("white_magenta_kitchen_tiles", KitchenTileBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
+    public static final DeferredBlock<Block> WHITE_PINK_KITCHEN_TILES = registerBlockWithItem("white_pink_kitchen_tiles", KitchenTileBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
 
     private static BlockBehaviour.Properties lampProperties(Block block) {
         return BlockBehaviour.Properties.ofFullCopy(block).lightLevel((state) -> state.getValue(LampBlock.ON) && (state.getValue(LampBlock.PART) == LampPart.TOP || state.getValue(LampBlock.PART) == LampPart.SINGLE) ? 15 : 0);

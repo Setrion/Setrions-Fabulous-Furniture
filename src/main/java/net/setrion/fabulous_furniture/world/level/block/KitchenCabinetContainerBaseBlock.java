@@ -3,6 +3,9 @@ package net.setrion.fabulous_furniture.world.level.block;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -17,7 +20,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class KitchenCabinetContainerBaseBlock extends KitchenCounterContainerBaseBlock {
+import java.util.List;
+
+public class KitchenCabinetContainerBaseBlock extends KitchenCounterContainerBaseBlock implements BlockTagSupplier {
 
     public static final MapCodec<KitchenCabinetContainerBaseBlock> CODEC = simpleCodec(KitchenCabinetContainerBaseBlock::new);
 
@@ -121,9 +126,13 @@ public class KitchenCabinetContainerBaseBlock extends KitchenCounterContainerBas
     }
 
     @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        Containers.dropContentsOnDestroy(state, newState, level, pos);
-        super.onRemove(state, level, pos, newState, isMoving);
+    protected void affectNeighborsAfterRemoval(BlockState p_393681_, ServerLevel p_394632_, BlockPos p_394133_, boolean p_394282_) {
+        Containers.updateNeighboursAfterDestroy(p_393681_, p_394632_, p_394133_);
+    }
+
+    @Override
+    public List<TagKey<Block>> getTags() {
+        return List.of(BlockTags.MINEABLE_WITH_AXE);
     }
 
     static {

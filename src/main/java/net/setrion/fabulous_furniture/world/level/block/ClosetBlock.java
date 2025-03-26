@@ -8,7 +8,10 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
@@ -29,7 +32,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.setrion.fabulous_furniture.registry.SFFBlocks;
 import net.setrion.fabulous_furniture.registry.SFFStats;
@@ -37,9 +42,11 @@ import net.setrion.fabulous_furniture.util.VoxelShapeUtils;
 import net.setrion.fabulous_furniture.world.level.block.entity.ClosetBlockEntity;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.stream.Stream;
 
-public class ClosetBlock extends BaseEntityBlock {
+public class ClosetBlock extends BaseEntityBlock implements BlockTagSupplier {
 
     public static final MapCodec<ClosetBlock> CODEC = simpleCodec(ClosetBlock::new);
 
@@ -119,7 +126,7 @@ public class ClosetBlock extends BaseEntityBlock {
         builder.add(HALF, FACING, OPEN);
     }
 
-    private void playSound(@Nullable Entity source, BlockState state, Level level, BlockPos pos, boolean isOpening) {
+    private void playSound(@Nullable Entity source, Level level, BlockPos pos, boolean isOpening) {
         SoundEvent open = SoundEvents.WOODEN_DOOR_OPEN;
         SoundEvent close = SoundEvents.WOODEN_DOOR_CLOSE;
         level.playSound(source, pos, isOpening ? open : close, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
@@ -132,7 +139,7 @@ public class ClosetBlock extends BaseEntityBlock {
                 blockState = blockState.cycle(OPEN);
                 System.out.println(SFFBlocks.BLOCKS.getEntries().size());
                 level.setBlock(blockPos, blockState, 10);
-                this.playSound(null, blockState, level, blockPos, blockState.getValue(OPEN));
+                this.playSound(null, level, blockPos, blockState.getValue(OPEN));
                 level.gameEvent(player, this.isOpen(blockState) ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, blockPos);
                 return InteractionResult.SUCCESS;
             } else {
@@ -151,6 +158,11 @@ public class ClosetBlock extends BaseEntityBlock {
         return InteractionResult.SUCCESS;
     }
 
+    @Override
+    protected void affectNeighborsAfterRemoval(BlockState p_393681_, ServerLevel p_394632_, BlockPos p_394133_, boolean p_394282_) {
+        Containers.updateNeighboursAfterDestroy(p_393681_, p_394632_, p_394133_);
+    }
+
     public boolean isOpen(BlockState state) {
         return state.getValue(OPEN);
     }
@@ -158,19 +170,9 @@ public class ClosetBlock extends BaseEntityBlock {
     public void setOpen(@Nullable Entity entity, Level level, BlockState state, BlockPos pos, boolean open) {
         if (state.is(this) && state.getValue(OPEN) != open) {
             level.setBlock(pos, state.setValue(OPEN, open), 10);
-            this.playSound(entity, state, level, pos, open);
+            this.playSound(entity, level, pos, open);
             level.gameEvent(entity, open ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, pos);
         }
-    }
-
-    static {
-        FACING = HorizontalDirectionalBlock.FACING;
-        OPEN = BlockStateProperties.OPEN;
-        HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
-        BOTTOM_OPEN = Block.box(0, 0, 2, 16, 16, 16);
-        BOTTOM_CLOSED = Block.box(0, 0, 0, 14, 16, 16);
-        TOP_OPEN = Block.box(0, 0, 0, 16, 16, 14);
-        TOP_CLOSED = Block.box(2, 0, 0, 16, 16, 16);
     }
 
     @Override
@@ -182,5 +184,71 @@ public class ClosetBlock extends BaseEntityBlock {
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return new ClosetBlockEntity(blockPos, blockState);
+    }
+
+    @Override
+    public List<TagKey<Block>> getTags() {
+        return List.of(BlockTags.MINEABLE_WITH_AXE);
+    }
+
+    static {
+        FACING = HorizontalDirectionalBlock.FACING;
+        OPEN = BlockStateProperties.OPEN;
+        HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
+        BOTTOM_OPEN = Stream.of(
+                Block.box(15, 13, -5, 16, 16, 2),
+                Block.box(0, 13, -5, 1, 16, 2),
+                Block.box(0, 10, 2, 16, 14, 16),
+                Block.box(0, 2, 2, 2, 10, 16),
+                Block.box(14, 2, 2, 16, 10, 16),
+                Block.box(0, 0, 2, 16, 2, 16),
+                Block.box(2, 5, 2, 14, 7, 15),
+                Block.box(2, 2, 15, 14, 10, 16),
+                Block.box(1, 1.5, -7, 15, 5.5, -6),
+                Block.box(6, 3, -8, 10, 4, -6),
+                Block.box(2, 2.25, -6, 2.25, 4.75, 7),
+                Block.box(13.75, 2.25, -6, 14, 4.75, 7),
+                Block.box(2.25, 2.25, 6.75, 13.75, 4.75, 7),
+                Block.box(2, 2, -6, 14, 2.25, 7),
+                Block.box(6, 8, -5, 10, 9, -3),
+                Block.box(1, 6.5, -4, 15, 10.5, -3),
+                Block.box(13.75, 7.25, -3, 14, 9.75, 10),
+                Block.box(2.25, 7.25, 9.75, 13.75, 9.75, 10),
+                Block.box(2, 7, -3, 14, 7.25, 10),
+                Block.box(2, 7.25, -3, 2.25, 9.75, 10),
+                Block.box(0, 14, 2, 2, 16, 16),
+                Block.box(14, 14, 2, 16, 16, 16),
+                Block.box(2, 14, 14, 14, 16, 16),
+                Block.box(7.5, 14, 2, 8.5, 16, 14)
+        ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+        BOTTOM_CLOSED = Stream.of(
+                Block.box(0, 0, 2, 16, 16, 16),
+                Block.box(8, 13, 1, 15, 16, 2),
+                Block.box(1, 13, 1, 8, 16, 2),
+                Block.box(1, 1.5, 1, 15, 5.5, 2),
+                Block.box(6, 3, 0, 10, 4, 2),
+                Block.box(6, 8, 0, 10, 9, 2),
+                Block.box(1, 6.5, 1, 15, 10.5, 2)
+        ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+        TOP_OPEN = Stream.of(
+                Block.box(0, 14, 2, 16, 16, 16),
+                Block.box(15, 0, -5, 16, 15, 2),
+                Block.box(-1, 4, -4, 0, 8, -3),
+                Block.box(0, 0, -5, 1, 15, 2),
+                Block.box(16, 4, -4, 17, 8, -3),
+                Block.box(0, 0, 2, 2, 14, 16),
+                Block.box(14, 0, 2, 16, 14, 16),
+                Block.box(2, 0, 14, 14, 14, 16),
+                Block.box(2, 9, 2, 14, 10, 14),
+                Block.box(7.5, 0, 2, 8.5, 9, 14),
+                Block.box(8.5, 3, 2, 14, 4, 14)
+        ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+        TOP_CLOSED = Stream.of(
+                Block.box(0, 0, 2, 16, 16, 16),
+                Block.box(8, 0, 1, 15, 15, 2),
+                Block.box(6, 4, 0, 7, 8, 1),
+                Block.box(1, 0, 1, 8, 15, 2),
+                Block.box(9, 4, 0, 10, 8, 1)
+        ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
     }
 }

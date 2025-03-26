@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.WeatheringCopper;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 
@@ -28,7 +29,9 @@ public class WeatheringKitchenFridgeBlock extends FridgeBlock implements Weather
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (state.getValue(FridgeBlock.HALF) == DoubleBlockHalf.LOWER) {
+            BlockEntity be = level.getBlockEntity(pos);
             changeOverTime(state, level, pos, random);
+            level.setBlockEntity(be);
         }
     }
 

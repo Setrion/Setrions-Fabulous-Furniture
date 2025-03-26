@@ -3,6 +3,8 @@ package net.setrion.fabulous_furniture.world.level.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
@@ -36,7 +38,7 @@ import net.setrion.fabulous_furniture.world.level.block.state.properties.BedShap
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class WoodenBedBlock extends Block {
+public class WoodenBedBlock extends Block implements BlockTagSupplier {
 
     public static final EnumProperty<BedPart> PART;
     public static final EnumProperty<BedShape> SHAPE;
@@ -214,7 +216,7 @@ public class WoodenBedBlock extends Block {
         if (!level.isClientSide) {
             BlockPos blockpos = pos.relative(state.getValue(FACING));
             level.setBlock(blockpos, state.setValue(PART, BedPart.HEAD), 3);
-            level.blockUpdated(pos, Blocks.AIR);
+            level.updateNeighborsAt(pos, Blocks.AIR);
             state.updateNeighbourShapes(level, pos, 3);
         }
     }
@@ -226,6 +228,11 @@ public class WoodenBedBlock extends Block {
 
     protected boolean isPathfindable(BlockState state, PathComputationType type) {
         return false;
+    }
+
+    @Override
+    public List<TagKey<Block>> getTags() {
+        return List.of(BlockTags.MINEABLE_WITH_AXE);
     }
 
     static {

@@ -62,7 +62,7 @@ public class CarpentryTableMenu extends AbstractContainerMenu {
             }
 
             public void onTake(Player player, ItemStack stack) {
-                stack.onCraftedBy(player.level(), player, stack.getCount());
+                stack.onCraftedBy(player, stack.getCount());
 
                 access.execute((level, pos) -> {
                     long i = level.getGameTime();
@@ -196,7 +196,7 @@ public class CarpentryTableMenu extends AbstractContainerMenu {
             Item item = itemstack1.getItem();
             itemstack = itemstack1.copy();
             if (index == 6) {
-                item.onCraftedBy(itemstack1, player.level(), player);
+                item.onCraftedBy(itemstack1, player);
                 if (!this.moveItemStackTo(itemstack1, 7, 43, true)) {
                     return ItemStack.EMPTY;
                 }

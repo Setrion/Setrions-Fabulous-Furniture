@@ -7,6 +7,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -32,9 +34,10 @@ import net.setrion.fabulous_furniture.util.VoxelShapeUtils;
 import net.setrion.fabulous_furniture.world.level.block.entity.BedsideTableBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.stream.Stream;
 
-public class BedsideTableBlock extends BaseEntityBlock {
+public class BedsideTableBlock extends BaseEntityBlock implements BlockTagSupplier {
 
     public static final EnumProperty<Direction> FACING;
     public static final BooleanProperty OPEN;
@@ -94,9 +97,8 @@ public class BedsideTableBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        Containers.dropContentsOnDestroy(state, newState, level, pos);
-        super.onRemove(state, level, pos, newState, isMoving);
+    protected void affectNeighborsAfterRemoval(BlockState p_393681_, ServerLevel p_394632_, BlockPos p_394133_, boolean p_394282_) {
+        Containers.updateNeighboursAfterDestroy(p_393681_, p_394632_, p_394133_);
     }
 
     @Override
@@ -163,5 +165,10 @@ public class BedsideTableBlock extends BaseEntityBlock {
                         Block.box(2.25, 2.25, 10.75, 13.75, 5.25, 11)
                 ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get()
         ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+    }
+
+    @Override
+    public List<TagKey<Block>> getTags() {
+        return List.of(BlockTags.MINEABLE_WITH_AXE);
     }
 }

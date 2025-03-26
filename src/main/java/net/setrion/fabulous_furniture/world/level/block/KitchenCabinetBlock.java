@@ -2,6 +2,8 @@ package net.setrion.fabulous_furniture.world.level.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -20,7 +22,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.setrion.fabulous_furniture.util.VoxelShapeUtils;
 import net.setrion.fabulous_furniture.world.level.block.state.properties.CounterShape;
 
-public class KitchenCabinetBlock extends Block {
+import java.util.List;
+
+public class KitchenCabinetBlock extends Block implements BlockTagSupplier {
 
     public static final EnumProperty<Direction> FACING;
     public static final EnumProperty<CounterShape> SHAPE;
@@ -163,6 +167,11 @@ public class KitchenCabinetBlock extends Block {
         return super.mirror(state, mirror);
     }
 
+    @Override
+    public List<TagKey<Block>> getTags() {
+        return List.of(BlockTags.MINEABLE_WITH_AXE);
+    }
+
     static {
         FACING = HorizontalDirectionalBlock.FACING;
         SHAPE = EnumProperty.create("shape", CounterShape.class);
@@ -172,6 +181,5 @@ public class KitchenCabinetBlock extends Block {
         INNER_CABINET_SHAPE = Shapes.or(Block.box(6, 0, 0, 16, 2, 16), Block.box(0, 0, 6, 16, 2, 16), Block.box(4, 2, 0, 16, 4, 16), Block.box(0, 2, 4, 16, 4, 16), Block.box(2, 4, 0, 16, 14, 16), Block.box(0, 4, 2, 16, 14, 16));
 
         OUTER_CABINET_SHAPE = Shapes.or(Block.box(6, 0, 6, 16, 2, 16), Block.box(4, 2, 4, 16, 4, 16), Block.box(2, 4, 2, 16, 14, 16));
-
     }
 }

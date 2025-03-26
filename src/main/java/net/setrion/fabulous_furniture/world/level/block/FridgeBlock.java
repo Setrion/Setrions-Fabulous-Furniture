@@ -8,6 +8,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -34,9 +36,10 @@ import net.setrion.fabulous_furniture.registry.SFFTags;
 import net.setrion.fabulous_furniture.world.level.block.entity.KitchenFridgeBlockEntity;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.function.BiConsumer;
 
-public class FridgeBlock extends BaseEntityBlock {
+public class FridgeBlock extends BaseEntityBlock implements BlockTagSupplier {
 
     public static final MapCodec<FridgeBlock> CODEC = simpleCodec(FridgeBlock::new);
 
@@ -187,17 +190,6 @@ public class FridgeBlock extends BaseEntityBlock {
         }
     }
 
-    static {
-        FACING = HorizontalDirectionalBlock.FACING;
-        OPEN = BlockStateProperties.OPEN;
-        HINGE = BlockStateProperties.DOOR_HINGE;
-        HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
-        FRIDGE_NORTH = Block.box(0, 0, 2, 16, 16, 16);
-        FRIDGE_EAST = Block.box(0, 0, 0, 14, 16, 16);
-        FRIDGE_SOUTH = Block.box(0, 0, 0, 16, 16, 14);
-        FRIDGE_WEST = Block.box(2, 0, 0, 16, 16, 16);
-    }
-
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
@@ -207,5 +199,21 @@ public class FridgeBlock extends BaseEntityBlock {
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return new KitchenFridgeBlockEntity(blockPos, blockState);
+    }
+
+    @Override
+    public List<TagKey<Block>> getTags() {
+        return List.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL);
+    }
+
+    static {
+        FACING = HorizontalDirectionalBlock.FACING;
+        OPEN = BlockStateProperties.OPEN;
+        HINGE = BlockStateProperties.DOOR_HINGE;
+        HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
+        FRIDGE_NORTH = Block.box(0, 0, 2, 16, 16, 16);
+        FRIDGE_EAST = Block.box(0, 0, 0, 14, 16, 16);
+        FRIDGE_SOUTH = Block.box(0, 0, 0, 16, 16, 14);
+        FRIDGE_WEST = Block.box(2, 0, 0, 16, 16, 16);
     }
 }

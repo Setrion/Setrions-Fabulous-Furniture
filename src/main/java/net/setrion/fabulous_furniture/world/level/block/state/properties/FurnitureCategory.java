@@ -26,6 +26,8 @@ public record FurnitureCategory(String name, Item item) {
     public static final FurnitureCategory TABLES;
     public static final FurnitureCategory LAMPS;
     public static final FurnitureCategory BEDS;
+    public static final FurnitureCategory BEDSIDE_TABLES;
+    public static final FurnitureCategory CLOSETS;
 
     public FurnitureCategory(String name, Item item) {
         this.name = name;
@@ -71,5 +73,7 @@ public record FurnitureCategory(String name, Item item) {
         TABLES = register(new FurnitureCategory("tables", BuiltInRegistries.BLOCK.getValue(FabulousFurniture.prefix("oak_table")).asItem()));
         LAMPS = register(new FurnitureCategory("lamps", BuiltInRegistries.BLOCK.getValue(FabulousFurniture.prefix("white_oak_lamp")).asItem()));
         BEDS = register(new FurnitureCategory("beds", BuiltInRegistries.BLOCK.getValue(FabulousFurniture.prefix("white_oak_bed")).asItem()));
+        BEDSIDE_TABLES = register(new FurnitureCategory("bedside_tables", BuiltInRegistries.BLOCK.getValue(FabulousFurniture.prefix("oak_bedside_table")).asItem()));
+        CLOSETS = register(new FurnitureCategory("closets", BuiltInRegistries.BLOCK.getValue(FabulousFurniture.prefix("oak_closet")).asItem()));
     }
 }

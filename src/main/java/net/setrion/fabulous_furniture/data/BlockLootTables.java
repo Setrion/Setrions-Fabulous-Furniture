@@ -62,7 +62,7 @@ public class BlockLootTables extends BlockLootSubProvider {
     }
 
     private void generateCurtains() {
-        WOOL_COLORS.forEach((wool, color) -> CURTAIN_RODS.forEach((rod, name) -> dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(color+"_"+name+"_curtains")))));
+        WOOL_COLORS.forEach((wool, color) -> METALS.forEach((rod, name) -> dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(color+"_"+name+"_curtains")))));
     }
 
     private void generateKitchenTiles() {
@@ -174,6 +174,15 @@ public class BlockLootTables extends BlockLootSubProvider {
                 add(getBlockFromResourceLocation(FabulousFurniture.prefix(color+"_stripped_"+type.name()+log_suffix+"_bed")), loot -> createSinglePropConditionTable(loot, WoodenBedBlock.PART, BedPart.HEAD));
             }
         }));
+
+        TABLEWARE_MATERIALS.forEach((block, suffix) -> {
+            String top_name = block.getDescriptionId().replaceFirst("block.minecraft.", "").replaceFirst("quartz_block", "quartz");
+            dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(top_name+"_tableware")));
+        });
+
+        METALS.forEach((metal, name) -> {
+            dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(name+"_toaster")));
+        });
     }
 
     private Block getBlockFromResourceLocation(ResourceLocation location) {

@@ -5,6 +5,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +27,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.setrion.fabulous_furniture.world.level.block.state.properties.CurtainShape;
 import org.jetbrains.annotations.Nullable;
 
-public class CurtainBlock extends Block {
+import java.util.List;
+
+public class CurtainBlock extends Block implements BlockTagSupplier {
 
     public static final EnumProperty<CurtainShape> CURTAIN_SHAPE;
     public static final EnumProperty<Direction> FACING;
@@ -165,6 +169,11 @@ public class CurtainBlock extends Block {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(CURTAIN_SHAPE, FACING, LEFT, RIGHT, OPEN);
+    }
+
+    @Override
+    public List<TagKey<Block>> getTags() {
+        return List.of(BlockTags.MINEABLE_WITH_AXE);
     }
 
     static {

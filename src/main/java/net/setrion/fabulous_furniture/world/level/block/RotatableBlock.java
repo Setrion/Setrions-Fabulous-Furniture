@@ -2,6 +2,8 @@ package net.setrion.fabulous_furniture.world.level.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
@@ -13,33 +15,30 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.setrion.fabulous_furniture.util.VoxelShapeUtils;
 
-public class RotatableBlock extends Block {
+import java.util.List;
+
+public class RotatableBlock extends Block implements BlockTagSupplier {
 
     public static final EnumProperty<Direction> FACING;
 
-    private final VoxelShape SHAPE_NORTH;
-    private final VoxelShape SHAPE_EAST;
-    private final VoxelShape SHAPE_SOUTH;
-    private final VoxelShape SHAPE_WEST;
+    private final VoxelShape SHAPE;
 
-    public RotatableBlock(Properties properties, VoxelShape[] shapes) {
+    public RotatableBlock(Properties properties, VoxelShape shape) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
-        this.SHAPE_NORTH = shapes[0];
-        this.SHAPE_EAST = shapes[1];
-        this.SHAPE_SOUTH = shapes[2];
-        this.SHAPE_WEST = shapes[3];
+        this.SHAPE = shape;
     }
 
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         Direction direction = state.getValue(FACING);
         return switch (direction) {
             default:
-            case NORTH: yield SHAPE_NORTH;
-            case EAST: yield SHAPE_EAST;
-            case SOUTH: yield SHAPE_SOUTH;
-            case WEST: yield SHAPE_WEST;
+            case NORTH: yield SHAPE;
+            case EAST: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, SHAPE);
+            case SOUTH: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, SHAPE);
+            case WEST: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, SHAPE);
         };
     }
 
@@ -61,6 +60,11 @@ public class RotatableBlock extends Block {
     @Override
     public BlockState mirror(BlockState blockState, Mirror mirror) {
         return rotate(blockState, mirror.getRotation(blockState.getValue(FACING)));
+    }
+
+    @Override
+    public List<TagKey<Block>> getTags() {
+        return List.of(BlockTags.MINEABLE_WITH_AXE);
     }
 
     static {

@@ -2,6 +2,8 @@ package net.setrion.fabulous_furniture.world.level.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -22,7 +24,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.setrion.fabulous_furniture.world.level.block.state.properties.LampPart;
 import org.jetbrains.annotations.Nullable;
 
-public class LampBlock extends Block {
+import java.util.List;
+
+public class LampBlock extends Block implements BlockTagSupplier {
 
     public static final BooleanProperty ON;
     public static final EnumProperty<LampPart> PART;
@@ -96,6 +100,11 @@ public class LampBlock extends Block {
         }
         //level.playSound(null, pos, SoundEvents.BARREL_CLOSE, SoundSource.BLOCKS);
         return InteractionResult.PASS;
+    }
+
+    @Override
+    public List<TagKey<Block>> getTags() {
+        return List.of(BlockTags.MINEABLE_WITH_AXE);
     }
 
     static {

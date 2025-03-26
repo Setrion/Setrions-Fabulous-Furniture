@@ -10,6 +10,7 @@ import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.setrion.fabulous_furniture.FabulousFurniture;
 import net.setrion.fabulous_furniture.registry.SFFBlocks;
 import net.setrion.fabulous_furniture.registry.SFFTags;
+import net.setrion.fabulous_furniture.world.level.block.BlockTagSupplier;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -38,6 +39,15 @@ public class TagGenerator {
             for (WoodType type : WoodType.values().toList()) {
                 tag(SFFTags.Blocks.CRATES).add(BuiltInRegistries.BLOCK.getValue(FabulousFurniture.prefix(type.name()+"_crate")));
             }
+
+            SFFBlocks.BLOCKS.getEntries().stream().filter(entry -> entry.getId().getNamespace().equals(FabulousFurniture.MOD_ID)).forEach(entry -> {
+                Block block = entry.get();
+                if(block instanceof BlockTagSupplier supplier) {
+                    supplier.getTags().forEach(key -> this.tag(key).add(block));
+                } else {
+                    throw new IllegalArgumentException("Block doesn't implement BlockTagSupplier: " + entry.getId());
+                }
+            });
 
             tag(SFFTags.Blocks.COPPER_FRIDGES).add(
                     SFFBlocks.COPPER_FRIDGE.get(),

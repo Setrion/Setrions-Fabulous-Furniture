@@ -2,6 +2,8 @@ package net.setrion.fabulous_furniture.world.level.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -20,7 +22,9 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.setrion.fabulous_furniture.world.level.entity.Seat;
 
-public class ChairBlock extends Block {
+import java.util.List;
+
+public class ChairBlock extends Block implements BlockTagSupplier {
 
     public static final EnumProperty<Direction> FACING;
     protected static final VoxelShape CHAIR_BASE;
@@ -71,6 +75,11 @@ public class ChairBlock extends Block {
     @Override
     public BlockState mirror(BlockState blockState, Mirror mirror) {
         return rotate(blockState, mirror.getRotation(blockState.getValue(FACING)));
+    }
+
+    @Override
+    public List<TagKey<Block>> getTags() {
+        return List.of(BlockTags.MINEABLE_WITH_AXE);
     }
 
     static {

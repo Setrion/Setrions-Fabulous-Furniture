@@ -2,6 +2,8 @@ package net.setrion.fabulous_furniture.world.level.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -17,7 +19,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.setrion.fabulous_furniture.util.VoxelShapeUtils;
 import net.setrion.fabulous_furniture.world.level.block.state.properties.CounterShape;
 
-public class KitchenCounterBlock extends Block {
+import java.util.List;
+
+public class KitchenCounterBlock extends Block implements BlockTagSupplier {
 
     public static final EnumProperty<Direction> FACING;
     public static final EnumProperty<CounterShape> SHAPE;
@@ -161,6 +165,11 @@ public class KitchenCounterBlock extends Block {
         }
 
         return super.mirror(state, mirror);
+    }
+
+    @Override
+    public List<TagKey<Block>> getTags() {
+        return List.of(BlockTags.MINEABLE_WITH_AXE);
     }
 
     static {

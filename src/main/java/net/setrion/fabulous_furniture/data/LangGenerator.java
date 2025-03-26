@@ -41,6 +41,8 @@ public class LangGenerator extends LanguageProvider {
         add("container.fridge", "Fridge");
 
         translateCurtains();
+        translateTableware();
+        translateToasters();
         WoodType.values().toList().forEach(this::translateWoodenFurniture);
 
         add(CARPENTRY_TABLE.asItem(), "Carpentry Table");
@@ -76,9 +78,22 @@ public class LangGenerator extends LanguageProvider {
 
     private void translateCurtains() {
         WOOL_COLORS.forEach((wool, color) -> {
-            CURTAIN_RODS.forEach((rod, name) -> {
+            METALS.forEach((rod, name) -> {
                 translate(color+"_"+name+"_curtains");
             });
+        });
+    }
+
+    protected void translateTableware() {
+        TABLEWARE_MATERIALS.forEach((block, suffix) -> {
+            String top_name = block.getDescriptionId().replaceFirst("block.minecraft.", "").replaceFirst("quartz_block", "quartz");
+            translate(top_name+"_tableware");
+        });
+    }
+
+    protected void translateToasters() {
+        METALS.forEach((metal, name) -> {
+            translate(name+"_toaster");
         });
     }
 

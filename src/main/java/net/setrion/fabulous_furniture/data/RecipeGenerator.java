@@ -46,6 +46,9 @@ public class RecipeGenerator extends RecipeProvider {
         createFridgeRecipes();
         createCurtainRecipes();
         createKitchenTileRecipes();
+        METALS.forEach((metal, name) -> {
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(name+"_toaster")), 1, FurnitureCategory.KITCHEN_MISC, getMaterialTypeFromTop(metal), new ItemStack(metal));
+        });
         createWoodenFurnitureRecipes(WoodType.OAK, MaterialType.OAK);
         createWoodenFurnitureRecipes(WoodType.SPRUCE, MaterialType.SPRUCE);
         createWoodenFurnitureRecipes(WoodType.BIRCH, MaterialType.BIRCH);
@@ -75,7 +78,7 @@ public class RecipeGenerator extends RecipeProvider {
     }
 
     private void createCurtainRecipes() {
-        WOOL_COLORS.forEach((wool, color) -> CURTAIN_RODS.forEach((rod, name) -> carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(color+"_"+name+"_curtains")), 6, FurnitureCategory.CURTAINS, MaterialType.WOOL, getMaterialTypeFromTop(rod), new ItemStack(wool, 1), new ItemStack(rod, 1))));
+        WOOL_COLORS.forEach((wool, color) -> METALS.forEach((rod, name) -> carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(color+"_"+name+"_curtains")), 6, FurnitureCategory.CURTAINS, MaterialType.WOOL, getMaterialTypeFromTop(rod), new ItemStack(wool, 1), new ItemStack(rod, 1))));
     }
 
     private void createKitchenTileRecipes() {
@@ -174,13 +177,13 @@ public class RecipeGenerator extends RecipeProvider {
         carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_table")), 2, FurnitureCategory.TABLES, materialType, new ItemStack(log, 1));
         carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_table")), 2, FurnitureCategory.TABLES, materialType, new ItemStack(strippedLog, 1));
 
-        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_bedside_table")), 2, FurnitureCategory.TABLES, materialType, new ItemStack(planks, 2), new ItemStack(log, 1));
-        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_bedside_table")), 2, FurnitureCategory.TABLES, materialType, new ItemStack(log, 2), new ItemStack(strippedLog, 1));
-        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_bedside_table")), 2, FurnitureCategory.TABLES, materialType, new ItemStack(strippedLog, 2), new ItemStack(log, 1));
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_bedside_table")), 2, FurnitureCategory.BEDSIDE_TABLES, materialType, new ItemStack(planks, 2), new ItemStack(log, 1));
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_bedside_table")), 2, FurnitureCategory.BEDSIDE_TABLES, materialType, new ItemStack(log, 2), new ItemStack(strippedLog, 1));
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_bedside_table")), 2, FurnitureCategory.BEDSIDE_TABLES, materialType, new ItemStack(strippedLog, 2), new ItemStack(log, 1));
 
-        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_closet")), 1, FurnitureCategory.TABLES, materialType, new ItemStack(planks, 2), new ItemStack(log, 1));
-        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_closet")), 1, FurnitureCategory.TABLES, materialType, new ItemStack(log, 2), new ItemStack(strippedLog, 1));
-        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_closet")), 1, FurnitureCategory.TABLES, materialType, new ItemStack(strippedLog, 2), new ItemStack(log, 1));
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_closet")), 1, FurnitureCategory.CLOSETS, materialType, new ItemStack(planks, 2), new ItemStack(log, 1));
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_closet")), 1, FurnitureCategory.CLOSETS, materialType, new ItemStack(log, 2), new ItemStack(strippedLog, 1));
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_closet")), 1, FurnitureCategory.CLOSETS, materialType, new ItemStack(strippedLog, 2), new ItemStack(log, 1));
 
         WOOL_COLORS.forEach((block, color) -> BlockFamilies.getAllFamilies().toList().forEach(blockFamily -> {
             if (blockFamily.getBaseBlock() == planks) {
