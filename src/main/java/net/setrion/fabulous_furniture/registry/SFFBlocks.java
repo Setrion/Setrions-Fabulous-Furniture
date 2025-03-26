@@ -5,6 +5,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -15,6 +16,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.setrion.fabulous_furniture.FabulousFurniture;
 import net.setrion.fabulous_furniture.world.level.block.*;
+import net.setrion.fabulous_furniture.world.level.block.state.properties.LampPart;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,8 +27,11 @@ public class SFFBlocks {
 
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(FabulousFurniture.MOD_ID);
 
+    public static final DeferredBlock<CarpentryTableBlock> CARPENTRY_TABLE;
+
     public static final Map<Block, String> COUNTER_TOPS = new HashMap<>(12);
-    public static final Map<Block, String> WOOL_COLORS = new HashMap<>(12);
+    public static final Map<Block, DyeColor> WOOL_COLORS = new HashMap<>(12);
+    public static final Map<Block, String> CURTAIN_RODS = new HashMap<>(12);
 
     static {
         COUNTER_TOPS.put(Blocks.POLISHED_GRANITE, "");
@@ -42,132 +47,134 @@ public class SFFBlocks {
         COUNTER_TOPS.put(Blocks.QUARTZ_BLOCK, "_top");
         COUNTER_TOPS.put(Blocks.CALCITE, "");
 
-        WOOL_COLORS.put(Blocks.WHITE_WOOL, "white");
-        WOOL_COLORS.put(Blocks.LIGHT_GRAY_WOOL, "light_gray");
-        WOOL_COLORS.put(Blocks.GRAY_WOOL, "gray");
-        WOOL_COLORS.put(Blocks.BLACK_WOOL, "black");
-        WOOL_COLORS.put(Blocks.BROWN_WOOL, "brown");
-        WOOL_COLORS.put(Blocks.RED_WOOL, "red");
-        WOOL_COLORS.put(Blocks.ORANGE_WOOL, "orange");
-        WOOL_COLORS.put(Blocks.YELLOW_WOOL, "yellow");
-        WOOL_COLORS.put(Blocks.LIME_WOOL, "lime");
-        WOOL_COLORS.put(Blocks.GREEN_WOOL, "green");
-        WOOL_COLORS.put(Blocks.CYAN_WOOL, "cyan");
-        WOOL_COLORS.put(Blocks.LIGHT_BLUE_WOOL, "light_blue");
-        WOOL_COLORS.put(Blocks.BLUE_WOOL, "blue");
-        WOOL_COLORS.put(Blocks.PURPLE_WOOL, "purple");
-        WOOL_COLORS.put(Blocks.MAGENTA_WOOL, "magenta");
-        WOOL_COLORS.put(Blocks.PINK_WOOL, "pink");
+        WOOL_COLORS.put(Blocks.WHITE_WOOL, DyeColor.WHITE);
+        WOOL_COLORS.put(Blocks.LIGHT_GRAY_WOOL, DyeColor.LIGHT_GRAY);
+        WOOL_COLORS.put(Blocks.GRAY_WOOL, DyeColor.GRAY);
+        WOOL_COLORS.put(Blocks.BLACK_WOOL, DyeColor.BLACK);
+        WOOL_COLORS.put(Blocks.BROWN_WOOL, DyeColor.BROWN);
+        WOOL_COLORS.put(Blocks.RED_WOOL, DyeColor.RED);
+        WOOL_COLORS.put(Blocks.ORANGE_WOOL, DyeColor.ORANGE);
+        WOOL_COLORS.put(Blocks.YELLOW_WOOL, DyeColor.YELLOW);
+        WOOL_COLORS.put(Blocks.LIME_WOOL, DyeColor.LIME);
+        WOOL_COLORS.put(Blocks.GREEN_WOOL, DyeColor.GREEN);
+        WOOL_COLORS.put(Blocks.CYAN_WOOL, DyeColor.CYAN);
+        WOOL_COLORS.put(Blocks.LIGHT_BLUE_WOOL, DyeColor.LIGHT_BLUE);
+        WOOL_COLORS.put(Blocks.BLUE_WOOL, DyeColor.BLUE);
+        WOOL_COLORS.put(Blocks.PURPLE_WOOL, DyeColor.PURPLE);
+        WOOL_COLORS.put(Blocks.MAGENTA_WOOL, DyeColor.MAGENTA);
+        WOOL_COLORS.put(Blocks.PINK_WOOL, DyeColor.PINK);
+
+        CURTAIN_RODS.put(Blocks.COPPER_BLOCK, "copper");
+        CURTAIN_RODS.put(Blocks.IRON_BLOCK, "iron");
+        CURTAIN_RODS.put(Blocks.GOLD_BLOCK, "gold");
+        CURTAIN_RODS.put(Blocks.NETHERITE_BLOCK, "netherite");
+
+        CARPENTRY_TABLE = registerBlockWithItem("carpentry_table", CarpentryTableBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CRAFTING_TABLE));
         for (WoodType type : WoodType.values().toList()) {
+            String log_suffix;
+            if (type == WoodType.CRIMSON || type == WoodType.WARPED) {
+                log_suffix = "_stem";
+            } else if (type == WoodType.BAMBOO) {
+                log_suffix = "_block";
+            } else {
+                log_suffix = "_log";
+            }
             registerBlockWithItem(type.name()+"_crate", CrateBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
             COUNTER_TOPS.forEach(((block, suffix) -> {
                 String top_name = block.getDescriptionId().replaceFirst("block.minecraft.", "").replaceFirst("quartz_block", "quartz");
                 registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_counter", KitchenCounterBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
-                registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_counter_inner_corner", KitchenCounterInnerCornerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
-                registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_counter_outer_corner", KitchenCounterOuterCornerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
-                registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_counter_open", KitchenCounterContainerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
-                registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_counter_door", KitchenCounterContainerDoorBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
-                registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_counter_glass_door", KitchenCounterContainerDoorBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
-                registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_counter_small_drawer", KitchenCounterContainerDrawerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
-                registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_counter_big_drawer", KitchenCounterContainerDrawerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_counter_shelf", properties -> new KitchenCounterContainerBaseBlock(properties, false, false), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_counter_door", KitchenCounterOpenableHingeContainerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_counter_small_drawer", properties -> new KitchenCounterOpenableContainerBlock(properties, false), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_counter_big_drawer", properties -> new KitchenCounterOpenableContainerBlock(properties, false), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
                 registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_counter_sink", KitchenCounterSinkBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).randomTicks().pushReaction(PushReaction.BLOCK));
                 registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_counter_smoker", KitchenCounterSmokerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
-                registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_cabinet_door", KitchenCabinetContainerDoorBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
-                registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_cabinet_glass_door", KitchenCabinetContainerDoorBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
-                registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_cabinet_sideways_door", KitchenCabinetContainerSidewaysDoorBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
-                registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_cabinet_sideways_glass_door", KitchenCabinetContainerSidewaysDoorBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_cabinet_door", properties -> new KitchenCabinetOpenableContainerBlock(properties, false), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_cabinet_glass_door", properties -> new KitchenCabinetOpenableContainerBlock(properties, false), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_cabinet_sideways_door", KitchenCabinetOpenableHingeContainerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem(type.name()+"_"+top_name+"_kitchen_cabinet_sideways_glass_door", KitchenCabinetOpenableHingeContainerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+
+                registerBlockWithItem(type.name()+log_suffix+"_"+top_name+"_kitchen_counter", KitchenCounterBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem(type.name()+log_suffix+"_"+top_name+"_kitchen_counter_shelf", properties -> new KitchenCounterContainerBaseBlock(properties, false, false), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem(type.name()+log_suffix+"_"+top_name+"_kitchen_counter_door", KitchenCounterOpenableHingeContainerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem(type.name()+log_suffix+"_"+top_name+"_kitchen_counter_small_drawer", properties -> new KitchenCounterOpenableContainerBlock(properties, false), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem(type.name()+log_suffix+"_"+top_name+"_kitchen_counter_big_drawer", properties -> new KitchenCounterOpenableContainerBlock(properties, false), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem(type.name()+log_suffix+"_"+top_name+"_kitchen_counter_sink", KitchenCounterSinkBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).randomTicks().pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem(type.name()+log_suffix+"_"+top_name+"_kitchen_counter_smoker", KitchenCounterSmokerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem(type.name()+log_suffix+"_"+top_name+"_kitchen_cabinet_door", properties -> new KitchenCabinetOpenableContainerBlock(properties, false), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem(type.name()+log_suffix+"_"+top_name+"_kitchen_cabinet_glass_door", properties -> new KitchenCabinetOpenableContainerBlock(properties, false), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem(type.name()+log_suffix+"_"+top_name+"_kitchen_cabinet_sideways_door", KitchenCabinetOpenableHingeContainerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem(type.name()+log_suffix+"_"+top_name+"_kitchen_cabinet_sideways_glass_door", KitchenCabinetOpenableHingeContainerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+
+                registerBlockWithItem("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_counter", KitchenCounterBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_counter_shelf", properties -> new KitchenCounterContainerBaseBlock(properties, false, false), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_counter_door", KitchenCounterOpenableHingeContainerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_counter_small_drawer", properties -> new KitchenCounterOpenableContainerBlock(properties, false), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_counter_big_drawer", properties -> new KitchenCounterOpenableContainerBlock(properties, false), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_counter_sink", KitchenCounterSinkBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).randomTicks().pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_counter_smoker", KitchenCounterSmokerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_cabinet_door", properties -> new KitchenCabinetOpenableContainerBlock(properties, false), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_cabinet_glass_door", properties -> new KitchenCabinetOpenableContainerBlock(properties, false), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_cabinet_sideways_door", KitchenCabinetOpenableHingeContainerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+                registerBlockWithItem("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_cabinet_sideways_glass_door", KitchenCabinetOpenableHingeContainerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+
                 registerBlockWithItem(type.name()+"_"+top_name+"_knife_block", properties -> new RotatableBlock(properties, new VoxelShape[] {Block.box(4, 0, 4, 12, 14, 12), Block.box(4, 0, 4, 12, 14, 12), Block.box(4, 0, 4, 12, 14, 12), Block.box(4, 0, 4, 12, 14, 12)}), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
             }));
+
             registerBlockWithItem(type.name()+"_kitchen_cabinet", KitchenCabinetBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
-            registerBlockWithItem(type.name()+"_kitchen_cabinet_inner_corner", KitchenCabinetInnerCornerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
-            registerBlockWithItem(type.name()+"_kitchen_cabinet_outer_corner", KitchenCabinetOuterCornerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
-            registerBlockWithItem(type.name()+"_kitchen_cabinet_open", KitchenCabinetContainerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
-            registerBlockWithItem(type.name()+"_kitchen_cabinet_shelf", KitchenCabinetShelfBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+            registerBlockWithItem(type.name()+"_kitchen_cabinet_shelf", properties -> new KitchenCabinetContainerBaseBlock(properties, false, false), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+            registerBlockWithItem(type.name()+"_kitchen_shelf", KitchenShelfBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+
+            registerBlockWithItem(type.name()+log_suffix+"_kitchen_cabinet", KitchenCabinetBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+            registerBlockWithItem(type.name()+log_suffix+"_kitchen_cabinet_shelf", properties -> new KitchenCabinetContainerBaseBlock(properties, false, false), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+            registerBlockWithItem(type.name()+log_suffix+"_kitchen_shelf", KitchenShelfBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+
+            registerBlockWithItem("stripped_"+type.name()+log_suffix+"_kitchen_cabinet", KitchenCabinetBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+            registerBlockWithItem("stripped_"+type.name()+log_suffix+"_kitchen_cabinet_shelf", properties -> new KitchenCabinetContainerBaseBlock(properties, false, false), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+            registerBlockWithItem("stripped_"+type.name()+log_suffix+"_kitchen_shelf", KitchenShelfBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
+
             WOOL_COLORS.forEach(((block, color) -> {
-                String wool_name = block.getDescriptionId().replaceFirst("block.minecraft.", "");
-                registerBlockWithItem(type.name()+"_"+wool_name+"_chair", ChairBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
-                registerBlockWithItem(type.name()+"_"+color+"_table_lamp", LampBlock::new, () -> lampProperties(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem(color.getName()+"_"+type.name()+"_chair", ChairBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem(color.getName()+"_"+type.name()+log_suffix+"_chair", ChairBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem(color.getName()+"_stripped_"+type.name()+log_suffix+"_chair", ChairBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem(color.getName()+"_"+type.name()+"_lamp", LampBlock::new, () -> lampProperties(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem(color.getName()+"_"+type.name()+"_bed", WoodenBedBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem(color.getName()+"_"+type.name()+log_suffix+"_bed", WoodenBedBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem(color.getName()+"_stripped_"+type.name()+log_suffix+"_bed", WoodenBedBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
             }));
+
             registerBlockWithItem(type.name()+"_table", TableBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+            registerBlockWithItem(type.name()+log_suffix+"_table", TableBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+            registerBlockWithItem("stripped_"+type.name()+log_suffix+"_table", TableBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+
+            registerBlockWithItem(type.name()+"_bedside_table", BedsideTableBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+            registerBlockWithItem(type.name()+log_suffix+"_bedside_table", BedsideTableBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+            registerBlockWithItem("stripped_"+type.name()+log_suffix+"_bedside_table", BedsideTableBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+
+            registerBlockWithItem(type.name()+"_closet", ClosetBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+            registerBlockWithItem(type.name()+log_suffix+"_closet", ClosetBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+            registerBlockWithItem("stripped_"+type.name()+log_suffix+"_closet", ClosetBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
         }
+
+
+        WOOL_COLORS.forEach((block, color) -> {
+            CURTAIN_RODS.forEach((rod, name) -> {
+                registerBlockWithItem(color+"_"+name+"_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(block).noOcclusion());
+            });
+        });
     }
 
-    public static final DeferredBlock<Block> IRON_FRIDGE = registerBlockWithItem("iron_fridge", KitchenFridgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).pushReaction(PushReaction.BLOCK));
-    public static final DeferredBlock<Block> GOLD_FRIDGE = registerBlockWithItem("gold_fridge", KitchenFridgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GOLD_BLOCK).pushReaction(PushReaction.BLOCK));
-    public static final DeferredBlock<Block> NETHERITE_FRIDGE = registerBlockWithItem("netherite_fridge", KitchenFridgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.NETHERITE_BLOCK).pushReaction(PushReaction.BLOCK));
+    public static final DeferredBlock<Block> IRON_FRIDGE = registerBlockWithItem("iron_fridge", FridgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).pushReaction(PushReaction.BLOCK));
+    public static final DeferredBlock<Block> GOLD_FRIDGE = registerBlockWithItem("gold_fridge", FridgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GOLD_BLOCK).pushReaction(PushReaction.BLOCK));
+    public static final DeferredBlock<Block> NETHERITE_FRIDGE = registerBlockWithItem("netherite_fridge", FridgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.NETHERITE_BLOCK).pushReaction(PushReaction.BLOCK));
     public static final DeferredBlock<Block> COPPER_FRIDGE = registerBlockWithItem("copper_fridge", properties -> new WeatheringKitchenFridgeBlock(WeatheringCopper.WeatherState.UNAFFECTED, properties), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK).pushReaction(PushReaction.BLOCK));
     public static final DeferredBlock<Block> EXPOSED_COPPER_FRIDGE = registerBlockWithItem("exposed_copper_fridge", properties -> new WeatheringKitchenFridgeBlock(WeatheringCopper.WeatherState.WEATHERED, properties), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.EXPOSED_COPPER).pushReaction(PushReaction.BLOCK));
     public static final DeferredBlock<Block> WEATHERED_COPPER_FRIDGE = registerBlockWithItem("weathered_copper_fridge", properties -> new WeatheringKitchenFridgeBlock(WeatheringCopper.WeatherState.EXPOSED, properties), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WEATHERED_COPPER).pushReaction(PushReaction.BLOCK));
     public static final DeferredBlock<Block> OXIDIZED_COPPER_FRIDGE = registerBlockWithItem("oxidized_copper_fridge", properties -> new WeatheringKitchenFridgeBlock(WeatheringCopper.WeatherState.OXIDIZED, properties), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OXIDIZED_COPPER).pushReaction(PushReaction.BLOCK));
-    public static final DeferredBlock<Block> WAXED_COPPER_FRIDGE = registerBlockWithItem("waxed_copper_fridge", KitchenFridgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WAXED_COPPER_BLOCK).pushReaction(PushReaction.BLOCK));
-    public static final DeferredBlock<Block> WAXED_EXPOSED_COPPER_FRIDGE = registerBlockWithItem("waxed_exposed_copper_fridge", KitchenFridgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WAXED_EXPOSED_COPPER).pushReaction(PushReaction.BLOCK));
-    public static final DeferredBlock<Block> WAXED_WEATHERED_COPPER_FRIDGE = registerBlockWithItem("waxed_weathered_copper_fridge", KitchenFridgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WAXED_WEATHERED_COPPER).pushReaction(PushReaction.BLOCK));
-    public static final DeferredBlock<Block> WAXED_OXIDIZED_COPPER_FRIDGE = registerBlockWithItem("waxed_oxidized_copper_fridge", KitchenFridgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WAXED_OXIDIZED_COPPER).pushReaction(PushReaction.BLOCK));
-
-    public static final DeferredBlock<Block> WHITE_IRON_CURTAINS = registerBlockWithItem("white_iron_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> WHITE_GOLD_CURTAINS = registerBlockWithItem("white_gold_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> WHITE_NETHERITE_CURTAINS = registerBlockWithItem("white_netherite_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> WHITE_COPPER_CURTAINS = registerBlockWithItem("white_copper_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> LIGHT_GRAY_IRON_CURTAINS = registerBlockWithItem("light_gray_iron_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.LIGHT_GRAY_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> LIGHT_GRAY_GOLD_CURTAINS = registerBlockWithItem("light_gray_gold_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.LIGHT_GRAY_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> LIGHT_GRAY_NETHERITE_CURTAINS = registerBlockWithItem("light_gray_netherite_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.LIGHT_GRAY_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> LIGHT_GRAY_COPPER_CURTAINS = registerBlockWithItem("light_gray_copper_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.LIGHT_GRAY_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> GRAY_IRON_CURTAINS = registerBlockWithItem("gray_iron_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GRAY_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> GRAY_GOLD_CURTAINS = registerBlockWithItem("gray_gold_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GRAY_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> GRAY_NETHERITE_CURTAINS = registerBlockWithItem("gray_netherite_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GRAY_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> GRAY_COPPER_CURTAINS = registerBlockWithItem("gray_copper_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GRAY_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> BLACK_IRON_CURTAINS = registerBlockWithItem("black_iron_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BLACK_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> BLACK_GOLD_CURTAINS = registerBlockWithItem("black_gold_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BLACK_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> BLACK_NETHERITE_CURTAINS = registerBlockWithItem("black_netherite_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BLACK_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> BLACK_COPPER_CURTAINS = registerBlockWithItem("black_copper_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BLACK_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> BROWN_IRON_CURTAINS = registerBlockWithItem("brown_iron_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BROWN_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> BROWN_GOLD_CURTAINS = registerBlockWithItem("brown_gold_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BROWN_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> BROWN_NETHERITE_CURTAINS = registerBlockWithItem("brown_netherite_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BROWN_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> BROWN_COPPER_CURTAINS = registerBlockWithItem("brown_copper_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BROWN_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> RED_IRON_CURTAINS = registerBlockWithItem("red_iron_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.RED_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> RED_GOLD_CURTAINS = registerBlockWithItem("red_gold_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.RED_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> RED_NETHERITE_CURTAINS = registerBlockWithItem("red_netherite_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.RED_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> RED_COPPER_CURTAINS = registerBlockWithItem("red_copper_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.RED_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> ORANGE_IRON_CURTAINS = registerBlockWithItem("orange_iron_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.ORANGE_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> ORANGE_GOLD_CURTAINS = registerBlockWithItem("orange_gold_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.ORANGE_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> ORANGE_NETHERITE_CURTAINS = registerBlockWithItem("orange_netherite_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.ORANGE_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> ORANGE_COPPER_CURTAINS = registerBlockWithItem("orange_copper_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.ORANGE_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> YELLOW_IRON_CURTAINS = registerBlockWithItem("yellow_iron_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.YELLOW_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> YELLOW_GOLD_CURTAINS = registerBlockWithItem("yellow_gold_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.YELLOW_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> YELLOW_NETHERITE_CURTAINS = registerBlockWithItem("yellow_netherite_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.YELLOW_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> YELLOW_COPPER_CURTAINS = registerBlockWithItem("yellow_copper_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.YELLOW_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> LIME_IRON_CURTAINS = registerBlockWithItem("lime_iron_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.LIME_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> LIME_GOLD_CURTAINS = registerBlockWithItem("lime_gold_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.LIME_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> LIME_NETHERITE_CURTAINS = registerBlockWithItem("lime_netherite_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.LIME_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> LIME_COPPER_CURTAINS = registerBlockWithItem("lime_copper_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.LIME_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> GREEN_IRON_CURTAINS = registerBlockWithItem("green_iron_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GREEN_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> GREEN_GOLD_CURTAINS = registerBlockWithItem("green_gold_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GREEN_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> GREEN_NETHERITE_CURTAINS = registerBlockWithItem("green_netherite_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GREEN_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> GREEN_COPPER_CURTAINS = registerBlockWithItem("green_copper_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GREEN_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> CYAN_IRON_CURTAINS = registerBlockWithItem("cyan_iron_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CYAN_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> CYAN_GOLD_CURTAINS = registerBlockWithItem("cyan_gold_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CYAN_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> CYAN_NETHERITE_CURTAINS = registerBlockWithItem("cyan_netherite_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CYAN_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> CYAN_COPPER_CURTAINS = registerBlockWithItem("cyan_copper_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CYAN_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> LIGHT_BLUE_IRON_CURTAINS = registerBlockWithItem("light_blue_iron_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.LIGHT_BLUE_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> LIGHT_BLUE_GOLD_CURTAINS = registerBlockWithItem("light_blue_gold_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.LIGHT_BLUE_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> LIGHT_BLUE_NETHERITE_CURTAINS = registerBlockWithItem("light_blue_netherite_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.LIGHT_BLUE_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> LIGHT_BLUE_COPPER_CURTAINS = registerBlockWithItem("light_blue_copper_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.LIGHT_BLUE_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> BLUE_IRON_CURTAINS = registerBlockWithItem("blue_iron_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BLUE_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> BLUE_GOLD_CURTAINS = registerBlockWithItem("blue_gold_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BLUE_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> BLUE_NETHERITE_CURTAINS = registerBlockWithItem("blue_netherite_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BLUE_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> BLUE_COPPER_CURTAINS = registerBlockWithItem("blue_copper_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BLUE_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> PURPLE_IRON_CURTAINS = registerBlockWithItem("purple_iron_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.PURPLE_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> PURPLE_GOLD_CURTAINS = registerBlockWithItem("purple_gold_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.PURPLE_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> PURPLE_NETHERITE_CURTAINS = registerBlockWithItem("purple_netherite_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.PURPLE_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> PURPLE_COPPER_CURTAINS = registerBlockWithItem("purple_copper_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.PURPLE_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> MAGENTA_IRON_CURTAINS = registerBlockWithItem("magenta_iron_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.MAGENTA_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> MAGENTA_GOLD_CURTAINS = registerBlockWithItem("magenta_gold_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.MAGENTA_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> MAGENTA_NETHERITE_CURTAINS = registerBlockWithItem("magenta_netherite_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.MAGENTA_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> MAGENTA_COPPER_CURTAINS = registerBlockWithItem("magenta_copper_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.MAGENTA_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> PINK_IRON_CURTAINS = registerBlockWithItem("pink_iron_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.PINK_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> PINK_GOLD_CURTAINS = registerBlockWithItem("pink_gold_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.PINK_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> PINK_NETHERITE_CURTAINS = registerBlockWithItem("pink_netherite_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.PINK_WOOL).noOcclusion());
-    public static final DeferredBlock<Block> PINK_COPPER_CURTAINS = registerBlockWithItem("pink_copper_curtains", CurtainBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.PINK_WOOL).noOcclusion());
+    public static final DeferredBlock<Block> WAXED_COPPER_FRIDGE = registerBlockWithItem("waxed_copper_fridge", FridgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WAXED_COPPER_BLOCK).pushReaction(PushReaction.BLOCK));
+    public static final DeferredBlock<Block> WAXED_EXPOSED_COPPER_FRIDGE = registerBlockWithItem("waxed_exposed_copper_fridge", FridgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WAXED_EXPOSED_COPPER).pushReaction(PushReaction.BLOCK));
+    public static final DeferredBlock<Block> WAXED_WEATHERED_COPPER_FRIDGE = registerBlockWithItem("waxed_weathered_copper_fridge", FridgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WAXED_WEATHERED_COPPER).pushReaction(PushReaction.BLOCK));
+    public static final DeferredBlock<Block> WAXED_OXIDIZED_COPPER_FRIDGE = registerBlockWithItem("waxed_oxidized_copper_fridge", FridgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WAXED_OXIDIZED_COPPER).pushReaction(PushReaction.BLOCK));
 
     public static final DeferredBlock<Block> WHITE_LIGHT_GRAY_KITCHEN_TILES = registerBlockWithItem("white_light_gray_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
     public static final DeferredBlock<Block> WHITE_GRAY_KITCHEN_TILES = registerBlockWithItem("white_gray_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
@@ -186,7 +193,7 @@ public class SFFBlocks {
     public static final DeferredBlock<Block> WHITE_PINK_KITCHEN_TILES = registerBlockWithItem("white_pink_kitchen_tiles", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
 
     private static BlockBehaviour.Properties lampProperties(Block block) {
-        return BlockBehaviour.Properties.ofFullCopy(block).lightLevel((state) -> state.getValue(LampBlock.ON) ? 15 : 0);
+        return BlockBehaviour.Properties.ofFullCopy(block).lightLevel((state) -> state.getValue(LampBlock.ON) && (state.getValue(LampBlock.PART) == LampPart.TOP || state.getValue(LampBlock.PART) == LampPart.SINGLE) ? 15 : 0);
     }
     
     public static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {

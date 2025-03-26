@@ -52,7 +52,7 @@
 			"faces": {
 				"north": {"uv": [1, 15, 15, 16], "texture": "#counter"},
 				"up": {"uv": [1, 12, 15, 14], "texture": "#counter"},
-				"down": {"uv": [0, 0, 14, 2], "texture": "#counter", "cullface": "down"}
+				"down": {"uv": [1, 12, 15, 14], "texture": "#counter", "cullface": "down"}
 			}
 		},
 		{

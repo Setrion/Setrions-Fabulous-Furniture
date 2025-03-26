@@ -1,8 +1,0 @@
-{
-  "parent": "fabulous_furniture:block/template/kitchen_counter_template",
-  "textures": {
-    "counter": "minecraft:block/oak_planks",
-    "particle": "minecraft:block/oak_planks",
-    "top": "minecraft:block/yellow_terracotta"
-  }
-}

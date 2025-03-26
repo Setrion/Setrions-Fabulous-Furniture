@@ -1,0 +1,106 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "block/block",
+	"elements": [
+		{
+			"from": [0, 0, 2],
+			"to": [16, 16, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [14, 0, 0]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#closet"},
+				"east": {"uv": [0, 0, 14, 16], "texture": "#closet", "cullface": "east"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#closet", "cullface": "south"},
+				"west": {"uv": [0, 0, 14, 16], "texture": "#closet", "cullface": "west"},
+				"up": {"uv": [0, 0, 16, 14], "texture": "#closet", "cullface": "up"},
+				"down": {"uv": [0, 0, 16, 14], "texture": "#closet", "cullface": "down"}
+			}
+		},
+		{
+			"from": [8, 13, 1],
+			"to": [15, 16, 2],
+			"rotation": {"angle": 0, "axis": "y", "origin": [13, 13, 0]},
+			"faces": {
+				"north": {"uv": [1, 0, 8, 3], "texture": "#door"},
+				"east": {"uv": [0, 0, 1, 3], "texture": "#door"},
+				"up": {"uv": [0, 0, 7, 1], "texture": "#door", "cullface": "up"},
+				"down": {"uv": [1, 15, 8, 16], "texture": "#door"}
+			}
+		},
+		{
+			"from": [1, 13, 1],
+			"to": [8, 16, 2],
+			"rotation": {"angle": 0, "axis": "y", "origin": [6, 13, 0]},
+			"faces": {
+				"north": {"uv": [8, 0, 15, 3], "texture": "#door"},
+				"west": {"uv": [0, 0, 1, 3], "texture": "#door"},
+				"up": {"uv": [0, 0, 7, 1], "texture": "#door", "cullface": "up"},
+				"down": {"uv": [8, 15, 15, 16], "texture": "#door"}
+			}
+		},
+		{
+			"from": [1, 1.5, 1],
+			"to": [15, 5.5, 2],
+			"rotation": {"angle": 0, "axis": "y", "origin": [1, 1.5, 0]},
+			"faces": {
+				"north": {"uv": [1, 11, 15, 15], "texture": "#door"},
+				"east": {"uv": [0, 11, 1, 15], "texture": "#door"},
+				"west": {"uv": [15, 11, 16, 15], "texture": "#door"},
+				"up": {"uv": [1, 10, 15, 11], "texture": "#door"},
+				"down": {"uv": [1, 15, 15, 16], "texture": "#door"}
+			}
+		},
+		{
+			"from": [6, 3, 0],
+			"to": [10, 4, 2],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 3, 0]},
+			"faces": {
+				"north": {"uv": [0, 0, 4, 1], "texture": "#closet", "cullface": "north"},
+				"east": {"uv": [0, 0, 2, 1], "texture": "#closet"},
+				"west": {"uv": [0, 0, 2, 1], "texture": "#closet"},
+				"up": {"uv": [0, 0, 4, 2], "texture": "#closet"},
+				"down": {"uv": [0, 0, 4, 2], "texture": "#closet"}
+			}
+		},
+		{
+			"from": [6, 8, 0],
+			"to": [10, 9, 2],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 8, 0]},
+			"faces": {
+				"north": {"uv": [0, 0, 4, 1], "texture": "#closet", "cullface": "north"},
+				"east": {"uv": [0, 0, 2, 1], "texture": "#closet"},
+				"west": {"uv": [0, 0, 2, 1], "texture": "#closet"},
+				"up": {"uv": [0, 0, 4, 2], "texture": "#closet"},
+				"down": {"uv": [0, 0, 4, 2], "texture": "#closet"}
+			}
+		},
+		{
+			"from": [1, 6.5, 1],
+			"to": [15, 10.5, 2],
+			"rotation": {"angle": 0, "axis": "y", "origin": [1, 6.5, 0]},
+			"faces": {
+				"north": {"uv": [1, 6, 15, 10], "texture": "#door"},
+				"east": {"uv": [0, 6, 1, 10], "texture": "#door"},
+				"west": {"uv": [15, 6, 16, 10], "texture": "#door"},
+				"up": {"uv": [1, 5, 15, 6], "texture": "#door"},
+				"down": {"uv": [1, 10, 15, 11], "texture": "#door"}
+			}
+		}
+	],
+	"groups": [
+		0,
+		1,
+		2,
+		{
+			"name": "group",
+			"origin": [7, 2.5, 0],
+			"color": 0,
+			"children": [3, 4]
+		},
+		{
+			"name": "group",
+			"origin": [1, 6, 0],
+			"color": 0,
+			"children": [5, 6]
+		}
+	]
+}
