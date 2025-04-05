@@ -157,7 +157,6 @@ public class FridgeBlock extends BaseEntityBlock implements BlockTagSupplier {
         if (level instanceof ServerLevel serverlevel) {
             if (player.isShiftKeyDown()) {
                 blockState = blockState.cycle(OPEN);
-                System.out.println(SFFBlocks.BLOCKS.getEntries().size());
                 level.setBlock(blockPos, blockState, 10);
                 this.playSound(null, blockState, level, blockPos, blockState.getValue(OPEN));
                 level.gameEvent(player, this.isOpen(blockState) ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, blockPos);

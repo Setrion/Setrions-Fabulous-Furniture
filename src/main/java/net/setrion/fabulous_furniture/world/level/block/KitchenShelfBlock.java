@@ -8,7 +8,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
@@ -102,10 +101,8 @@ public class KitchenShelfBlock extends KitchenCabinetContainerBaseBlock {
 
     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos blockPos) {
         BlockPos above = blockPos.above();
-        BlockPos below = blockPos.below();
         BlockState aboveState = level.getBlockState(above);
-        BlockState belowState = level.getBlockState(below);
-        return aboveState.isFaceSturdy(level, above, Direction.DOWN) || belowState.isFaceSturdy(level, below, Direction.UP) || (aboveState.getBlock() instanceof KitchenShelfBlock && aboveState.getValue(FACING) == state.getValue(FACING));
+        return aboveState.isFaceSturdy(level, above, Direction.DOWN) || (aboveState.getBlock() instanceof KitchenShelfBlock && aboveState.getValue(FACING) == state.getValue(FACING));
     }
 
     @Override

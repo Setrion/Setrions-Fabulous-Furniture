@@ -49,6 +49,10 @@ public class RecipeGenerator extends RecipeProvider {
         METALS.forEach((metal, name) -> {
             carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(name+"_toaster")), 1, FurnitureCategory.KITCHEN_MISC, getMaterialTypeFromTop(metal), new ItemStack(metal));
         });
+        TABLEWARE_MATERIALS.forEach((block, suffix) -> {
+            String top_name = block.getDescriptionId().replaceFirst("block.minecraft.", "").replaceFirst("quartz_block", "quartz");
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(top_name+"_tableware")), 4, FurnitureCategory.KITCHEN_MISC, block == QUARTZ_BLOCK ? MaterialType.QUARTZ : MaterialType.TERRACOTTA, new ItemStack(block));
+        });
         createWoodenFurnitureRecipes(WoodType.OAK, MaterialType.OAK);
         createWoodenFurnitureRecipes(WoodType.SPRUCE, MaterialType.SPRUCE);
         createWoodenFurnitureRecipes(WoodType.BIRCH, MaterialType.BIRCH);
@@ -201,39 +205,13 @@ public class RecipeGenerator extends RecipeProvider {
     }
 
     private MaterialType getMaterialTypeFromTop(Block block) {
-        if (block == IRON_BLOCK) {
-            return MaterialType.IRON;
-        } else if (block == COPPER_BLOCK) {
-            return MaterialType.COPPER;
-        } else if (block == GOLD_BLOCK) {
-            return MaterialType.GOLD;
-        } else if (block == NETHERITE_BLOCK) {
-            return MaterialType.NETHERITE;
-        } else if (block == POLISHED_GRANITE) {
-            return MaterialType.GRANITE;
-        } else if (block == POLISHED_DIORITE) {
-            return MaterialType.DIORITE;
-        } else if (block == POLISHED_ANDESITE) {
-            return MaterialType.ANDESITE;
-        } else if (block == POLISHED_DEEPSLATE) {
-            return MaterialType.DEEPSLATE;
-        } else if (block == POLISHED_TUFF) {
-            return MaterialType.TUFF;
-        } else if (block == SANDSTONE) {
-            return MaterialType.SANDSTONE;
-        } else if (block == RED_SANDSTONE) {
-            return MaterialType.RED_SANDSTONE;
-        } else if (block == POLISHED_BLACKSTONE) {
-            return MaterialType.BLACKSTONE;
-        } else if (block == GILDED_BLACKSTONE) {
-            return MaterialType.GILDED_BLACKSTONE;
-        } else if (block == SMOOTH_BASALT) {
-            return MaterialType.BASALT;
-        } else if (block == QUARTZ_BLOCK) {
-            return MaterialType.QUARTZ;
-        } else {
-            return MaterialType.CALCITE;
+        MaterialType type = MaterialType.OAK;
+        for (MaterialType t : MaterialType.values().toList()) {
+            if (t.item() == block.asItem()) {
+                type = t;
+            }
         }
+        return type;
     }
 
     private void carpentryTableCrafting(ItemLike result, int count, FurnitureCategory category, MaterialType main, ItemStack... ingredients) {

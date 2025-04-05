@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.VersionChecker;
+import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.setrion.fabulous_furniture.FabulousFurniture;
 import net.setrion.fabulous_furniture.network.CarpentryRecipes;
@@ -27,6 +28,7 @@ import net.setrion.fabulous_furniture.world.item.crafting.CarpentryTableRecipe;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CarpentryTableBlock extends Block implements BlockTagSupplier {
@@ -51,8 +53,6 @@ public class CarpentryTableBlock extends Block implements BlockTagSupplier {
                 });
                 PacketDistributor.sendToPlayer((ServerPlayer) player, new CarpentryRecipes(recipesForInput));
                 player.openMenu(state.getMenuProvider(level, pos));
-                System.out.println(ModList.get().getModContainerById(FabulousFurniture.MOD_ID).get().getModInfo().getUpdateURL());
-                System.out.println(VersionChecker.getResult(ModList.get().getModContainerById(FabulousFurniture.MOD_ID).get().getModInfo()));
             }
             return InteractionResult.CONSUME;
         }

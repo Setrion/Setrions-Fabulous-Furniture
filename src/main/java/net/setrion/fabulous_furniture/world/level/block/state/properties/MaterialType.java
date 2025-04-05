@@ -38,6 +38,7 @@ public record MaterialType(String name, Item item) {
     public static final MaterialType BASALT;
     public static final MaterialType QUARTZ;
     public static final MaterialType CALCITE;
+    public static final MaterialType TERRACOTTA;
     public static final MaterialType IRON;
     public static final MaterialType COPPER;
     public static final MaterialType GOLD;
@@ -101,6 +102,7 @@ public record MaterialType(String name, Item item) {
         BASALT = register(new MaterialType("basalt", Blocks.SMOOTH_BASALT.asItem()));
         QUARTZ = register(new MaterialType("quartz", Blocks.QUARTZ_BLOCK.asItem()));
         CALCITE = register(new MaterialType("calcite", Blocks.CALCITE.asItem()));
+        TERRACOTTA = register(new MaterialType("terracotta", Blocks.TERRACOTTA.asItem()));
         IRON = register(new MaterialType("iron", Blocks.IRON_BLOCK.asItem()));
         COPPER = register(new MaterialType("copper", Blocks.COPPER_BLOCK.asItem()));
         GOLD = register(new MaterialType("gold", Blocks.GOLD_BLOCK.asItem()));

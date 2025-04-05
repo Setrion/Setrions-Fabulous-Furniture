@@ -134,19 +134,26 @@ public class WoodenBedBlock extends Block implements BlockTagSupplier {
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
-        BlockState state = this.defaultBlockState().setValue(FACING, blockPlaceContext.getHorizontalDirection());
-        BlockState state1 = blockPlaceContext.getLevel().getBlockState(blockPlaceContext.getClickedPos().relative(state.getValue(FACING).getClockWise()));
-        BlockState state2 = blockPlaceContext.getLevel().getBlockState(blockPlaceContext.getClickedPos().relative(state.getValue(FACING).getClockWise().getOpposite()));
-        if (isSameBed(state, state1) && isSameBed(state, state2)) {
-            return state.setValue(SHAPE, BedShape.MIDDLE);
-        } else if (isSameBed(state, state1)) {
-            return state.setValue(SHAPE, BedShape.LEFT);
-        } else if (isSameBed(state, state2)) {
-            return state.setValue(SHAPE, BedShape.RIGHT);
-        } else {
-            return state.setValue(SHAPE, BedShape.SINGLE);
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        Direction direction = context.getHorizontalDirection();
+        BlockPos blockpos = context.getClickedPos();
+        BlockPos blockpos1 = blockpos.relative(direction);
+        Level level = context.getLevel();
+        if (level.getBlockState(blockpos1).canBeReplaced(context) && level.getWorldBorder().isWithinBounds(blockpos1)) {
+            BlockState state = this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
+            BlockState state1 = context.getLevel().getBlockState(context.getClickedPos().relative(state.getValue(FACING).getClockWise()));
+            BlockState state2 = context.getLevel().getBlockState(context.getClickedPos().relative(state.getValue(FACING).getClockWise().getOpposite()));
+            if (isSameBed(state, state1) && isSameBed(state, state2)) {
+                return state.setValue(SHAPE, BedShape.MIDDLE);
+            } else if (isSameBed(state, state1)) {
+                return state.setValue(SHAPE, BedShape.LEFT);
+            } else if (isSameBed(state, state2)) {
+                return state.setValue(SHAPE, BedShape.RIGHT);
+            } else {
+                return state.setValue(SHAPE, BedShape.SINGLE);
+            }
         }
+        return null;
     }
 
     public boolean isSameBed(BlockState state, BlockState state2) {
@@ -232,7 +239,7 @@ public class WoodenBedBlock extends Block implements BlockTagSupplier {
 
     @Override
     public List<TagKey<Block>> getTags() {
-        return List.of(BlockTags.MINEABLE_WITH_AXE);
+        return List.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.BEDS);
     }
 
     static {
