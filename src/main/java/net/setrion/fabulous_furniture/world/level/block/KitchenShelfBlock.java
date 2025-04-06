@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.setrion.fabulous_furniture.util.VoxelShapeUtils;
 import net.setrion.fabulous_furniture.world.level.block.state.properties.ShelfShape;
 
 public class KitchenShelfBlock extends KitchenCabinetContainerBaseBlock {
@@ -26,10 +27,7 @@ public class KitchenShelfBlock extends KitchenCabinetContainerBaseBlock {
     public static final EnumProperty<Direction> FACING;
     public static final EnumProperty<ShelfShape> SHAPE;
 
-    protected static final VoxelShape COUNTER_NORTH;
-    protected static final VoxelShape COUNTER_EAST;
-    protected static final VoxelShape COUNTER_SOUTH;
-    protected static final VoxelShape COUNTER_WEST;
+    protected static final VoxelShape VOXELSHAPE;
 
 
     public KitchenShelfBlock(Properties properties) {
@@ -45,11 +43,11 @@ public class KitchenShelfBlock extends KitchenCabinetContainerBaseBlock {
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         Direction direction = state.getValue(FACING);
         return switch (direction) {
-            default:
-            case NORTH: yield COUNTER_NORTH;
-            case EAST: yield COUNTER_EAST;
-            case SOUTH: yield COUNTER_SOUTH;
-            case WEST: yield COUNTER_WEST;
+            case NORTH: yield VOXELSHAPE;
+            case EAST: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, VOXELSHAPE);
+            case SOUTH: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, VOXELSHAPE);
+            case WEST:
+            default: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, VOXELSHAPE);
         };
     }
 
@@ -124,9 +122,6 @@ public class KitchenShelfBlock extends KitchenCabinetContainerBaseBlock {
         FACING = HorizontalDirectionalBlock.FACING;
         SHAPE = EnumProperty.create("shape", ShelfShape.class);
 
-        COUNTER_NORTH = Shapes.or(Block.box(0, 0, 5, 16, 1, 16), Block.box(0, 8, 5, 16, 9, 16));
-        COUNTER_EAST = Shapes.or(Block.box(0, 0, 0, 11, 1, 16), Block.box(0, 8, 0, 11, 9, 16));
-        COUNTER_SOUTH = Shapes.or(Block.box(0, 0, 0, 16, 1, 11), Block.box(0, 8, 0, 16, 9, 11));
-        COUNTER_WEST = Shapes.or(Block.box(5, 0, 0, 16, 1, 16), Block.box(5, 8, 0, 16, 9, 16));
+        VOXELSHAPE = Shapes.or(Block.box(0, 0, 5, 16, 1, 16), Block.box(0, 8, 5, 16, 9, 16));
     }
 }

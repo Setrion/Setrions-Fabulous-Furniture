@@ -13,6 +13,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SmokerBlock;
 import net.minecraft.world.level.block.state.properties.*;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -64,7 +65,7 @@ public class ModelGenerator extends ModelProvider {
 
         Collection<Block> blocks = BLOCKS.getEntries().stream().map(DeferredHolder::get).collect(Collectors.toList());
         blocks.forEach((block -> {
-            if (!(block instanceof TableBlock || block instanceof KitchenShelfBlock || block instanceof CurtainBlock || block instanceof WoodenBedBlock || block instanceof FridgeBlock || block instanceof ClosetBlock)) {
+            if (!(block instanceof TableBlock || block instanceof KitchenShelfBlock || block instanceof CurtainBlock || block instanceof WoodenBedBlock || block instanceof FridgeBlock || block instanceof ClosetBlock || block instanceof BenchBlock)) {
                 registerBasicBlockModel(blockModels.itemModelOutput, block);
             } else {
                 if (block instanceof CurtainBlock) {
@@ -198,6 +199,40 @@ public class ModelGenerator extends ModelProvider {
         createModel(blockModels, createCloset(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_closet")), TextureMapping.getBlockTexture(planks), TextureMapping.getBlockTexture(log), blockModels));
         createModel(blockModels, createCloset(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_closet")), TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(strippedLog), blockModels));
         createModel(blockModels, createCloset(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_closet")), TextureMapping.getBlockTexture(strippedLog), TextureMapping.getBlockTexture(log), blockModels));
+
+        METALS.forEach((metal, name) -> {
+            if (metal != Blocks.COPPER_BLOCK) {
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_" + name + "_bench")), planks, TextureMapping.getBlockTexture(metal), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_" + name + "_bench")), log, TextureMapping.getBlockTexture(metal), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_" + name + "_bench")), strippedLog, TextureMapping.getBlockTexture(metal), blockModels));
+            } else {
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_waxed_" + name + "_bench")), planks, TextureMapping.getBlockTexture(metal), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_waxed_" + name + "_bench")), log, TextureMapping.getBlockTexture(metal), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_waxed_" + name + "_bench")), strippedLog, TextureMapping.getBlockTexture(metal), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_waxed_exposed_" + name + "_bench")), planks, TextureMapping.getBlockTexture(EXPOSED_COPPER), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_waxed_exposed_" + name + "_bench")), log, TextureMapping.getBlockTexture(EXPOSED_COPPER), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_waxed_exposed_" + name + "_bench")), strippedLog, TextureMapping.getBlockTexture(EXPOSED_COPPER), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_waxed_weathered_" + name + "_bench")), planks, TextureMapping.getBlockTexture(WEATHERED_COPPER), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_waxed_weathered_" + name + "_bench")), log, TextureMapping.getBlockTexture(WEATHERED_COPPER), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_waxed_weathered_" + name + "_bench")), strippedLog, TextureMapping.getBlockTexture(WEATHERED_COPPER), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_waxed_oxidized_" + name + "_bench")), planks, TextureMapping.getBlockTexture(OXIDIZED_COPPER), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_waxed_oxidized_" + name + "_bench")), log, TextureMapping.getBlockTexture(OXIDIZED_COPPER), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_waxed_oxidized_" + name + "_bench")), strippedLog, TextureMapping.getBlockTexture(OXIDIZED_COPPER), blockModels));
+
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_" +  name + "_bench")), planks, TextureMapping.getBlockTexture(metal), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_" + name + "_bench")), log, TextureMapping.getBlockTexture(metal), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_" + name + "_bench")), strippedLog, TextureMapping.getBlockTexture(metal), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_exposed_" + name + "_bench")), planks, TextureMapping.getBlockTexture(EXPOSED_COPPER), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_exposed_" + name + "_bench")), log, TextureMapping.getBlockTexture(EXPOSED_COPPER), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_exposed_" + name + "_bench")), strippedLog, TextureMapping.getBlockTexture(EXPOSED_COPPER), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_weathered_" + name + "_bench")), planks, TextureMapping.getBlockTexture(WEATHERED_COPPER), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_weathered_" + name + "_bench")), log, TextureMapping.getBlockTexture(WEATHERED_COPPER), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_weathered_" + name + "_bench")), strippedLog, TextureMapping.getBlockTexture(WEATHERED_COPPER), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_oxidized_" + name + "_bench")), planks, TextureMapping.getBlockTexture(OXIDIZED_COPPER), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_oxidized_" + name + "_bench")), log, TextureMapping.getBlockTexture(OXIDIZED_COPPER), blockModels));
+                createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_oxidized_" + name + "_bench")), strippedLog, TextureMapping.getBlockTexture(OXIDIZED_COPPER), blockModels));
+            }
+        });
 
         WOOL_COLORS.forEach((block, color) -> BlockFamilies.getAllFamilies().toList().forEach(blockFamily -> {
             if (blockFamily.getBaseBlock() == planks) {
@@ -638,6 +673,21 @@ public class ModelGenerator extends ModelProvider {
         ).with(ROTATION_HORIZONTAL_FACING_ALT);
     }
 
+    private MultiVariantGenerator createBenchBlock(Block block, Block wood, ResourceLocation metal, BlockModelGenerators blockModels) {
+        TextureMapping mapping = new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(wood)).put(TextureSlots.WOOD, TextureMapping.getBlockTexture(wood)).put(TextureSlots.METAL, metal);
+        MultiVariant single = BlockModelGenerators.plainVariant(ModelTemplates.BENCH_SINGLE.create(block, mapping, blockModels.modelOutput));
+        MultiVariant left = BlockModelGenerators.plainVariant(ModelTemplates.BENCH_LEFT.create(block, mapping, blockModels.modelOutput));
+        MultiVariant right = BlockModelGenerators.plainVariant(ModelTemplates.BENCH_RIGHT.create(block, mapping, blockModels.modelOutput));
+        MultiVariant middle = BlockModelGenerators.plainVariant(ModelTemplates.BENCH_MIDDLE.create(block, new TextureMapping().put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(wood)).put(TextureSlots.WOOD, TextureMapping.getBlockTexture(wood)), blockModels.modelOutput));
+        return MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(BenchBlock.SHAPE)
+                        .select(BenchShape.SINGLE, single)
+                        .select(BenchShape.LEFT, left)
+                        .select(BenchShape.RIGHT, right)
+                        .select(BenchShape.MIDDLE, middle)
+        ).with(ROTATION_HORIZONTAL_FACING);
+    }
+
     private void createModel(BlockModelGenerators blockModels, MultiVariantGenerator generator) {
         blockModels.blockStateOutput.accept(generator);
     }
@@ -669,6 +719,7 @@ public class ModelGenerator extends ModelProvider {
         public static final TextureSlot STAND = TextureSlot.create("stand");
         public static final TextureSlot PLANKS = TextureSlot.create("planks");
         public static final TextureSlot WOOD = TextureSlot.create("wood");
+        public static final TextureSlot METAL = TextureSlot.create("metal");
         public static final TextureSlot CHAIR = TextureSlot.create("chair");
         public static final TextureSlot LOG = TextureSlot.create("log");
         public static final TextureSlot LOG_TOP = TextureSlot.create("log_top");
@@ -815,6 +866,11 @@ public class ModelGenerator extends ModelProvider {
         public static final ModelTemplate WOODEN_BED_FOOT_RIGHT = getTemplate("wooden_bed_foot_right_template", Optional.of("_foot_right"), TextureSlot.PARTICLE, TextureSlots.WOOD, TextureSlots.WOOL, TextureSlots.DECORATION);
         public static final ModelTemplate WOODEN_BED_FOOT_MIDDLE = getTemplate("wooden_bed_foot_middle_template", Optional.of("_foot_middle"), TextureSlot.PARTICLE, TextureSlots.WOOD, TextureSlots.WOOL, TextureSlots.DECORATION);
         public static final ModelTemplate WOODEN_BED_ITEM = getTemplate("wooden_bed_item_template", Optional.of("_item"), TextureSlot.PARTICLE, TextureSlots.WOOD, TextureSlots.WOOL, TextureSlots.DECORATION);
+
+        public static final ModelTemplate BENCH_SINGLE = getTemplate("bench_single_template", Optional.of("_single"), TextureSlot.PARTICLE, TextureSlots.WOOD, TextureSlots.METAL);
+        public static final ModelTemplate BENCH_RIGHT = getTemplate("bench_right_template", Optional.of("_right"), TextureSlot.PARTICLE, TextureSlots.WOOD, TextureSlots.METAL);
+        public static final ModelTemplate BENCH_LEFT = getTemplate("bench_left_template", Optional.of("_left"), TextureSlot.PARTICLE, TextureSlots.WOOD, TextureSlots.METAL);
+        public static final ModelTemplate BENCH_MIDDLE = getTemplate("bench_middle_template", Optional.of("_middle"), TextureSlot.PARTICLE, TextureSlots.WOOD);
 
         private static ModelTemplate getTemplate(String name, Optional<String> suffix, TextureSlot... slots) {
             return new ModelTemplate(Optional.of(FabulousFurniture.prefix(name).withPrefix("block/template/")), suffix, slots);

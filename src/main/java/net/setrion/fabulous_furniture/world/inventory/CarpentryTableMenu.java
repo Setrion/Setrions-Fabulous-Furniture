@@ -84,6 +84,7 @@ public class CarpentryTableMenu extends AbstractContainerMenu {
         this.slotUpdateListener = listener;
     }
 
+    @SuppressWarnings("unchecked")
     public void setupRecipes() {
         if (level instanceof ServerLevel serverLevel) {
             recipesForInput.clear();
@@ -191,7 +192,7 @@ public class CarpentryTableMenu extends AbstractContainerMenu {
     public ItemStack quickMoveStack(Player player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
+        if (slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             Item item = itemstack1.getItem();
             itemstack = itemstack1.copy();

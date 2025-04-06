@@ -1,5 +1,6 @@
 package net.setrion.fabulous_furniture.data;
 
+import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.BlockFamilies;
@@ -7,6 +8,9 @@ import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.WeatheringCopper;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.WoodType;
@@ -14,9 +18,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.setrion.fabulous_furniture.FabulousFurniture;
 import net.setrion.fabulous_furniture.registry.SFFBlocks;
-import net.setrion.fabulous_furniture.world.level.block.ClosetBlock;
-import net.setrion.fabulous_furniture.world.level.block.FridgeBlock;
-import net.setrion.fabulous_furniture.world.level.block.WoodenBedBlock;
+import net.setrion.fabulous_furniture.world.level.block.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -160,6 +162,40 @@ public class BlockLootTables extends BlockLootSubProvider {
         add(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_closet")), block -> createSinglePropConditionTable(block, ClosetBlock.HALF, DoubleBlockHalf.LOWER));
         add(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_closet")), block -> createSinglePropConditionTable(block, ClosetBlock.HALF, DoubleBlockHalf.LOWER));
         add(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_closet")), block -> createSinglePropConditionTable(block, ClosetBlock.HALF, DoubleBlockHalf.LOWER));
+
+        METALS.forEach((metal, name) -> {
+            if (metal != Blocks.COPPER_BLOCK) {
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_" + name + "_bench")));
+            } else {
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_waxed_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_waxed_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_waxed_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_waxed_exposed_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_waxed_exposed_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_waxed_exposed_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_waxed_weathered_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_waxed_weathered_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_waxed_weathered_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_waxed_oxidized_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_waxed_oxidized_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_waxed_oxidized_" + name + "_bench")));
+
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_" +  name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_exposed_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_exposed_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_exposed_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_weathered_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_weathered_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_weathered_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_oxidized_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_oxidized_" + name + "_bench")));
+                dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_oxidized_" + name + "_bench")));
+            }
+        });
 
         WOOL_COLORS.forEach((block, color) -> BlockFamilies.getAllFamilies().toList().forEach(blockFamily -> {
             if (blockFamily.getBaseBlock() == planks) {

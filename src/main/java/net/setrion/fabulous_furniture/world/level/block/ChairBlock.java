@@ -20,6 +20,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.setrion.fabulous_furniture.util.VoxelShapeUtils;
 import net.setrion.fabulous_furniture.world.level.entity.Seat;
 
 import java.util.List;
@@ -27,11 +28,7 @@ import java.util.List;
 public class ChairBlock extends Block implements BlockTagSupplier {
 
     public static final EnumProperty<Direction> FACING;
-    protected static final VoxelShape CHAIR_BASE;
-    protected static final VoxelShape CHAIR_NORTH;
-    protected static final VoxelShape CHAIR_EAST;
-    protected static final VoxelShape CHAIR_SOUTH;
-    protected static final VoxelShape CHAIR_WEST;
+    protected static final VoxelShape CHAIR_SHAPE;
 
     public ChairBlock(Properties properties) {
         super(properties);
@@ -41,11 +38,11 @@ public class ChairBlock extends Block implements BlockTagSupplier {
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         Direction direction = state.getValue(FACING);
         return switch (direction) {
-            default:
-            case NORTH: yield Shapes.or(CHAIR_BASE, CHAIR_NORTH);
-            case EAST: yield Shapes.or(CHAIR_BASE, CHAIR_EAST);
-            case SOUTH: yield Shapes.or(CHAIR_BASE, CHAIR_SOUTH);
-            case WEST: yield Shapes.or(CHAIR_BASE, CHAIR_WEST);
+            case NORTH: yield CHAIR_SHAPE;
+            case EAST: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, CHAIR_SHAPE);
+            case SOUTH: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, CHAIR_SHAPE);
+            case WEST:
+            default: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, CHAIR_SHAPE);
         };
     }
 
@@ -85,10 +82,6 @@ public class ChairBlock extends Block implements BlockTagSupplier {
     static {
         FACING = HorizontalDirectionalBlock.FACING;
 
-        CHAIR_BASE = Shapes.or(Block.box(3, 0, 3, 5, 7, 5), Block.box(11, 0, 3, 13, 7, 5), Block.box(3, 0, 11, 5, 7, 13), Block.box(11, 0, 11, 13, 7, 13), Block.box(2, 7, 2, 14, 9, 14));
-        CHAIR_NORTH = Block.box(2, 9, 12, 14, 20, 14);
-        CHAIR_EAST = Block.box(2, 9, 2, 4, 20, 14);
-        CHAIR_SOUTH = Block.box(2, 9, 2, 14, 20, 4);
-        CHAIR_WEST = Block.box(12, 9, 2, 14, 20, 14);
+        CHAIR_SHAPE = Shapes.or(Block.box(3, 0, 3, 5, 7, 5), Block.box(11, 0, 3, 13, 7, 5), Block.box(3, 0, 11, 5, 7, 13), Block.box(11, 0, 11, 13, 7, 13), Block.box(2, 7, 2, 14, 9, 14), Block.box(2, 9, 12, 14, 20, 14));
     }
 }

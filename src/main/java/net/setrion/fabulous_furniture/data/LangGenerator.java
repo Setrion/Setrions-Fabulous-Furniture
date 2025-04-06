@@ -5,6 +5,7 @@ import net.minecraft.data.BlockFamilies;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.setrion.fabulous_furniture.FabulousFurniture;
@@ -172,6 +173,40 @@ public class LangGenerator extends LanguageProvider {
         translate(type.name()+"_closet");
         translate(type.name()+log_suffix+"_closet");
         translate("stripped_"+type.name()+log_suffix+"_closet");
+
+        METALS.forEach((metal, name) -> {
+            if (metal != Blocks.COPPER_BLOCK) {
+                translate(type.name() + "_" + name + "_bench");
+                translate(type.name() + log_suffix + "_" + name + "_bench");
+                translate("stripped_" + type.name() + log_suffix + "_" + name + "_bench");
+            } else {
+                translate(type.name() + "_waxed_" + name + "_bench");
+                translate(type.name() + log_suffix + "_waxed_" + name + "_bench");
+                translate("stripped_" + type.name() + log_suffix + "_waxed_" + name + "_bench");
+                translate(type.name() + "_waxed_exposed_" + name + "_bench");
+                translate(type.name() + log_suffix + "_waxed_exposed_" + name + "_bench");
+                translate("stripped_" + type.name() + log_suffix + "_waxed_exposed_" + name + "_bench");
+                translate(type.name() + "_waxed_weathered_" + name + "_bench");
+                translate(type.name() + log_suffix + "_waxed_weathered_" + name + "_bench");
+                translate("stripped_" + type.name() + log_suffix + "_waxed_weathered_" + name + "_bench");
+                translate(type.name() + "_waxed_oxidized_" + name + "_bench");
+                translate(type.name() + log_suffix + "_waxed_oxidized_" + name + "_bench");
+                translate("stripped_" + type.name() + log_suffix + "_waxed_oxidized_" + name + "_bench");
+
+                translate(type.name() + "_" +  name + "_bench");
+                translate(type.name() + log_suffix + "_" + name + "_bench");
+                translate("stripped_" + type.name() + log_suffix + "_" + name + "_bench");
+                translate(type.name() + "_exposed_" + name + "_bench");
+                translate(type.name() + log_suffix + "_exposed_" + name + "_bench");
+                translate("stripped_" + type.name() + log_suffix + "_exposed_" + name + "_bench");
+                translate(type.name() + "_weathered_" + name + "_bench");
+                translate(type.name() + log_suffix + "_weathered_" + name + "_bench");
+                translate("stripped_" + type.name() + log_suffix + "_weathered_" + name + "_bench");
+                translate(type.name() + "_oxidized_" + name + "_bench");
+                translate(type.name() + log_suffix + "_oxidized_" + name + "_bench");
+                translate("stripped_" + type.name() + log_suffix + "_oxidized_" + name + "_bench");
+            }
+        });
 
         WOOL_COLORS.forEach((block, color) -> BlockFamilies.getAllFamilies().toList().forEach(blockFamily -> {
             if (blockFamily.getBaseBlock() == planks) {

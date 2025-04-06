@@ -11,6 +11,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
@@ -30,7 +31,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.setrion.fabulous_furniture.registry.SFFBlocks;
 import net.setrion.fabulous_furniture.registry.SFFStats;
 import net.setrion.fabulous_furniture.registry.SFFTags;
 import net.setrion.fabulous_furniture.world.level.block.entity.KitchenFridgeBlockEntity;
@@ -69,12 +69,12 @@ public class FridgeBlock extends BaseEntityBlock implements BlockTagSupplier {
         };
     }
 
-    protected BlockState updateShape(BlockState blockState, LevelReader p_374501_, ScheduledTickAccess p_374380_, BlockPos p_52800_, Direction p_52797_, BlockPos p_52801_, BlockState p_52798_, RandomSource p_374395_) {
+    protected BlockState updateShape(BlockState blockState, LevelReader level, ScheduledTickAccess tickAccess, BlockPos p_52800_, Direction p_52797_, BlockPos p_52801_, BlockState p_52798_, RandomSource p_374395_) {
         DoubleBlockHalf doubleblockhalf = blockState.getValue(HALF);
         if (p_52797_.getAxis() == Direction.Axis.Y && doubleblockhalf == DoubleBlockHalf.LOWER == (p_52797_ == Direction.UP)) {
             return p_52798_.getBlock() instanceof FridgeBlock && p_52798_.getValue(HALF) != doubleblockhalf ? p_52798_.setValue(HALF, doubleblockhalf) : Blocks.AIR.defaultBlockState();
         } else {
-            return doubleblockhalf == DoubleBlockHalf.LOWER && p_52797_ == Direction.DOWN && !blockState.canSurvive(p_374501_, p_52800_) ? Blocks.AIR.defaultBlockState() : super.updateShape(blockState, p_374501_, p_374380_, p_52800_, p_52797_, p_52801_, p_52798_, p_374395_);
+            return doubleblockhalf == DoubleBlockHalf.LOWER && p_52797_ == Direction.DOWN && !blockState.canSurvive(level, p_52800_) ? Blocks.AIR.defaultBlockState() : super.updateShape(blockState, level, tickAccess, p_52800_, p_52797_, p_52801_, p_52798_, p_374395_);
         }
     }
 
@@ -102,6 +102,11 @@ public class FridgeBlock extends BaseEntityBlock implements BlockTagSupplier {
         } else {
             return null;
         }
+    }
+
+    @Override
+    protected void affectNeighborsAfterRemoval(BlockState p_393681_, ServerLevel p_394632_, BlockPos p_394133_, boolean p_394282_) {
+        Containers.updateNeighboursAfterDestroy(p_393681_, p_394632_, p_394133_);
     }
 
     private DoorHingeSide getHinge(BlockPlaceContext context) {
