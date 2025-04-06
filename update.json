@@ -5,11 +5,5 @@
 		"1.21.5-recommended": "0.2.0",
 		"1.21.4-latest": "0.1.1",
 		"1.21.4-recommended": "0.1.1"
-	},
-	"1.21.4": {
-		"0.1.1": "Added LootTables for every Block"
-	},
-	"1.21.5": {
-		"0.2.0": "Added Furniture for Bedrooms"
 	}
 }
