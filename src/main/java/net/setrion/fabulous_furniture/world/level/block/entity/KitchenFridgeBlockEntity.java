@@ -41,12 +41,14 @@ public class KitchenFridgeBlockEntity extends SFFBaseContainerBlockEntity {
 
     @Override
     void updateBlockState(BlockState state, boolean open) {
-        if (state.getValue(FridgeBlock.HALF) == DoubleBlockHalf.LOWER) {
-            level.setBlock(getBlockPos(), state.setValue(FridgeBlock.OPEN, open), 3);
-            level.setBlock(getBlockPos().above(), state.setValue(FridgeBlock.OPEN, open).setValue(FridgeBlock.HALF, DoubleBlockHalf.UPPER), 3);
-        } else {
-            level.setBlock(getBlockPos(), state.setValue(FridgeBlock.OPEN, open), 3);
-            level.setBlock(getBlockPos().below(), state.setValue(FridgeBlock.OPEN, open).setValue(FridgeBlock.HALF, DoubleBlockHalf.LOWER), 3);
+        if (level != null) {
+            if (state.getValue(FridgeBlock.HALF) == DoubleBlockHalf.LOWER) {
+                level.setBlock(getBlockPos(), state.setValue(FridgeBlock.OPEN, open), 3);
+                level.setBlock(getBlockPos().above(), state.setValue(FridgeBlock.OPEN, open).setValue(FridgeBlock.HALF, DoubleBlockHalf.UPPER), 3);
+            } else {
+                level.setBlock(getBlockPos(), state.setValue(FridgeBlock.OPEN, open), 3);
+                level.setBlock(getBlockPos().below(), state.setValue(FridgeBlock.OPEN, open).setValue(FridgeBlock.HALF, DoubleBlockHalf.LOWER), 3);
+            }
         }
     }
 }

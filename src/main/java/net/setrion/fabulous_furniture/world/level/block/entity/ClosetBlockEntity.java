@@ -41,12 +41,14 @@ public class ClosetBlockEntity extends SFFBaseContainerBlockEntity {
 
     @Override
     void updateBlockState(BlockState state, boolean open) {
-        if (state.getValue(ClosetBlock.HALF) == DoubleBlockHalf.LOWER) {
-            level.setBlock(getBlockPos(), state.setValue(ClosetBlock.OPEN, open), 3);
-            level.setBlock(getBlockPos().above(), state.setValue(ClosetBlock.OPEN, open).setValue(ClosetBlock.HALF, DoubleBlockHalf.UPPER), 3);
-        } else {
-            level.setBlock(getBlockPos(), state.setValue(ClosetBlock.OPEN, open), 3);
-            level.setBlock(getBlockPos().below(), state.setValue(ClosetBlock.OPEN, open).setValue(ClosetBlock.HALF, DoubleBlockHalf.LOWER), 3);
+        if (level != null) {
+            if (state.getValue(ClosetBlock.HALF) == DoubleBlockHalf.LOWER) {
+                level.setBlock(getBlockPos(), state.setValue(ClosetBlock.OPEN, open), 3);
+                level.setBlock(getBlockPos().above(), state.setValue(ClosetBlock.OPEN, open).setValue(ClosetBlock.HALF, DoubleBlockHalf.UPPER), 3);
+            } else {
+                level.setBlock(getBlockPos(), state.setValue(ClosetBlock.OPEN, open), 3);
+                level.setBlock(getBlockPos().below(), state.setValue(ClosetBlock.OPEN, open).setValue(ClosetBlock.HALF, DoubleBlockHalf.LOWER), 3);
+            }
         }
     }
 }

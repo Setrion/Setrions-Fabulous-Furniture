@@ -3,13 +3,10 @@ package net.setrion.fabulous_furniture.world.level.block;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.Containers;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -19,6 +16,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.setrion.fabulous_furniture.util.VoxelShapeUtils;
 
 import java.util.List;
 
@@ -27,13 +25,10 @@ public class KitchenCabinetContainerBaseBlock extends KitchenCounterContainerBas
     public static final MapCodec<KitchenCabinetContainerBaseBlock> CODEC = simpleCodec(KitchenCabinetContainerBaseBlock::new);
 
     public static final EnumProperty<Direction> FACING;
-    protected static final VoxelShape COUNTER_NORTH;
-    protected static final VoxelShape COUNTER_EAST;
-    protected static final VoxelShape COUNTER_SOUTH;
-    protected static final VoxelShape COUNTER_WEST;
+    protected static final VoxelShape VOXELSHAPE;
 
-    private boolean canBeOpened;
-    private boolean hasHinge;
+    private final boolean canBeOpened;
+    private final boolean hasHinge;
 
     protected KitchenCabinetContainerBaseBlock(Properties properties) {
         this(properties, false, false);
@@ -54,11 +49,14 @@ public class KitchenCabinetContainerBaseBlock extends KitchenCounterContainerBas
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         Direction direction = state.getValue(FACING);
         return switch (direction) {
-            default:
-            case NORTH: yield COUNTER_NORTH;
-            case EAST: yield COUNTER_EAST;
-            case SOUTH: yield COUNTER_SOUTH;
-            case WEST: yield COUNTER_WEST;
+            case EAST:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, VOXELSHAPE);
+            case SOUTH:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, VOXELSHAPE);
+            case WEST:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, VOXELSHAPE);
+            case NORTH: default:
+                yield VOXELSHAPE;
         };
     }
 
@@ -126,11 +124,6 @@ public class KitchenCabinetContainerBaseBlock extends KitchenCounterContainerBas
     }
 
     @Override
-    protected void affectNeighborsAfterRemoval(BlockState p_393681_, ServerLevel p_394632_, BlockPos p_394133_, boolean p_394282_) {
-        Containers.updateNeighboursAfterDestroy(p_393681_, p_394632_, p_394133_);
-    }
-
-    @Override
     public List<TagKey<Block>> getTags() {
         return List.of(BlockTags.MINEABLE_WITH_AXE);
     }
@@ -138,9 +131,6 @@ public class KitchenCabinetContainerBaseBlock extends KitchenCounterContainerBas
     static {
         FACING = HorizontalDirectionalBlock.FACING;
 
-        COUNTER_NORTH = Shapes.or(Block.box(0, 0, 6, 16, 2, 16), Block.box(0, 2, 4, 16, 4, 16), Block.box(0, 4, 2, 16, 14, 16));
-        COUNTER_EAST = Shapes.or(Block.box(0, 0, 0, 10, 2, 16), Block.box(0, 2, 0, 12, 4, 16), Block.box(0, 4, 0, 14, 14, 16));
-        COUNTER_SOUTH = Shapes.or(Block.box(0, 0, 0, 16, 2, 10), Block.box(0, 2, 0, 16, 4, 12), Block.box(0, 4, 0, 16, 14, 14));
-        COUNTER_WEST = Shapes.or(Block.box(6, 0, 0, 16, 2, 16), Block.box(4, 2, 0, 16, 4, 16), Block.box(2, 4, 0, 16, 14, 16));
+        VOXELSHAPE = Shapes.or(Block.box(0, 0, 6, 16, 2, 16), Block.box(0, 2, 4, 16, 4, 16), Block.box(0, 4, 2, 16, 14, 16));
     }
 }

@@ -46,6 +46,8 @@ public class FabulousFurniture {
                 event.modify(SFFBlockEntityTypes.BEDSIDE_TABLE.get(), block.get());
             } else if (block.get() instanceof ClosetBlock) {
                 event.modify(SFFBlockEntityTypes.CLOSET.get(), block.get());
+            } else if (block.get() instanceof FlowerBoxBlock) {
+                event.modify(SFFBlockEntityTypes.FLOWER_BOX.get(), block.get());
             }
         }
     }

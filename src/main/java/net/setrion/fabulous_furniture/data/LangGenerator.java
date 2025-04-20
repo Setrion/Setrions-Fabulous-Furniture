@@ -22,13 +22,9 @@ public class LangGenerator extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
-        MaterialType.values().toList().forEach(material -> {
-            add(material.getTranslatableName(), createTranslatedName(material.name()));
-        });
+        MaterialType.values().toList().forEach(material -> add(material.getTranslatableName(), createTranslatedName(material.name())));
 
-        FurnitureCategory.values().toList().forEach(category -> {
-            add(category.getTranslatableName(), createTranslatedName(category.name()));
-        });
+        FurnitureCategory.values().toList().forEach(category -> add(category.getTranslatableName(), createTranslatedName(category.name())));
 
         add("itemGroup.fabulous_furniture.main", "Setrion's Fabulous Furniture");
 
@@ -38,13 +34,19 @@ public class LangGenerator extends LanguageProvider {
         add("carpentry_table.materials", "Materials");
 
         add("container.carpentry_table", "Carpentry");
-        add("container.kitchen_counter", "Kitchen Counter");
+        add("container.crate", "Crate");
+        add("container.kitchen_storage", "Kitchen Storage");
         add("container.fridge", "Fridge");
+        add("container.bedside_table", "Bedside Table");
+        add("container.closet", "Closet");
+
+        add("trash_bin.warning", "Interacting with a Trash Bin will delete the Item you're holding!");
 
         translateCurtains();
         translateTableware();
         translateToasters();
-        WoodType.values().toList().forEach(this::translateWoodenFurniture);
+        translateBirdbaths();
+        WOOD_TYPES.forEach(this::translateWoodenFurniture);
 
         add(CARPENTRY_TABLE.asItem(), "Carpentry Table");
 
@@ -77,12 +79,15 @@ public class LangGenerator extends LanguageProvider {
         add(WHITE_PINK_KITCHEN_TILES.asItem(), "Pink Kitchen Tiles");
     }
 
-    private void translateCurtains() {
-        WOOL_COLORS.forEach((wool, color) -> {
-            METALS.forEach((rod, name) -> {
-                translate(color+"_"+name+"_curtains");
-            });
+    private void translateBirdbaths() {
+        STONE_MATERIALS.forEach((block, name) -> {
+            String top_name = block.getDescriptionId().replaceFirst("block.minecraft.", "").replaceFirst("quartz_block", "quartz");
+            translate(top_name+"_birdbath");
         });
+    }
+
+    private void translateCurtains() {
+        WOOL_COLORS.forEach((wool, color) -> METALS.forEach((rod, name) -> translate(color+"_"+name+"_curtains")));
     }
 
     protected void translateTableware() {
@@ -93,9 +98,7 @@ public class LangGenerator extends LanguageProvider {
     }
 
     protected void translateToasters() {
-        METALS.forEach((metal, name) -> {
-            translate(name+"_toaster");
-        });
+        METALS.forEach((metal, name) -> translate(name+"_toaster"));
     }
 
     private void translateWoodenFurniture(WoodType type) {
@@ -109,7 +112,7 @@ public class LangGenerator extends LanguageProvider {
             log_suffix = "_log";
         }
         translate(type.name()+"_crate");
-        COUNTER_TOPS.forEach(((block, s) -> {
+        STONE_MATERIALS.forEach(((block, s) -> {
             String top_name = block.getDescriptionId().replaceFirst("block.minecraft.", "").replaceFirst("quartz_block", "quartz");
             translate(type.name()+"_"+top_name+"_kitchen_counter");
             translate(type.name()+"_"+top_name+"_kitchen_counter_shelf");
@@ -173,6 +176,18 @@ public class LangGenerator extends LanguageProvider {
         translate(type.name()+"_closet");
         translate(type.name()+log_suffix+"_closet");
         translate("stripped_"+type.name()+log_suffix+"_closet");
+
+        translate(type.name()+"_flower_box");
+        translate(type.name()+log_suffix+"_flower_box");
+        translate("stripped_"+type.name()+log_suffix+"_flower_box");
+
+        translate(type.name()+"_flower_box_corner");
+        translate(type.name()+log_suffix+"_flower_box_corner");
+        translate("stripped_"+type.name()+log_suffix+"_flower_box_corner");
+
+        translate(type.name()+"_trash_bin");
+        translate(type.name()+log_suffix+"_trash_bin");
+        translate("stripped_"+type.name()+log_suffix+"_trash_bin");
 
         METALS.forEach((metal, name) -> {
             if (metal != Blocks.COPPER_BLOCK) {

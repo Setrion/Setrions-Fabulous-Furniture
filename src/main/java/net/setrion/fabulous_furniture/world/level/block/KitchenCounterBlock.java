@@ -25,12 +25,10 @@ public class KitchenCounterBlock extends Block implements BlockTagSupplier {
 
     public static final EnumProperty<Direction> FACING;
     public static final EnumProperty<CounterShape> SHAPE;
-    protected static final VoxelShape COUNTER_SHAPE;
-    protected static final VoxelShape TOP;
+    protected static final VoxelShape VOXELSHAPE;
 
-    protected static final VoxelShape INNER_COUNTER_SHAPE;
-
-    protected static final VoxelShape OUTER_COUNTER_SHAPE;
+    protected static final VoxelShape VOXELSHAPE_INNER;
+    protected static final VoxelShape VOXELSHAPE_OUTER;
 
     public KitchenCounterBlock(Properties properties) {
         super(properties);
@@ -40,35 +38,38 @@ public class KitchenCounterBlock extends Block implements BlockTagSupplier {
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         Direction direction = state.getValue(FACING);
         CounterShape shape = state.getValue(SHAPE);
-        if ((shape == CounterShape.INNER_LEFT && direction == Direction.NORTH) || (shape == CounterShape.INNER_RIGHT && direction == Direction.WEST)) {
-            return INNER_COUNTER_SHAPE;
-        } else if ((shape == CounterShape.INNER_LEFT && direction == Direction.EAST) || (shape == CounterShape.INNER_RIGHT && direction == Direction.NORTH)) {
-            return VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, INNER_COUNTER_SHAPE);
-        } else if ((shape == CounterShape.INNER_LEFT && direction == Direction.SOUTH) || (shape == CounterShape.INNER_RIGHT && direction == Direction.EAST)) {
-            return VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, INNER_COUNTER_SHAPE);
-        } else if ((shape == CounterShape.INNER_LEFT && direction == Direction.WEST) || (shape == CounterShape.INNER_RIGHT && direction == Direction.SOUTH)) {
-            return VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, INNER_COUNTER_SHAPE);
-        } else if ((shape == CounterShape.OUTER_LEFT && direction == Direction.NORTH) || (shape == CounterShape.OUTER_RIGHT && direction == Direction.WEST)) {
-            return OUTER_COUNTER_SHAPE;
-        } else if ((shape == CounterShape.OUTER_LEFT && direction == Direction.EAST) || (shape == CounterShape.OUTER_RIGHT && direction == Direction.NORTH)) {
-            return VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, OUTER_COUNTER_SHAPE);
-        } else if ((shape == CounterShape.OUTER_LEFT && direction == Direction.SOUTH) || (shape == CounterShape.OUTER_RIGHT && direction == Direction.EAST)) {
-            return VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, OUTER_COUNTER_SHAPE);
-        } else if ((shape == CounterShape.OUTER_LEFT && direction == Direction.WEST) || (shape == CounterShape.OUTER_RIGHT && direction == Direction.SOUTH)) {
-            return VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, OUTER_COUNTER_SHAPE);
-        }{
-            return switch (direction) {
-                default:
-                case NORTH:
-                    yield Shapes.or(TOP, COUNTER_SHAPE);
-                case EAST:
-                    yield Shapes.or(TOP, VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, COUNTER_SHAPE));
-                case SOUTH:
-                    yield Shapes.or(TOP, VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, COUNTER_SHAPE));
-                case WEST:
-                    yield Shapes.or(TOP, VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, COUNTER_SHAPE));
-            };
+
+        VoxelShape baseShape = null;
+
+        if (shape == CounterShape.INNER_LEFT || shape == CounterShape.INNER_RIGHT) {
+            baseShape = VOXELSHAPE_INNER;
+        } else if (shape == CounterShape.OUTER_LEFT || shape == CounterShape.OUTER_RIGHT) {
+            baseShape = VOXELSHAPE_OUTER;
         }
+
+        if (baseShape != null) {
+            Direction baseDir = switch (shape) {
+                case INNER_RIGHT, OUTER_RIGHT -> Direction.WEST;
+                default -> Direction.NORTH;
+            };
+
+            if (direction == baseDir) {
+                return baseShape;
+            } else {
+                return VoxelShapeUtils.rotateShapeAroundY(baseDir, direction, baseShape);
+            }
+        }
+
+        return switch (direction) {
+            case EAST:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, VOXELSHAPE);
+            case SOUTH:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, VOXELSHAPE);
+            case WEST:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, VOXELSHAPE);
+            case NORTH: default:
+                yield VOXELSHAPE;
+        };
     }
 
     @Override
@@ -175,9 +176,8 @@ public class KitchenCounterBlock extends Block implements BlockTagSupplier {
     static {
         FACING = HorizontalDirectionalBlock.FACING;
         SHAPE = EnumProperty.create("shape", CounterShape.class);
-        TOP = Block.box(0, 14, 0, 16, 16, 16);
-        COUNTER_SHAPE = Block.box(0, 0, 2, 16, 14, 16);
-        INNER_COUNTER_SHAPE = Shapes.or(Block.box(0, 0, 2, 16, 14, 16), Block.box(2, 0, 0, 16, 14, 2), Block.box(0, 14, 0, 16, 16, 16));
-        OUTER_COUNTER_SHAPE = Shapes.or(Block.box(4, 0, 2, 16, 14, 16), Block.box(2, 0, 4, 4, 14, 16), Block.box(0, 14, 2, 2, 16, 16), Block.box(2, 14, 0, 16, 16, 16));
+        VOXELSHAPE = Shapes.or(Block.box(0, 0, 2, 16, 14, 16), Block.box(0, 14, 0, 16, 16, 16));
+        VOXELSHAPE_INNER = Shapes.or(Block.box(0, 0, 2, 16, 14, 16), Block.box(2, 0, 0, 16, 14, 2), Block.box(0, 14, 0, 16, 16, 16));
+        VOXELSHAPE_OUTER = Shapes.or(Block.box(4, 0, 2, 16, 14, 16), Block.box(2, 0, 4, 4, 14, 16), Block.box(0, 14, 2, 2, 16, 16), Block.box(2, 14, 0, 16, 16, 16));
     }
 }

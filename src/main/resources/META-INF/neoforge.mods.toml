@@ -3,7 +3,7 @@ loaderVersion="${loader_version_range}"
 license="All Rights Reserved"
 [[mods]]
 modId="fabulous_furniture"
-version="0.2.0"
+version="0.2.1"
 displayName="Setrion's Fabulous Furniture"
 updateJSONURL="https://raw.githubusercontent.com/Setrion/Setrions-Fabulous-Furniture/refs/heads/main/update.json"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/setrions-fabulous-furniture"

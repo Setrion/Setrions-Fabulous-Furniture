@@ -247,8 +247,6 @@ public class CarpentryTableMenu extends AbstractContainerMenu {
     public void removed(Player player) {
         super.removed(player);
         this.resultContainer.removeItemNoUpdate(1);
-        this.access.execute((p_40313_, p_40314_) -> {
-            this.clearContainer(player, this.container);
-        });
+        this.access.execute((p_40313_, p_40314_) -> this.clearContainer(player, this.container));
     }
 }

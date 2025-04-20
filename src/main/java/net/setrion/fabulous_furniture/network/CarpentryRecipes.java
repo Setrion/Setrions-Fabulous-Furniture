@@ -15,9 +15,7 @@ public record CarpentryRecipes(List<RecipeHolder<CarpentryTableRecipe>> recipes)
 
     public static final CustomPacketPayload.Type<CarpentryRecipes> TYPE = new CustomPacketPayload.Type<>(FabulousFurniture.prefix("carpentry_recipes"));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, CarpentryRecipes> STREAM_CODEC = StreamCodec.of((buf, message) -> {
-        buf.writeCollection(message.recipes, (buf1, holder) -> RecipeHolder.STREAM_CODEC.encode(buf, holder));
-    }, buf -> new CarpentryRecipes(buf.readList(buf1 -> (RecipeHolder<CarpentryTableRecipe>) RecipeHolder.STREAM_CODEC.decode(buf))));
+    public static final StreamCodec<RegistryFriendlyByteBuf, CarpentryRecipes> STREAM_CODEC = StreamCodec.of((buf, message) -> buf.writeCollection(message.recipes, (buf1, holder) -> RecipeHolder.STREAM_CODEC.encode(buf, holder)), buf -> new CarpentryRecipes(buf.readList(buf1 -> (RecipeHolder<CarpentryTableRecipe>) RecipeHolder.STREAM_CODEC.decode(buf))));
 
     @Override
     public Type<? extends CustomPacketPayload> type() {

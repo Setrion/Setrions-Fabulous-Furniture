@@ -23,22 +23,25 @@ public class RotatableBlock extends Block implements BlockTagSupplier {
 
     public static final EnumProperty<Direction> FACING;
 
-    private final VoxelShape SHAPE;
+    private final VoxelShape VOXELSHAPE;
 
     public RotatableBlock(Properties properties, VoxelShape shape) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
-        this.SHAPE = shape;
+        this.VOXELSHAPE = shape;
     }
 
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         Direction direction = state.getValue(FACING);
         return switch (direction) {
-            default:
-            case NORTH: yield SHAPE;
-            case EAST: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, SHAPE);
-            case SOUTH: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, SHAPE);
-            case WEST: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, SHAPE);
+            case EAST:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, VOXELSHAPE);
+            case SOUTH:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, VOXELSHAPE);
+            case WEST:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, VOXELSHAPE);
+            case NORTH: default:
+                yield VOXELSHAPE;
         };
     }
 

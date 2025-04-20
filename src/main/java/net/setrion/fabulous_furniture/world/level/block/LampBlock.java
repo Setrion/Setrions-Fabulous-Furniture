@@ -2,6 +2,8 @@ package net.setrion.fabulous_furniture.world.level.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
@@ -31,10 +33,10 @@ public class LampBlock extends Block implements BlockTagSupplier {
     public static final BooleanProperty ON;
     public static final EnumProperty<LampPart> PART;
 
-    VoxelShape SINGLE = Block.box(3, 0, 3, 13, 14, 13);
-    VoxelShape TOP = Shapes.or(Block.box(3, 5, 3, 13, 14, 13), Block.box(7, 0, 7, 9, 5, 9));
-    VoxelShape MIDDLE = Block.box(7, 0, 7, 9, 16, 9);
-    VoxelShape BOTTOM = Shapes.or(Block.box(4, 0, 4, 12, 2, 12), Block.box(7, 2, 7, 9, 16, 9));
+    private static final VoxelShape VOXELSHAPE_SINGLE;
+    private static final VoxelShape VOXELSHAPE_TOP;
+    private static final VoxelShape VOXELSHAPE_MIDDLE;
+    private static final VoxelShape VOXELSHAPE_BOTTOM;
 
     public LampBlock(Properties properties) {
         super(properties);
@@ -50,10 +52,14 @@ public class LampBlock extends Block implements BlockTagSupplier {
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         LampPart direction = state.getValue(PART);
         return switch (direction) {
-            case SINGLE: yield SINGLE;
-            case TOP: yield TOP;
-            case MIDDLE: yield MIDDLE;
-            case BOTTOM: yield BOTTOM;
+            case SINGLE:
+                yield VOXELSHAPE_SINGLE;
+            case TOP:
+                yield VOXELSHAPE_TOP;
+            case MIDDLE:
+                yield VOXELSHAPE_MIDDLE;
+            case BOTTOM:
+                yield VOXELSHAPE_BOTTOM;
         };
     }
 
@@ -77,28 +83,32 @@ public class LampBlock extends Block implements BlockTagSupplier {
     @Override
     protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess scheduledTickAccess, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
         if (direction == Direction.UP || direction == Direction.DOWN) {
+            BlockState newState = state;
             BlockState above = level.getBlockState(pos.above());
             BlockState below = level.getBlockState(pos.below());
             if (above.getBlock() == this && below.getBlock() == this) {
-                return state.setValue(PART, LampPart.MIDDLE);
+                newState = newState.setValue(PART, LampPart.MIDDLE);
             } else if (above.getBlock() == this && below.getBlock() != this) {
-                return state.setValue(PART, LampPart.BOTTOM);
+                newState = newState.setValue(PART, LampPart.BOTTOM);
             } else if (above.getBlock() != this && below.getBlock() == this) {
-                return state.setValue(PART, LampPart.TOP);
+                newState = newState.setValue(PART, LampPart.TOP);
             } else {
-                return state.setValue(PART, LampPart.SINGLE);
+                newState = newState.setValue(PART, LampPart.SINGLE);
             }
+            if (neighborState.hasProperty(ON)) {
+                newState = newState.setValue(ON, neighborState.getValue(ON));
+            }
+            return newState;
         }
         return super.updateShape(state, level, scheduledTickAccess, pos, direction, neighborPos, neighborState, random);
     }
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (state.getValue(PART) == LampPart.SINGLE || state.getValue(PART) == LampPart.TOP) {
-            level.setBlock(pos, state.cycle(ON), 3);
+        if (level.setBlock(pos, state.cycle(ON), 3)) {
+            level.playSound(null, pos, SoundEvents.COMPARATOR_CLICK, SoundSource.BLOCKS);
             return InteractionResult.SUCCESS;
         }
-        //level.playSound(null, pos, SoundEvents.BARREL_CLOSE, SoundSource.BLOCKS);
         return InteractionResult.PASS;
     }
 
@@ -110,5 +120,10 @@ public class LampBlock extends Block implements BlockTagSupplier {
     static {
         ON = BooleanProperty.create("on");
         PART = EnumProperty.create("part", LampPart.class);
+
+        VOXELSHAPE_SINGLE = Block.box(3, 0, 3, 13, 14, 13);
+        VOXELSHAPE_TOP = Shapes.or(Block.box(3, 5, 3, 13, 14, 13), Block.box(7, 0, 7, 9, 5, 9));
+        VOXELSHAPE_MIDDLE = Block.box(7, 0, 7, 9, 16, 9);
+        VOXELSHAPE_BOTTOM = Shapes.or(Block.box(4, 0, 4, 12, 2, 12), Block.box(7, 2, 7, 9, 16, 9));
     }
 }

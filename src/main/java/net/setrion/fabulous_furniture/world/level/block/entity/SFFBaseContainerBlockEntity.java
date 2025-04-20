@@ -15,7 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.*;
@@ -26,9 +25,8 @@ import net.setrion.fabulous_furniture.world.level.block.KitchenCounterContainerB
 public class SFFBaseContainerBlockEntity extends RandomizableContainerBlockEntity {
 
     protected NonNullList<ItemStack> items;
-    private final boolean canBeOpened;
-    private String title;
-    private int size;
+    private final String title;
+    private final int size;
     private final ContainerOpenersCounter openersCounter;
 
     public SFFBaseContainerBlockEntity(BlockPos pos, BlockState state) {
@@ -38,7 +36,6 @@ public class SFFBaseContainerBlockEntity extends RandomizableContainerBlockEntit
     public SFFBaseContainerBlockEntity(BlockEntityType<?> type, boolean canBeOpened, String title, int size, SoundEvent open, SoundEvent close, BlockPos pos, BlockState state) {
         super(type, pos, state);
         this.items = NonNullList.withSize(size*9, ItemStack.EMPTY);
-        this.canBeOpened = canBeOpened;
         this.title = title;
         this.size = size;
         this.openersCounter = new ContainerOpenersCounter() {
@@ -46,7 +43,7 @@ public class SFFBaseContainerBlockEntity extends RandomizableContainerBlockEntit
                 if (canBeOpened && !state.getValue(KitchenCounterContainerBaseBlock.OPEN)) { //if not open
                     SFFBaseContainerBlockEntity.this.playSound(open);
                     SFFBaseContainerBlockEntity.this.updateBlockState(state, true);
-                } else if (!canBeOpened) {
+                } else if (canBeOpened) {
                     SFFBaseContainerBlockEntity.this.playSound(open);
                 }
             }
@@ -55,13 +52,13 @@ public class SFFBaseContainerBlockEntity extends RandomizableContainerBlockEntit
                 if (canBeOpened && state.getValue(KitchenCounterContainerBaseBlock.OPEN)) { //if already open
                     SFFBaseContainerBlockEntity.this.playSound(close);
                     SFFBaseContainerBlockEntity.this.updateBlockState(state, false);
-                } else if (!canBeOpened) {
+                } else if (canBeOpened) {
                     SFFBaseContainerBlockEntity.this.playSound(close);
                 }
             }
 
             protected void openerCountChanged(Level level, BlockPos blockPos, BlockState blockState, int oldCount, int newCount) {
-                SFFBaseContainerBlockEntity.this.signalOpenCount(level, blockPos, blockState, oldCount, newCount);
+                SFFBaseContainerBlockEntity.this.signalOpenCount(level, blockPos, blockState, newCount);
             }
 
             protected boolean isOwnContainer(Player player) {
@@ -96,12 +93,12 @@ public class SFFBaseContainerBlockEntity extends RandomizableContainerBlockEntit
     }
 
     @Override
-    protected NonNullList<ItemStack> getItems() {
+    public NonNullList<ItemStack> getItems() {
         return items;
     }
 
     @Override
-    protected void setItems(NonNullList<ItemStack> items) {
+    public void setItems(NonNullList<ItemStack> items) {
         this.items = items;
     }
 
@@ -118,41 +115,33 @@ public class SFFBaseContainerBlockEntity extends RandomizableContainerBlockEntit
     }
 
     public void startOpen(Player player) {
-        if (!remove && !player.isSpectator()) {
+        if (!remove && !player.isSpectator() && getLevel() != null) {
             openersCounter.incrementOpeners(player, getLevel(), getBlockPos(), getBlockState());
         }
     }
 
     public void stopOpen(Player player) {
-        if (!remove && !player.isSpectator()) {
+        if (!remove && !player.isSpectator() && getLevel() != null) {
             openersCounter.decrementOpeners(player, getLevel(), getBlockPos(), getBlockState());
         }
     }
 
-    public static int getOpenCount(BlockGetter level, BlockPos pos) {
-        BlockState blockstate = level.getBlockState(pos);
-        if (blockstate.hasBlockEntity()) {
-            BlockEntity blockentity = level.getBlockEntity(pos);
-            if (blockentity instanceof SFFBaseContainerBlockEntity) {
-                return ((SFFBaseContainerBlockEntity)blockentity).openersCounter.getOpenerCount();
-            }
-        }
-
-        return 0;
-    }
-
     void updateBlockState(BlockState state, boolean open) {
-        this.level.setBlock(this.getBlockPos(), state.setValue(KitchenCounterContainerBaseBlock.OPEN, open), 3);
+        if (level != null) {
+            this.level.setBlock(this.getBlockPos(), state.setValue(KitchenCounterContainerBaseBlock.OPEN, open), 3);
+        }
     }
 
     void playSound(SoundEvent sound) {
-        double d0 = worldPosition.getX() + 0.5 / 2.0;
-        double d1 = worldPosition.getY() + 0.5 / 2.0;
-        double d2 = worldPosition.getZ() + 0.5 / 2.0;
-        level.playSound(null, d0, d1, d2, sound, SoundSource.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
+        if (level != null) {
+            double d0 = worldPosition.getX() + 0.5 / 2.0;
+            double d1 = worldPosition.getY() + 0.5 / 2.0;
+            double d2 = worldPosition.getZ() + 0.5 / 2.0;
+            level.playSound(null, d0, d1, d2, sound, SoundSource.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
+        }
     }
 
-    protected void signalOpenCount(Level level, BlockPos pos, BlockState state, int eventId, int eventParam) {
+    protected void signalOpenCount(Level level, BlockPos pos, BlockState state, int eventParam) {
         Block block = state.getBlock();
         level.blockEvent(pos, block, 1, eventParam);
     }

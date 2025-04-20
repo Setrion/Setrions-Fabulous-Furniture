@@ -28,7 +28,7 @@ import java.util.List;
 public class ChairBlock extends Block implements BlockTagSupplier {
 
     public static final EnumProperty<Direction> FACING;
-    protected static final VoxelShape CHAIR_SHAPE;
+    protected static final VoxelShape VOXELSHAPE;
 
     public ChairBlock(Properties properties) {
         super(properties);
@@ -38,11 +38,14 @@ public class ChairBlock extends Block implements BlockTagSupplier {
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         Direction direction = state.getValue(FACING);
         return switch (direction) {
-            case NORTH: yield CHAIR_SHAPE;
-            case EAST: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, CHAIR_SHAPE);
-            case SOUTH: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, CHAIR_SHAPE);
+            case EAST:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, VOXELSHAPE);
+            case SOUTH:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, VOXELSHAPE);
             case WEST:
-            default: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, CHAIR_SHAPE);
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, VOXELSHAPE);
+            case NORTH: default:
+                yield VOXELSHAPE;
         };
     }
 
@@ -82,6 +85,6 @@ public class ChairBlock extends Block implements BlockTagSupplier {
     static {
         FACING = HorizontalDirectionalBlock.FACING;
 
-        CHAIR_SHAPE = Shapes.or(Block.box(3, 0, 3, 5, 7, 5), Block.box(11, 0, 3, 13, 7, 5), Block.box(3, 0, 11, 5, 7, 13), Block.box(11, 0, 11, 13, 7, 13), Block.box(2, 7, 2, 14, 9, 14), Block.box(2, 9, 12, 14, 20, 14));
+        VOXELSHAPE = Shapes.or(Block.box(3, 0, 3, 5, 7, 5), Block.box(11, 0, 3, 13, 7, 5), Block.box(3, 0, 11, 5, 7, 13), Block.box(11, 0, 11, 13, 7, 13), Block.box(2, 7, 2, 14, 9, 14), Block.box(2, 9, 12, 14, 20, 14));
     }
 }

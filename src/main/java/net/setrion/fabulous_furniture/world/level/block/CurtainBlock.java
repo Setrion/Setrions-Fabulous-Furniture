@@ -24,12 +24,13 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.setrion.fabulous_furniture.util.VoxelShapeUtils;
 import net.setrion.fabulous_furniture.world.level.block.state.properties.CurtainShape;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class CurtainBlock extends Block implements BlockTagSupplier {
+public class CurtainBlock extends Block implements BlockTagSupplier, ItemModelSupplier {
 
     public static final EnumProperty<CurtainShape> CURTAIN_SHAPE;
     public static final EnumProperty<Direction> FACING;
@@ -37,10 +38,8 @@ public class CurtainBlock extends Block implements BlockTagSupplier {
     public static final BooleanProperty RIGHT;
     public static final BooleanProperty OPEN;
 
-    public static final VoxelShape SHAPE_NORTH;
-    public static final VoxelShape SHAPE_EAST;
-    public static final VoxelShape SHAPE_SOUTH;
-    public static final VoxelShape SHAPE_WEST;
+    public static final VoxelShape VOXELSHAPE;
+    public static final VoxelShape VOXELSHAPE_COLLISION;
 
     public CurtainBlock(Properties properties) {
         super(properties);
@@ -124,15 +123,14 @@ public class CurtainBlock extends Block implements BlockTagSupplier {
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         Direction direction = state.getValue(FACING);
         return switch (direction) {
-            default:
-            case NORTH:
-                yield Block.box(0, 0, 15, 16, 16, 16);
             case EAST:
-                yield Block.box(0, 0, 0, 1, 16, 16);
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, VOXELSHAPE);
             case SOUTH:
-                yield Block.box(0, 0, 0, 16, 16, 1);
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, VOXELSHAPE);
             case WEST:
-                yield Block.box(15, 0, 0, 16, 16, 16);
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, VOXELSHAPE);
+            case NORTH: default:
+                yield VOXELSHAPE;
         };
     }
 
@@ -151,15 +149,14 @@ public class CurtainBlock extends Block implements BlockTagSupplier {
         Direction direction = state.getValue(FACING);
         if (state.getValue(CURTAIN_SHAPE) != CurtainShape.BOTTOM) {
             return switch (direction) {
-                default:
-                case NORTH:
-                    yield SHAPE_NORTH;
                 case EAST:
-                    yield SHAPE_EAST;
+                    yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, VOXELSHAPE_COLLISION);
                 case SOUTH:
-                    yield SHAPE_SOUTH;
+                    yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, VOXELSHAPE_COLLISION);
                 case WEST:
-                    yield SHAPE_WEST;
+                    yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, VOXELSHAPE_COLLISION);
+                case NORTH: default:
+                    yield VOXELSHAPE_COLLISION;
             };
         } else {
             return Block.box(0, 0, 0, 0, 0, 0);
@@ -183,9 +180,17 @@ public class CurtainBlock extends Block implements BlockTagSupplier {
         RIGHT = BooleanProperty.create("right");
         OPEN = BooleanProperty.create("open");
 
-        SHAPE_NORTH = Block.box(0, 13, 15, 16, 15, 16);
-        SHAPE_EAST = Block.box(0, 13, 0, 1, 15, 16);
-        SHAPE_SOUTH = Block.box(0, 13, 0, 16, 15, 1);
-        SHAPE_WEST = Block.box(15, 13, 0, 16, 15, 16);
+        VOXELSHAPE = Block.box(0, 0, 15, 16, 16, 16);
+        VOXELSHAPE_COLLISION = Block.box(0, 13, 15, 16, 15, 16);
+    }
+
+    @Override
+    public String getItemModelSuffix() {
+        return "_small_single_open";
+    }
+
+    @Override
+    public boolean hasSeparateModel() {
+        return true;
     }
 }

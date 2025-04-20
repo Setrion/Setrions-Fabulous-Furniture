@@ -18,7 +18,7 @@ import net.setrion.fabulous_furniture.registry.SFFBlocks;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import static net.setrion.fabulous_furniture.registry.SFFBlocks.METALS;
+import static net.setrion.fabulous_furniture.registry.SFFBlocks.*;
 
 public class DataMapGenerator extends DataMapProvider {
 
@@ -39,7 +39,7 @@ public class DataMapGenerator extends DataMapProvider {
                 .add(SFFBlocks.WEATHERED_COPPER_FRIDGE.getKey(), new Waxable(SFFBlocks.WAXED_WEATHERED_COPPER_FRIDGE.get()), false)
                 .add(SFFBlocks.OXIDIZED_COPPER_FRIDGE.getKey(), new Waxable(SFFBlocks.WAXED_OXIDIZED_COPPER_FRIDGE.get()), false);
 
-        for (WoodType type : WoodType.values().toList()) {
+        for (WoodType type : WOOD_TYPES) {
             String log_suffix;
             if (type == WoodType.CRIMSON || type == WoodType.WARPED) {
                 log_suffix = "_stem";

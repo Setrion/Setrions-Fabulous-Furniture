@@ -46,9 +46,7 @@ public class RecipeGenerator extends RecipeProvider {
         createFridgeRecipes();
         createCurtainRecipes();
         createKitchenTileRecipes();
-        METALS.forEach((metal, name) -> {
-            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(name+"_toaster")), 1, FurnitureCategory.KITCHEN_MISC, getMaterialTypeFromTop(metal), new ItemStack(metal));
-        });
+        METALS.forEach((metal, name) -> carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(name+"_toaster")), 1, FurnitureCategory.KITCHEN_MISC, getMaterialTypeFromTop(metal), new ItemStack(metal)));
         TABLEWARE_MATERIALS.forEach((block, suffix) -> {
             String top_name = block.getDescriptionId().replaceFirst("block.minecraft.", "").replaceFirst("quartz_block", "quartz");
             carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(top_name+"_tableware")), 4, FurnitureCategory.KITCHEN_MISC, block == QUARTZ_BLOCK ? MaterialType.QUARTZ : MaterialType.TERRACOTTA, new ItemStack(block));
@@ -123,7 +121,7 @@ public class RecipeGenerator extends RecipeProvider {
         }
         carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_crate")), 2, FurnitureCategory.CRATES, materialType, new ItemStack(planks, 2), new ItemStack(log, 2));
 
-        COUNTER_TOPS.forEach(((block, s) -> {
+        STONE_MATERIALS.forEach(((block, s) -> {
             String top_name = block.getDescriptionId().replaceFirst("block.minecraft.", "").replaceFirst("quartz_block", "quartz");
             MaterialType additional = getMaterialTypeFromTop(block);
             carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_"+top_name+"_kitchen_counter")), 4, FurnitureCategory.KITCHEN_COUNTERS, materialType, additional, new ItemStack(planks, 4), new ItemStack(block, 1));

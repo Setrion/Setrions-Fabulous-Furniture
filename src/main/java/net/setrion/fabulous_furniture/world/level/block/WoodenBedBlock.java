@@ -32,18 +32,23 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.setrion.fabulous_furniture.util.VoxelShapeUtils;
 import net.setrion.fabulous_furniture.world.level.block.state.properties.BedShape;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class WoodenBedBlock extends Block implements BlockTagSupplier {
+public class WoodenBedBlock extends Block implements BlockTagSupplier, ItemModelSupplier {
 
     public static final EnumProperty<BedPart> PART;
     public static final EnumProperty<BedShape> SHAPE;
     public static final EnumProperty<Direction> FACING;
     public static final BooleanProperty OCCUPIED;
+
+    private static final VoxelShape VOXELSHAPE_FOOT;
+    private static final VoxelShape VOXELSHAPE_HEAD;
 
     public WoodenBedBlock(Properties properties) {
         super(properties);
@@ -107,7 +112,7 @@ public class WoodenBedBlock extends Block implements BlockTagSupplier {
         if (list.isEmpty()) {
             return false;
         } else {
-            list.get(0).stopSleeping();
+            list.getFirst().stopSleeping();
             return true;
         }
     }
@@ -153,7 +158,7 @@ public class WoodenBedBlock extends Block implements BlockTagSupplier {
                 return state.setValue(SHAPE, BedShape.SINGLE);
             }
         }
-        return null;
+        return Blocks.AIR.defaultBlockState();
     }
 
     public boolean isSameBed(BlockState state, BlockState state2) {
@@ -206,10 +211,14 @@ public class WoodenBedBlock extends Block implements BlockTagSupplier {
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         Direction direction = getConnectedDirection(state).getOpposite();
         return switch (direction) {
-            case NORTH -> Block.box(0, 4, 0, 16, 8, 16);
-            case SOUTH -> Block.box(0, 4, 0, 16, 8, 16);
-            case WEST -> Block.box(0, 4, 0, 16, 8, 16);
-            default -> Block.box(0, 4, 0, 16, 8, 16);
+            case EAST:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, state.getValue(PART) == BedPart.FOOT ? VOXELSHAPE_FOOT : VOXELSHAPE_HEAD);
+            case SOUTH:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, state.getValue(PART) == BedPart.FOOT ? VOXELSHAPE_FOOT : VOXELSHAPE_HEAD);
+            case WEST:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, state.getValue(PART) == BedPart.FOOT ? VOXELSHAPE_FOOT : VOXELSHAPE_HEAD);
+            case NORTH: default:
+                yield state.getValue(PART) == BedPart.FOOT ? VOXELSHAPE_FOOT : VOXELSHAPE_HEAD;
         };
     }
 
@@ -228,6 +237,7 @@ public class WoodenBedBlock extends Block implements BlockTagSupplier {
         }
     }
 
+    @Deprecated
     protected long getSeed(BlockState state, BlockPos pos) {
         BlockPos blockpos = pos.relative(state.getValue(FACING), state.getValue(PART) == BedPart.HEAD ? 0 : 1);
         return Mth.getSeed(blockpos.getX(), pos.getY(), blockpos.getZ());
@@ -242,10 +252,23 @@ public class WoodenBedBlock extends Block implements BlockTagSupplier {
         return List.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.BEDS);
     }
 
+    @Override
+    public String getItemModelSuffix() {
+        return "";
+    }
+
+    @Override
+    public boolean hasSeparateModel() {
+        return false;
+    }
+
     static {
         PART = BlockStateProperties.BED_PART;
         SHAPE = EnumProperty.create("shape", BedShape.class);
         FACING = BlockStateProperties.HORIZONTAL_FACING;
         OCCUPIED = BedBlock.OCCUPIED;
+
+        VOXELSHAPE_FOOT = Block.box(0, 0, 0, 16, 8, 16);
+        VOXELSHAPE_HEAD = Shapes.or(Block.box(0, 0, 0, 16, 8, 16), Block.box(0, 8, 0, 16, 15, 2));
     }
 }

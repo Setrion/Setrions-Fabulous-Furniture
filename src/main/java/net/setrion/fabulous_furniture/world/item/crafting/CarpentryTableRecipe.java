@@ -41,9 +41,7 @@ public class CarpentryTableRecipe implements Recipe<SingleRecipeInput> {
     private final NonNullList<StackedIngredient> ingredients;
     private final ItemStack result;
     private final FurnitureCategory category;
-    static StreamCodec<FriendlyByteBuf, FurnitureCategory> FURNITURE_CATEGORY_STREAM_CODEC = StreamCodec.of((buf, type) -> {
-        Utf8String.write(buf, type.name(), 128);
-    }, buf -> {
+    static StreamCodec<FriendlyByteBuf, FurnitureCategory> FURNITURE_CATEGORY_STREAM_CODEC = StreamCodec.of((buf, type) -> Utf8String.write(buf, type.name(), 128), buf -> {
         String name = Utf8String.read(buf, 128);
         FurnitureCategory w = FurnitureCategory.CRATES;
         for (FurnitureCategory wType : FurnitureCategory.values().toList()) {
@@ -54,9 +52,7 @@ public class CarpentryTableRecipe implements Recipe<SingleRecipeInput> {
         return w;
     });
     private final NonNullList<MaterialType> materialTypes;
-    static StreamCodec<FriendlyByteBuf, MaterialType> MATERIAL_TYPE_STREAM_CODEC = StreamCodec.of((buf, type) -> {
-        Utf8String.write(buf, type.name(), 128);
-    }, buf -> {
+    static StreamCodec<FriendlyByteBuf, MaterialType> MATERIAL_TYPE_STREAM_CODEC = StreamCodec.of((buf, type) -> Utf8String.write(buf, type.name(), 128), buf -> {
         String name = Utf8String.read(buf, 128);
         MaterialType w = MaterialType.OAK;
         for (MaterialType wType : MaterialType.values().toList()) {
@@ -177,7 +173,7 @@ public class CarpentryTableRecipe implements Recipe<SingleRecipeInput> {
         private final Item result;
         private final int count;
         private final FurnitureCategory furnitureCategory;
-        private NonNullList<MaterialType> materials = NonNullList.create();
+        private final NonNullList<MaterialType> materials = NonNullList.create();
         private final NonNullList<StackedIngredient> ingredients = NonNullList.create();
         private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
         private RecipeCategory category = RecipeCategory.MISC;
@@ -199,14 +195,12 @@ public class CarpentryTableRecipe implements Recipe<SingleRecipeInput> {
             return this;
         }
 
-        public Builder requiresMaterial(ItemStack stack) {
+        public void requiresMaterial(ItemStack stack) {
             ingredients.add(new StackedIngredient(Ingredient.of(stack.getItem()), stack.getCount()));
-            return this;
         }
 
-        public Builder containsMaterial(MaterialType type) {
+        public void containsMaterial(MaterialType type) {
             materials.add(type);
-            return this;
         }
 
         public Builder category(RecipeCategory category) {

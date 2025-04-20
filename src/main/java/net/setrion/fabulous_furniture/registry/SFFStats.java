@@ -21,6 +21,7 @@ public class SFFStats {
     public static final DeferredHolder<ResourceLocation, ResourceLocation> OPEN_KITCHEN_COUNTER = makeCustomStat("open_kitchen_counter");
     public static final DeferredHolder<ResourceLocation, ResourceLocation> OPEN_FRIDGE = makeCustomStat("open_fridge");
     public static final DeferredHolder<ResourceLocation, ResourceLocation> ACTIVATE_KITCHEN_SINK = makeCustomStat("activate_kitchen_sink");
+    public static final DeferredHolder<ResourceLocation, ResourceLocation> INTERACT_WITH_FLOWER_BOX = makeCustomStat("interact_with_flower_box");
 
     private static DeferredHolder<ResourceLocation, ResourceLocation> makeCustomStat(String key) {
         ResourceLocation resourcelocation = FabulousFurniture.prefix(key);

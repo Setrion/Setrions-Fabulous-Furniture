@@ -11,13 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 
 public record StackedIngredient(Ingredient ingredient, int count) {
-    public static final Codec<StackedIngredient> CODEC = RecordCodecBuilder.create(builder -> {
-        return builder.group(Ingredient.CODEC.fieldOf("ingredient").forGetter(o -> {
-            return o.ingredient;
-        }), Codec.INT.fieldOf("count").orElse(1).forGetter(o -> {
-            return o.count;
-        })).apply(builder, StackedIngredient::new);
-    });
+    public static final Codec<StackedIngredient> CODEC = RecordCodecBuilder.create(builder -> builder.group(Ingredient.CODEC.fieldOf("ingredient").forGetter(o -> o.ingredient), Codec.INT.fieldOf("count").orElse(1).forGetter(o -> o.count)).apply(builder, StackedIngredient::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, StackedIngredient> STREAM_CODEC = StreamCodec.composite(
             Ingredient.CONTENTS_STREAM_CODEC,

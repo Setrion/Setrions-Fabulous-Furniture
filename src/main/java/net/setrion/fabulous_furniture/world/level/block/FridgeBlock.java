@@ -33,13 +33,14 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.setrion.fabulous_furniture.registry.SFFStats;
 import net.setrion.fabulous_furniture.registry.SFFTags;
+import net.setrion.fabulous_furniture.util.VoxelShapeUtils;
 import net.setrion.fabulous_furniture.world.level.block.entity.KitchenFridgeBlockEntity;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class FridgeBlock extends BaseEntityBlock implements BlockTagSupplier {
+public class FridgeBlock extends BaseEntityBlock implements BlockTagSupplier, ItemModelSupplier {
 
     public static final MapCodec<FridgeBlock> CODEC = simpleCodec(FridgeBlock::new);
 
@@ -48,10 +49,7 @@ public class FridgeBlock extends BaseEntityBlock implements BlockTagSupplier {
     public static final EnumProperty<DoorHingeSide> HINGE;
     public static final EnumProperty<DoubleBlockHalf> HALF;
 
-    protected static final VoxelShape FRIDGE_NORTH;
-    protected static final VoxelShape FRIDGE_EAST;
-    protected static final VoxelShape FRIDGE_SOUTH;
-    protected static final VoxelShape FRIDGE_WEST;
+    protected static final VoxelShape VOXELSHAPE;
 
     public FridgeBlock(Properties properties) {
         super(properties);
@@ -61,11 +59,14 @@ public class FridgeBlock extends BaseEntityBlock implements BlockTagSupplier {
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         Direction direction = state.getValue(FACING);
         return switch (direction) {
-            default:
-            case NORTH: yield FRIDGE_NORTH;
-            case EAST: yield FRIDGE_EAST;
-            case SOUTH: yield FRIDGE_SOUTH;
-            case WEST: yield FRIDGE_WEST;
+            case EAST:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, VOXELSHAPE);
+            case SOUTH:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, VOXELSHAPE);
+            case WEST:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, VOXELSHAPE);
+            case NORTH: default:
+                yield VOXELSHAPE;
         };
     }
 
@@ -143,7 +144,7 @@ public class FridgeBlock extends BaseEntityBlock implements BlockTagSupplier {
         }
     }
 
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         level.setBlock(pos.above(), state.setValue(HALF, DoubleBlockHalf.UPPER), 3);
     }
 
@@ -210,14 +211,21 @@ public class FridgeBlock extends BaseEntityBlock implements BlockTagSupplier {
         return List.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL);
     }
 
+    @Override
+    public String getItemModelSuffix() {
+        return "";
+    }
+
+    @Override
+    public boolean hasSeparateModel() {
+        return false;
+    }
+
     static {
         FACING = HorizontalDirectionalBlock.FACING;
         OPEN = BlockStateProperties.OPEN;
         HINGE = BlockStateProperties.DOOR_HINGE;
         HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
-        FRIDGE_NORTH = Block.box(0, 0, 2, 16, 16, 16);
-        FRIDGE_EAST = Block.box(0, 0, 0, 14, 16, 16);
-        FRIDGE_SOUTH = Block.box(0, 0, 0, 16, 16, 14);
-        FRIDGE_WEST = Block.box(2, 0, 0, 16, 16, 16);
+        VOXELSHAPE = Block.box(0, 0, 2, 16, 16, 16);
     }
 }

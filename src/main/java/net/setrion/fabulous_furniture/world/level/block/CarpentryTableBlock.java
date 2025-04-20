@@ -16,11 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.fml.ModList;
-import net.neoforged.fml.VersionChecker;
-import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.network.PacketDistributor;
-import net.setrion.fabulous_furniture.FabulousFurniture;
 import net.setrion.fabulous_furniture.network.CarpentryRecipes;
 import net.setrion.fabulous_furniture.registry.SFFRecipeTypes;
 import net.setrion.fabulous_furniture.world.inventory.CarpentryTableMenu;
@@ -28,7 +24,6 @@ import net.setrion.fabulous_furniture.world.item.crafting.CarpentryTableRecipe;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class CarpentryTableBlock extends Block implements BlockTagSupplier {
@@ -40,6 +35,7 @@ public class CarpentryTableBlock extends Block implements BlockTagSupplier {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;

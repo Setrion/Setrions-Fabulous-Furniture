@@ -196,7 +196,7 @@ public class CarpentryTableScreen extends AbstractContainerScreen<CarpentryTable
         if (keyCode == 256) {
             minecraft.player.closeContainer();
         }
-        return !name.keyPressed(keyCode, scanCode, modifiers) && !name.canConsumeInput() ? super.keyPressed(keyCode, scanCode, modifiers) : true;
+        return name.keyPressed(keyCode, scanCode, modifiers) || name.canConsumeInput() || super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     public void render(GuiGraphics guiGraphics, int p_282517_, int p_282840_, float p_282389_) {

@@ -1,6 +1,5 @@
 package net.setrion.fabulous_furniture.data;
 
-import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.BlockFamilies;
@@ -9,8 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.WeatheringCopper;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.WoodType;
@@ -46,7 +43,7 @@ public class BlockLootTables extends BlockLootSubProvider {
         generateFridges();
         generateCurtains();
         generateKitchenTiles();
-        WoodType.values().toList().forEach(this::generateWoodenFurniture);
+        WOOD_TYPES.forEach(this::generateWoodenFurniture);
     }
 
     private void generateFridges() {
@@ -97,7 +94,7 @@ public class BlockLootTables extends BlockLootSubProvider {
         }
         add(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_crate")), this::createNameableBlockEntityTable);
 
-        COUNTER_TOPS.forEach(((block, s) -> {
+        STONE_MATERIALS.forEach(((block, s) -> {
             String top_name = block.getDescriptionId().replaceFirst("block.minecraft.", "").replaceFirst("quartz_block", "quartz");
             dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_"+top_name+"_kitchen_counter")));
             add(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_"+top_name+"_kitchen_counter_shelf")), this::createNameableBlockEntityTable);
@@ -158,10 +155,21 @@ public class BlockLootTables extends BlockLootSubProvider {
         dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_bedside_table")));
         dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_bedside_table")));
 
-
         add(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_closet")), block -> createSinglePropConditionTable(block, ClosetBlock.HALF, DoubleBlockHalf.LOWER));
         add(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_closet")), block -> createSinglePropConditionTable(block, ClosetBlock.HALF, DoubleBlockHalf.LOWER));
         add(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_closet")), block -> createSinglePropConditionTable(block, ClosetBlock.HALF, DoubleBlockHalf.LOWER));
+
+        dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_flower_box")));
+        dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_flower_box")));
+        dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_flower_box")));
+
+        dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_flower_box_corner")));
+        dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_flower_box_corner")));
+        dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_flower_box_corner")));
+
+        dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_trash_bin")));
+        dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_trash_bin")));
+        dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_trash_bin")));
 
         METALS.forEach((metal, name) -> {
             if (metal != Blocks.COPPER_BLOCK) {
@@ -197,6 +205,11 @@ public class BlockLootTables extends BlockLootSubProvider {
             }
         });
 
+        STONE_MATERIALS.forEach((block, name) -> {
+            String top_name = block.getDescriptionId().replaceFirst("block.minecraft.", "").replaceFirst("quartz_block", "quartz");
+            dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(top_name+"_birdbath")));
+        });
+
         WOOL_COLORS.forEach((block, color) -> BlockFamilies.getAllFamilies().toList().forEach(blockFamily -> {
             if (blockFamily.getBaseBlock() == planks) {
                 dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(color+"_"+type.name()+"_chair")));
@@ -216,9 +229,7 @@ public class BlockLootTables extends BlockLootSubProvider {
             dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(top_name+"_tableware")));
         });
 
-        METALS.forEach((metal, name) -> {
-            dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(name+"_toaster")));
-        });
+        METALS.forEach((metal, name) -> dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(name+"_toaster"))));
     }
 
     private Block getBlockFromResourceLocation(ResourceLocation location) {

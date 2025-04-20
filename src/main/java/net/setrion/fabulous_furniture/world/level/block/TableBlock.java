@@ -22,7 +22,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.List;
 import java.util.Map;
 
-public class TableBlock extends Block implements BlockTagSupplier {
+public class TableBlock extends Block implements BlockTagSupplier, ItemModelSupplier {
     public static final BooleanProperty NORTH;
     public static final BooleanProperty EAST;
     public static final BooleanProperty SOUTH;
@@ -100,6 +100,16 @@ public class TableBlock extends Block implements BlockTagSupplier {
     @Override
     public List<TagKey<Block>> getTags() {
         return List.of(BlockTags.MINEABLE_WITH_AXE);
+    }
+
+    @Override
+    public String getItemModelSuffix() {
+        return "_single";
+    }
+
+    @Override
+    public boolean hasSeparateModel() {
+        return true;
     }
 
     static {

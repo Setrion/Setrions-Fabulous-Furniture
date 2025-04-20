@@ -30,15 +30,12 @@ import net.setrion.fabulous_furniture.world.level.entity.Seat;
 
 import java.util.List;
 
-public class BenchBlock extends Block implements BlockTagSupplier {
+public class BenchBlock extends Block implements BlockTagSupplier, ItemModelSupplier {
 
     public static final EnumProperty<Direction> FACING;
     public static final EnumProperty<BenchShape> SHAPE;
 
-    private static final VoxelShape VOXELSHAPE_SINGLE;
-    private static final VoxelShape VOXELSHAPE_LEFT;
-    private static final VoxelShape VOXELSHAPE_RIGHT;
-    private static final VoxelShape VOXELSHAPE_MIDDLE;
+    private static final VoxelShape VOXELSHAPE;
 
     public BenchBlock(Properties properties) {
         super(properties);
@@ -70,18 +67,15 @@ public class BenchBlock extends Block implements BlockTagSupplier {
 
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         Direction direction = state.getValue(FACING);
-        VoxelShape vShape = switch(state.getValue(SHAPE)) {
-            case SINGLE -> VOXELSHAPE_SINGLE;
-            case LEFT -> VOXELSHAPE_LEFT;
-            case RIGHT -> VOXELSHAPE_RIGHT;
-            case MIDDLE -> VOXELSHAPE_MIDDLE;
-        };
         return switch (direction) {
-            case NORTH: yield vShape;
-            case EAST: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, vShape);
-            case SOUTH: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, vShape);
+            case EAST:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, VOXELSHAPE);
+            case SOUTH:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, VOXELSHAPE);
             case WEST:
-            default: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, vShape);
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, VOXELSHAPE);
+            case NORTH: default:
+                yield VOXELSHAPE;
         };
     }
 
@@ -135,9 +129,16 @@ public class BenchBlock extends Block implements BlockTagSupplier {
         FACING = HorizontalDirectionalBlock.FACING;
         SHAPE = EnumProperty.create("shape", BenchShape.class);
 
-        VOXELSHAPE_MIDDLE = Shapes.or(Block.box(0, 0, 1, 16, 2, 3), Block.box(0, 11, 14, 16, 13, 16), Block.box(0, 13, 15, 16, 14, 17), Block.box(0, 9, 13, 16, 11, 15), Block.box(0, 7, 12, 16, 9, 14), Block.box(0, 2, 2, 16, 4, 4), Block.box(0, 4, 3, 16, 6, 5), Block.box(0, 5, 5, 16, 7, 13));
-        VOXELSHAPE_LEFT = Shapes.or(VOXELSHAPE_MIDDLE, Block.box(13, 0, 12.75, 15, 6, 13.75));
-        VOXELSHAPE_RIGHT = Shapes.or(VOXELSHAPE_MIDDLE, Block.box(1, 0, 12.75, 3, 6, 13.75));
-        VOXELSHAPE_SINGLE = Shapes.or(VOXELSHAPE_MIDDLE, Block.box(13, 0, 12.75, 15, 6, 13.75), Block.box(1, 0, 12.75, 3, 6, 13.75));
+        VOXELSHAPE = Shapes.or(Block.box(0, 0, 0, 16, 7, 16), Block.box(0, 7, 12, 16, 15, 16));
+    }
+
+    @Override
+    public String getItemModelSuffix() {
+        return "_single";
+    }
+
+    @Override
+    public boolean hasSeparateModel() {
+        return true;
     }
 }

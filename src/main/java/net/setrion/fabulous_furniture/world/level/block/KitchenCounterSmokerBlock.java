@@ -14,16 +14,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.setrion.fabulous_furniture.util.VoxelShapeUtils;
 
 import java.util.List;
 
 public class KitchenCounterSmokerBlock extends SmokerBlock implements BlockTagSupplier {
 
-    protected static final VoxelShape COUNTER_NORTH;
-    protected static final VoxelShape COUNTER_EAST;
-    protected static final VoxelShape COUNTER_SOUTH;
-    protected static final VoxelShape COUNTER_WEST;
-    protected static final VoxelShape TOP;
+    protected static final VoxelShape VOXELSHAPE;
 
     public KitchenCounterSmokerBlock(Properties properties) {
         super(properties);
@@ -33,11 +30,14 @@ public class KitchenCounterSmokerBlock extends SmokerBlock implements BlockTagSu
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         Direction direction = state.getValue(FACING);
         return switch (direction) {
-            default:
-            case NORTH: yield Shapes.or(TOP, COUNTER_NORTH);
-            case EAST: yield Shapes.or(TOP, COUNTER_EAST);
-            case SOUTH: yield Shapes.or(TOP, COUNTER_SOUTH);
-            case WEST: yield Shapes.or(TOP, COUNTER_WEST);
+            case EAST:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, VOXELSHAPE);
+            case SOUTH:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, VOXELSHAPE);
+            case WEST:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, VOXELSHAPE);
+            case NORTH: default:
+                yield VOXELSHAPE;
         };
     }
 
@@ -59,10 +59,6 @@ public class KitchenCounterSmokerBlock extends SmokerBlock implements BlockTagSu
     }
 
     static {
-        COUNTER_NORTH = Block.box(0, 0, 2, 16, 14, 16);
-        COUNTER_EAST = Block.box(0, 0, 0, 14, 14, 16);
-        COUNTER_SOUTH = Block.box(0, 0, 0, 16, 14, 14);
-        COUNTER_WEST = Block.box(2, 0, 0, 16, 14, 16);
-        TOP = Block.box(0, 14, 0, 16, 16, 16);
+        VOXELSHAPE = Shapes.or(Block.box(0, 0, 2, 16, 14, 16), Block.box(0, 14, 0, 16, 16, 16));
     }
 }

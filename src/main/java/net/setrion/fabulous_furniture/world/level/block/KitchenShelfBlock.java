@@ -3,9 +3,7 @@ package net.setrion.fabulous_furniture.world.level.block;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.Containers;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
@@ -20,7 +18,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.setrion.fabulous_furniture.util.VoxelShapeUtils;
 import net.setrion.fabulous_furniture.world.level.block.state.properties.ShelfShape;
 
-public class KitchenShelfBlock extends KitchenCabinetContainerBaseBlock {
+public class KitchenShelfBlock extends KitchenCabinetContainerBaseBlock implements ItemModelSupplier {
 
     public static final MapCodec<KitchenShelfBlock> CODEC = simpleCodec(KitchenShelfBlock::new);
 
@@ -31,7 +29,7 @@ public class KitchenShelfBlock extends KitchenCabinetContainerBaseBlock {
 
 
     public KitchenShelfBlock(Properties properties) {
-        super(properties);
+        super(properties, false, false);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
@@ -43,11 +41,14 @@ public class KitchenShelfBlock extends KitchenCabinetContainerBaseBlock {
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         Direction direction = state.getValue(FACING);
         return switch (direction) {
-            case NORTH: yield VOXELSHAPE;
-            case EAST: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, VOXELSHAPE);
-            case SOUTH: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, VOXELSHAPE);
+            case EAST:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.EAST, VOXELSHAPE);
+            case SOUTH:
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.SOUTH, VOXELSHAPE);
             case WEST:
-            default: yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, VOXELSHAPE);
+                yield VoxelShapeUtils.rotateShapeAroundY(Direction.NORTH, Direction.WEST, VOXELSHAPE);
+            case NORTH: default:
+                yield VOXELSHAPE;
         };
     }
 
@@ -114,8 +115,13 @@ public class KitchenShelfBlock extends KitchenCabinetContainerBaseBlock {
     }
 
     @Override
-    protected void affectNeighborsAfterRemoval(BlockState p_393681_, ServerLevel p_394632_, BlockPos p_394133_, boolean p_394282_) {
-        Containers.updateNeighboursAfterDestroy(p_393681_, p_394632_, p_394133_);
+    public String getItemModelSuffix() {
+        return "_single";
+    }
+
+    @Override
+    public boolean hasSeparateModel() {
+        return true;
     }
 
     static {
