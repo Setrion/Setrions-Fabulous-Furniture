@@ -50,7 +50,6 @@ body:
     attributes:
       label: Additional Details
       description: Provide any other information you think might be useful for this report. This may include screenshots, video footage, other mod details, anything you think might be relevant.
-          required: true
         - label: I have confirmed the details provided in this report are concise as possible and does not contained vague information (ie. Versions are properly recorded, answers to questions are clear).
           required: true
         - label: I have confirmed this issue is unique and has not been reported already.
