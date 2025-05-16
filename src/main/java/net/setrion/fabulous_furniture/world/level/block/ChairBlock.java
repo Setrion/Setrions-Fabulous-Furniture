@@ -20,6 +20,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.setrion.fabulous_furniture.registry.SFFStats;
 import net.setrion.fabulous_furniture.util.VoxelShapeUtils;
 import net.setrion.fabulous_furniture.world.level.entity.Seat;
 
@@ -52,6 +53,7 @@ public class ChairBlock extends Block implements BlockTagSupplier {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if(Seat.sit(player, pos, 9.5*0.0625F, state.getValue(FACING))) {
+            player.awardStat(SFFStats.SIT_ON_CHAIR.get());
             return InteractionResult.CONSUME;
         }
         return InteractionResult.SUCCESS;

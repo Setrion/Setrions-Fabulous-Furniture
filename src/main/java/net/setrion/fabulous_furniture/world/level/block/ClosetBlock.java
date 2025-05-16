@@ -123,6 +123,7 @@ public class ClosetBlock extends BaseEntityBlock implements BlockTagSupplier, It
     @Override
     protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult) {
         if (level instanceof ServerLevel serverlevel) {
+            player.awardStat(SFFStats.OPEN_CLOSET.get());
             if (player.isShiftKeyDown()) {
                 blockState = blockState.cycle(OPEN);
                 level.setBlock(blockPos, blockState, 10);

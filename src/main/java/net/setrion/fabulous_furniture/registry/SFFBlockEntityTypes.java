@@ -30,6 +30,6 @@ public class SFFBlockEntityTypes {
             SFFBlocks.IRON_FRIDGE.get(), SFFBlocks.GOLD_FRIDGE.get(), SFFBlocks.NETHERITE_FRIDGE.get(), SFFBlocks.COPPER_FRIDGE.get(), SFFBlocks.EXPOSED_COPPER_FRIDGE.get(), SFFBlocks.WEATHERED_COPPER_FRIDGE.get(), SFFBlocks.OXIDIZED_COPPER_FRIDGE.get(), SFFBlocks.WAXED_COPPER_FRIDGE.get(), SFFBlocks.WAXED_EXPOSED_COPPER_FRIDGE.get(), SFFBlocks.WAXED_WEATHERED_COPPER_FRIDGE.get(), SFFBlocks.WAXED_OXIDIZED_COPPER_FRIDGE.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FlowerBoxBlockEntity>> FLOWER_BOX = BLOCK_ENTITY_TYPES.register("flower_box", () -> new BlockEntityType<>(FlowerBoxBlockEntity::new,
-            BuiltInRegistries.BLOCK.get(FabulousFurniture.prefix("oak_log_flower_box")).get().value(), BuiltInRegistries.BLOCK.get(FabulousFurniture.prefix("oak_log_flower_box_corner")).get().value()));
+            BuiltInRegistries.BLOCK.get(FabulousFurniture.prefix("oak_log_flower_box")).get().value()));
 
 }

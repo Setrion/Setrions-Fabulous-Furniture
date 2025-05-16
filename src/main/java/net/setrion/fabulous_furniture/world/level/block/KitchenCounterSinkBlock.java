@@ -112,7 +112,7 @@ public class KitchenCounterSinkBlock extends Block implements BlockTagSupplier {
             } else {
                 level.setBlock(pos, state.setValue(ON, true), 3);
             }
-            player.awardStat(Stats.CUSTOM.get(SFFStats.ACTIVATE_KITCHEN_SINK.get()));
+            player.awardStat(Stats.CUSTOM.get(SFFStats.ACTIVATE_SINK.get()));
         }
 
         return InteractionResult.SUCCESS;
@@ -126,6 +126,7 @@ public class KitchenCounterSinkBlock extends Block implements BlockTagSupplier {
                     player.setItemInHand(hand, new ItemStack(Items.WATER_BUCKET));
                     level.playSound(null, pos, SoundEvents.BUCKET_FILL, SoundSource.BLOCKS);
                     level.setBlock(pos, state.setValue(LEVEL, 0), 3);
+                    player.awardStat(Stats.CUSTOM.get(SFFStats.TAKE_WATER_FROM_SINK.get()));
                     return InteractionResult.SUCCESS;
                 }
             }

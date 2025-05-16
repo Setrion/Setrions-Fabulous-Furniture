@@ -23,6 +23,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.setrion.fabulous_furniture.registry.SFFStats;
 import net.setrion.fabulous_furniture.world.level.block.state.properties.LampPart;
 import org.jetbrains.annotations.Nullable;
 
@@ -106,6 +107,7 @@ public class LampBlock extends Block implements BlockTagSupplier {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (level.setBlock(pos, state.cycle(ON), 3)) {
+            player.awardStat(SFFStats.INTERACT_WITH_LAMP.get());
             level.playSound(null, pos, SoundEvents.COMPARATOR_CLICK, SoundSource.BLOCKS);
             return InteractionResult.SUCCESS;
         }

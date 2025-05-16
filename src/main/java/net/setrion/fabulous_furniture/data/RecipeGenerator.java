@@ -51,6 +51,10 @@ public class RecipeGenerator extends RecipeProvider {
             String top_name = block.getDescriptionId().replaceFirst("block.minecraft.", "").replaceFirst("quartz_block", "quartz");
             carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(top_name+"_tableware")), 4, FurnitureCategory.KITCHEN_MISC, block == QUARTZ_BLOCK ? MaterialType.QUARTZ : MaterialType.TERRACOTTA, new ItemStack(block));
         });
+        STONE_MATERIALS.forEach((block, name) -> {
+            String top_name = block.getDescriptionId().replaceFirst("block.minecraft.", "").replaceFirst("quartz_block", "quartz");
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(top_name+"_birdbath")), 1, FurnitureCategory.BIRDBATHS, getMaterialTypeFromTop(block), new ItemStack(block), new ItemStack(Items.WATER_BUCKET));
+        });
         createWoodenFurnitureRecipes(WoodType.OAK, MaterialType.OAK);
         createWoodenFurnitureRecipes(WoodType.SPRUCE, MaterialType.SPRUCE);
         createWoodenFurnitureRecipes(WoodType.BIRCH, MaterialType.BIRCH);
@@ -152,7 +156,7 @@ public class RecipeGenerator extends RecipeProvider {
             carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_counter_shelf")), 4, FurnitureCategory.KITCHEN_COUNTERS, materialType, additional, new ItemStack(strippedLog, 4), new ItemStack(block, 1));
             carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_counter_door")), 4, FurnitureCategory.KITCHEN_COUNTERS, materialType, additional, new ItemStack(strippedLog, 4), new ItemStack(log, 1), new ItemStack(block, 1));
             carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_counter_small_drawer")), 4, FurnitureCategory.KITCHEN_COUNTERS, materialType, additional, new ItemStack(strippedLog, 4), new ItemStack(log, 1), new ItemStack(block, 1));
-            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_counter_big_drawer")), 4, FurnitureCategory.KITCHEN_COUNTERS, materialType, new ItemStack(strippedLog, 4), new ItemStack(log, 1), new ItemStack(block, 1));
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_counter_big_drawer")), 4, FurnitureCategory.KITCHEN_COUNTERS, materialType, additional, new ItemStack(strippedLog, 4), new ItemStack(log, 1), new ItemStack(block, 1));
             carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_counter_sink")), 4, FurnitureCategory.KITCHEN_COUNTERS, materialType, additional, new ItemStack(strippedLog, 4), new ItemStack(Items.WATER_BUCKET, 1), new ItemStack(block, 1));
             carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_counter_smoker")), 4, FurnitureCategory.KITCHEN_COUNTERS, materialType, additional, new ItemStack(strippedLog, 1), new ItemStack(Blocks.SMOKER, 1), new ItemStack(block, 1));
             carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_"+top_name+"_kitchen_cabinet_door")), 4, FurnitureCategory.KITCHEN_CABINETS, materialType, additional, new ItemStack(strippedLog, 4), new ItemStack(log, 1), new ItemStack(block, 1));
@@ -186,6 +190,60 @@ public class RecipeGenerator extends RecipeProvider {
         carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_closet")), 1, FurnitureCategory.CLOSETS, materialType, new ItemStack(planks, 2), new ItemStack(log, 1));
         carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_closet")), 1, FurnitureCategory.CLOSETS, materialType, new ItemStack(log, 2), new ItemStack(strippedLog, 1));
         carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_closet")), 1, FurnitureCategory.CLOSETS, materialType, new ItemStack(strippedLog, 2), new ItemStack(log, 1));
+
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_flower_box")), 4, FurnitureCategory.FLOWER_BOXES, materialType, new ItemStack(planks), new ItemStack(DIRT));
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_flower_box")), 4, FurnitureCategory.FLOWER_BOXES, materialType, new ItemStack(log), new ItemStack(DIRT));
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_flower_box")), 4, FurnitureCategory.FLOWER_BOXES, materialType, new ItemStack(strippedLog), new ItemStack(DIRT));
+
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_flower_box_inner_corner")), 8, FurnitureCategory.FLOWER_BOXES, materialType, new ItemStack(planks), new ItemStack(DIRT));
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_flower_box_inner_corner")), 8, FurnitureCategory.FLOWER_BOXES, materialType, new ItemStack(log), new ItemStack(DIRT));
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_flower_box_inner_corner")), 8, FurnitureCategory.FLOWER_BOXES, materialType, new ItemStack(strippedLog), new ItemStack(DIRT));
+
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_flower_box_outer_corner")), 3, FurnitureCategory.FLOWER_BOXES, materialType, new ItemStack(planks), new ItemStack(DIRT));
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_flower_box_outer_corner")), 3, FurnitureCategory.FLOWER_BOXES, materialType, new ItemStack(log), new ItemStack(DIRT));
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_flower_box_outer_corner")), 3, FurnitureCategory.FLOWER_BOXES, materialType, new ItemStack(strippedLog), new ItemStack(DIRT));
+
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_flower_box_big")), 2, FurnitureCategory.FLOWER_BOXES, materialType, new ItemStack(planks), new ItemStack(DIRT));
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_flower_box_big")), 2, FurnitureCategory.FLOWER_BOXES, materialType, new ItemStack(log), new ItemStack(DIRT));
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_flower_box_big")), 2, FurnitureCategory.FLOWER_BOXES, materialType, new ItemStack(strippedLog), new ItemStack(DIRT));
+
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_trash_bin")), 1, FurnitureCategory.OUTDOOR_MISC, materialType, new ItemStack(planks), new ItemStack(Items.IRON_INGOT, 4));
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_trash_bin")), 1, FurnitureCategory.OUTDOOR_MISC, materialType, new ItemStack(log), new ItemStack(Items.IRON_INGOT, 4));
+        carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_trash_bin")), 1, FurnitureCategory.OUTDOOR_MISC, materialType, new ItemStack(strippedLog), new ItemStack(Items.IRON_INGOT, 4));
+
+        METALS.forEach((metal, name) -> {
+            if (metal != Blocks.COPPER_BLOCK) {
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, getMaterialTypeFromTop(metal), new ItemStack(planks, 2), new ItemStack(metal));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, getMaterialTypeFromTop(metal), new ItemStack(log, 2), new ItemStack(metal));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, getMaterialTypeFromTop(metal), new ItemStack(strippedLog, 2), new ItemStack(metal));
+            } else {
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_waxed_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(planks, 2), new ItemStack(WAXED_COPPER_BLOCK));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_waxed_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(log, 2), new ItemStack(WAXED_COPPER_BLOCK));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_waxed_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(strippedLog, 2), new ItemStack(WAXED_COPPER_BLOCK));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_waxed_exposed_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(planks, 2), new ItemStack(WAXED_EXPOSED_COPPER));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_waxed_exposed_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(log, 2), new ItemStack(WAXED_EXPOSED_COPPER));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_waxed_exposed_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(strippedLog, 2), new ItemStack(WAXED_EXPOSED_COPPER));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_waxed_weathered_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(planks, 2), new ItemStack(WAXED_WEATHERED_COPPER));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_waxed_weathered_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(log, 2), new ItemStack(WAXED_WEATHERED_COPPER));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_waxed_weathered_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(strippedLog, 2), new ItemStack(WAXED_WEATHERED_COPPER));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_waxed_oxidized_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(planks, 2), new ItemStack(WAXED_OXIDIZED_COPPER));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_waxed_oxidized_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(log, 2), new ItemStack(WAXED_OXIDIZED_COPPER));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_waxed_oxidized_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(strippedLog, 2), new ItemStack(WAXED_OXIDIZED_COPPER));
+
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_" +  name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(planks, 2), new ItemStack(WAXED_COPPER_BLOCK));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(log, 2), new ItemStack(WAXED_COPPER_BLOCK));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(strippedLog, 2), new ItemStack(WAXED_COPPER_BLOCK));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_exposed_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(planks, 2), new ItemStack(WAXED_EXPOSED_COPPER));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_exposed_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(log, 2), new ItemStack(WAXED_EXPOSED_COPPER));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_exposed_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(strippedLog, 2), new ItemStack(WAXED_EXPOSED_COPPER));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_weathered_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(planks, 2), new ItemStack(WAXED_WEATHERED_COPPER));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_weathered_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(log, 2), new ItemStack(WAXED_WEATHERED_COPPER));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_weathered_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(strippedLog, 2), new ItemStack(WAXED_WEATHERED_COPPER));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_oxidized_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(planks, 2), new ItemStack(WAXED_OXIDIZED_COPPER));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + log_suffix + "_oxidized_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(log, 2), new ItemStack(WAXED_OXIDIZED_COPPER));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_" + type.name() + log_suffix + "_oxidized_" + name + "_bench")), 4, FurnitureCategory.PARK_BENCHES, materialType, MaterialType.COPPER, new ItemStack(strippedLog, 2), new ItemStack(WAXED_OXIDIZED_COPPER));
+            }
+        });
 
         WOOL_COLORS.forEach((block, color) -> BlockFamilies.getAllFamilies().toList().forEach(blockFamily -> {
             if (blockFamily.getBaseBlock() == planks) {

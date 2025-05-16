@@ -17,7 +17,9 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.setrion.fabulous_furniture.registry.SFFBlockEntityTypes;
-import net.setrion.fabulous_furniture.world.level.block.FlowerBoxCornerBlock;
+import net.setrion.fabulous_furniture.world.level.block.FlowerBoxBigBlock;
+import net.setrion.fabulous_furniture.world.level.block.FlowerBoxInnerCornerBlock;
+import net.setrion.fabulous_furniture.world.level.block.FlowerBoxOuterCornerBlock;
 
 import javax.annotation.Nullable;
 
@@ -27,7 +29,7 @@ public class FlowerBoxBlockEntity extends RandomizableContainerBlockEntity {
     protected int slots;
 
     public FlowerBoxBlockEntity(BlockPos pos, BlockState state) {
-        this(state.getBlock() instanceof FlowerBoxCornerBlock ? 3 : 2, pos, state);
+        this(state.getBlock() instanceof FlowerBoxOuterCornerBlock ? 3 : state.getBlock() instanceof FlowerBoxBigBlock ? 4 : state.getBlock() instanceof FlowerBoxInnerCornerBlock ? 1 : 2, pos, state);
     }
 
     public FlowerBoxBlockEntity(int slots, BlockPos pos, BlockState blockState) {

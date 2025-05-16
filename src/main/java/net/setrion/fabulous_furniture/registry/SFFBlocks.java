@@ -190,13 +190,21 @@ public class SFFBlocks {
             registerBlockWithItem("stripped_"+type.name()+log_suffix+"_kitchen_cabinet_shelf", properties -> new KitchenCabinetContainerBaseBlock(properties, false, false), () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
             registerBlockWithItem("stripped_"+type.name()+log_suffix+"_kitchen_shelf", KitchenShelfBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))).pushReaction(PushReaction.BLOCK));
 
+            registerBlockWithItem(type.name()+"_flower_box_inner_corner", FlowerBoxInnerCornerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+            registerBlockWithItem(type.name()+log_suffix+"_flower_box_inner_corner", FlowerBoxInnerCornerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+            registerBlockWithItem("stripped_"+type.name()+log_suffix+"_flower_box_inner_corner", FlowerBoxInnerCornerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+
             registerBlockWithItem(type.name()+"_flower_box", FlowerBoxBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
             registerBlockWithItem(type.name()+log_suffix+"_flower_box", FlowerBoxBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
             registerBlockWithItem("stripped_"+type.name()+log_suffix+"_flower_box", FlowerBoxBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
 
-            registerBlockWithItem(type.name()+"_flower_box_corner", FlowerBoxCornerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
-            registerBlockWithItem(type.name()+log_suffix+"_flower_box_corner", FlowerBoxCornerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
-            registerBlockWithItem("stripped_"+type.name()+log_suffix+"_flower_box_corner", FlowerBoxCornerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+            registerBlockWithItem(type.name()+"_flower_box_outer_corner", FlowerBoxOuterCornerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+            registerBlockWithItem(type.name()+log_suffix+"_flower_box_outer_corner", FlowerBoxOuterCornerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+            registerBlockWithItem("stripped_"+type.name()+log_suffix+"_flower_box_outer_corner", FlowerBoxOuterCornerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+
+            registerBlockWithItem(type.name()+"_flower_box_big", FlowerBoxBigBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+            registerBlockWithItem(type.name()+log_suffix+"_flower_box_big", FlowerBoxBigBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+            registerBlockWithItem("stripped_"+type.name()+log_suffix+"_flower_box_big", FlowerBoxBigBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
 
             registerBlockWithItem(type.name()+"_trash_bin", TrashBinBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
             registerBlockWithItem(type.name()+log_suffix+"_trash_bin", TrashBinBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));

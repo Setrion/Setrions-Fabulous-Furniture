@@ -20,8 +20,19 @@ public class SFFStats {
     public static final DeferredHolder<ResourceLocation, ResourceLocation> OPEN_CRATE = makeCustomStat("open_crate");
     public static final DeferredHolder<ResourceLocation, ResourceLocation> OPEN_KITCHEN_COUNTER = makeCustomStat("open_kitchen_counter");
     public static final DeferredHolder<ResourceLocation, ResourceLocation> OPEN_FRIDGE = makeCustomStat("open_fridge");
-    public static final DeferredHolder<ResourceLocation, ResourceLocation> ACTIVATE_KITCHEN_SINK = makeCustomStat("activate_kitchen_sink");
+    public static final DeferredHolder<ResourceLocation, ResourceLocation> OPEN_BEDSIDE_TABLE = makeCustomStat("open_bedside_table");
+    public static final DeferredHolder<ResourceLocation, ResourceLocation> OPEN_CLOSET = makeCustomStat("open_closet");
+
+    public static final DeferredHolder<ResourceLocation, ResourceLocation> ACTIVATE_SINK = makeCustomStat("activate_sink");
+    public static final DeferredHolder<ResourceLocation, ResourceLocation> TAKE_WATER_FROM_SINK = makeCustomStat("take_water_from_sink");
+
     public static final DeferredHolder<ResourceLocation, ResourceLocation> INTERACT_WITH_FLOWER_BOX = makeCustomStat("interact_with_flower_box");
+    public static final DeferredHolder<ResourceLocation, ResourceLocation> INTERACT_WITH_LAMP = makeCustomStat("interact_with_lamp");
+
+    public static final DeferredHolder<ResourceLocation, ResourceLocation> THROW_AWAY_ITEM = makeCustomStat("throw_away_item");
+
+    public static final DeferredHolder<ResourceLocation, ResourceLocation> SIT_ON_CHAIR = makeCustomStat("sit_on_chair");
+    public static final DeferredHolder<ResourceLocation, ResourceLocation> SIT_ON_BENCH = makeCustomStat("sit_on_bench");
 
     private static DeferredHolder<ResourceLocation, ResourceLocation> makeCustomStat(String key) {
         ResourceLocation resourcelocation = FabulousFurniture.prefix(key);

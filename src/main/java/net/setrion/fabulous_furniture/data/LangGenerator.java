@@ -9,6 +9,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.setrion.fabulous_furniture.FabulousFurniture;
+import net.setrion.fabulous_furniture.registry.SFFStats;
+import net.setrion.fabulous_furniture.world.level.block.BlockTagSupplier;
 import net.setrion.fabulous_furniture.world.level.block.state.properties.FurnitureCategory;
 import net.setrion.fabulous_furniture.world.level.block.state.properties.MaterialType;
 
@@ -46,6 +48,8 @@ public class LangGenerator extends LanguageProvider {
         translateTableware();
         translateToasters();
         translateBirdbaths();
+
+        translateStats();
         WOOD_TYPES.forEach(this::translateWoodenFurniture);
 
         add(CARPENTRY_TABLE.asItem(), "Carpentry Table");
@@ -77,6 +81,21 @@ public class LangGenerator extends LanguageProvider {
         add(WHITE_PURPLE_KITCHEN_TILES.asItem(), "Purple Kitchen Tiles");
         add(WHITE_MAGENTA_KITCHEN_TILES.asItem(), "Magenta Kitchen Tiles");
         add(WHITE_PINK_KITCHEN_TILES.asItem(), "Pink Kitchen Tiles");
+    }
+
+    private void translateStats() {
+        add("stat."+SFFStats.OPEN_CRATE.get().toLanguageKey(), "Crates Opened");
+        add("stat."+SFFStats.OPEN_KITCHEN_COUNTER.get().toLanguageKey(), "Kitchen Counters Opened");
+        add("stat."+SFFStats.OPEN_FRIDGE.get().toLanguageKey(), "Fridges Opened");
+        add("stat."+SFFStats.OPEN_BEDSIDE_TABLE.get().toLanguageKey(), "Bedside Tables Opened");
+        add("stat."+SFFStats.OPEN_CLOSET.get().toLanguageKey(), "Closets Opened");
+        add("stat."+SFFStats.ACTIVATE_SINK.get().toLanguageKey(), "Sinks Activated");
+        add("stat."+SFFStats.TAKE_WATER_FROM_SINK.get().toLanguageKey(), "Water Taken from Sink");
+        add("stat."+SFFStats.INTERACT_WITH_FLOWER_BOX.get().toLanguageKey(), "Interactions with Flower Boxes");
+        add("stat."+SFFStats.INTERACT_WITH_LAMP.get().toLanguageKey(), "Interactions with Lamps");
+        add("stat."+SFFStats.THROW_AWAY_ITEM.get().toLanguageKey(), "Items Thrown away");
+        add("stat."+SFFStats.SIT_ON_CHAIR.get().toLanguageKey(), "Times Sat on a Chair");
+        add("stat."+SFFStats.SIT_ON_BENCH.get().toLanguageKey(), "Times Sat on a Bench");
     }
 
     private void translateBirdbaths() {
@@ -181,9 +200,17 @@ public class LangGenerator extends LanguageProvider {
         translate(type.name()+log_suffix+"_flower_box");
         translate("stripped_"+type.name()+log_suffix+"_flower_box");
 
-        translate(type.name()+"_flower_box_corner");
-        translate(type.name()+log_suffix+"_flower_box_corner");
-        translate("stripped_"+type.name()+log_suffix+"_flower_box_corner");
+        translate(type.name()+"_flower_box_inner_corner");
+        translate(type.name()+log_suffix+"_flower_box_inner_corner");
+        translate("stripped_"+type.name()+log_suffix+"_flower_box_inner_corner");
+
+        translate(type.name()+"_flower_box_outer_corner");
+        translate(type.name()+log_suffix+"_flower_box_outer_corner");
+        translate("stripped_"+type.name()+log_suffix+"_flower_box_outer_corner");
+
+        translate(type.name()+"_flower_box_big");
+        translate(type.name()+log_suffix+"_flower_box_big");
+        translate("stripped_"+type.name()+log_suffix+"_flower_box_big");
 
         translate(type.name()+"_trash_bin");
         translate(type.name()+log_suffix+"_trash_bin");
@@ -237,7 +264,12 @@ public class LangGenerator extends LanguageProvider {
     }
 
     private void translate(String name) {
-        add(getBlockFromResourceLocation(FabulousFurniture.prefix(name)).asItem(), createTranslatedName(name));
+        Block block = getBlockFromResourceLocation(FabulousFurniture.prefix(name));
+        String wip = "";
+        if (block instanceof BlockTagSupplier sup) {
+            wip = sup.isWIP() ? "§4[Work in Progress]§r" : "";
+        }
+        add(block.asItem(), createTranslatedName(name) + " " + wip);
     }
 
     private String createTranslatedName(String name) {

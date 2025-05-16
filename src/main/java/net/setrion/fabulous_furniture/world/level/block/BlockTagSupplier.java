@@ -7,4 +7,8 @@ import java.util.List;
 
 public interface BlockTagSupplier {
     List<TagKey<Block>> getTags();
+
+    default boolean isWIP() {
+        return false;
+    }
 }

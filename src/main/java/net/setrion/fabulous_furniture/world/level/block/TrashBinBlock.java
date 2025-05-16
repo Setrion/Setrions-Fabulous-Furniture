@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.setrion.fabulous_furniture.registry.SFFStats;
 
 import java.util.List;
 
@@ -43,6 +44,7 @@ public class TrashBinBlock extends Block implements BlockTagSupplier {
                     return InteractionResult.SUCCESS;
                 } else {
                     player.setItemInHand(hand, ItemStack.EMPTY);
+                    player.awardStat(SFFStats.THROW_AWAY_ITEM.get());
                     return InteractionResult.CONSUME;
                 }
             }

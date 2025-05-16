@@ -100,6 +100,7 @@ public class BedsideTableBlock extends BaseEntityBlock implements BlockTagSuppli
     @Override
     protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult) {
         if (level instanceof ServerLevel serverlevel) {
+            player.awardStat(SFFStats.OPEN_BEDSIDE_TABLE.get());
             if (blockState.hasProperty(OPEN) && player.isShiftKeyDown()) {
                 if (blockState.getValue(OPEN)) {
                     level.setBlock(blockPos, blockState.setValue(OPEN, !blockState.getValue(OPEN)), 3);

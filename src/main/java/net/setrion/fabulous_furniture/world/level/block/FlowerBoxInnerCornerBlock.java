@@ -14,12 +14,12 @@ import net.setrion.fabulous_furniture.util.VoxelShapeUtils;
 import net.setrion.fabulous_furniture.world.level.block.entity.FlowerBoxBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
-public class FlowerBoxCornerBlock extends FlowerBoxBlock {
+public class FlowerBoxInnerCornerBlock extends FlowerBoxBlock {
 
     private static final VoxelShape VOXELSHAPE_BOTTOM;
     private static final VoxelShape VOXELSHAPE_TOP;
 
-    public FlowerBoxCornerBlock(Properties properties) {
+    public FlowerBoxInnerCornerBlock(Properties properties) {
         super(properties);
     }
 
@@ -41,11 +41,11 @@ public class FlowerBoxCornerBlock extends FlowerBoxBlock {
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new FlowerBoxBlockEntity(3, blockPos, blockState);
+        return new FlowerBoxBlockEntity(1, blockPos, blockState);
     }
 
     static {
-        VOXELSHAPE_BOTTOM = Shapes.or(Block.box(0, 0, 0, 8, 6, 16), Block.box(8, 0, 8, 16, 6, 16));
-        VOXELSHAPE_TOP = Shapes.or(Block.box(0, 10, 0, 8, 16, 16), Block.box(8, 10, 8, 16, 16, 16));
+        VOXELSHAPE_BOTTOM = Block.box(8, 0, 8, 16, 6, 16);
+        VOXELSHAPE_TOP = Block.box(8, 10, 8, 16, 16, 16);
     }
 }

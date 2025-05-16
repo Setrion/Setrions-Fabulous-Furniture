@@ -28,6 +28,10 @@ public record FurnitureCategory(String name, Item item) {
     public static final FurnitureCategory BEDS;
     public static final FurnitureCategory BEDSIDE_TABLES;
     public static final FurnitureCategory CLOSETS;
+    public static final FurnitureCategory BIRDBATHS;
+    public static final FurnitureCategory PARK_BENCHES;
+    public static final FurnitureCategory FLOWER_BOXES;
+    public static final FurnitureCategory OUTDOOR_MISC;
 
     public FurnitureCategory(String name, Item item) {
         this.name = name;
@@ -75,5 +79,9 @@ public record FurnitureCategory(String name, Item item) {
         BEDS = register(new FurnitureCategory("beds", BuiltInRegistries.BLOCK.getValue(FabulousFurniture.prefix("white_oak_bed")).asItem()));
         BEDSIDE_TABLES = register(new FurnitureCategory("bedside_tables", BuiltInRegistries.BLOCK.getValue(FabulousFurniture.prefix("oak_bedside_table")).asItem()));
         CLOSETS = register(new FurnitureCategory("closets", BuiltInRegistries.BLOCK.getValue(FabulousFurniture.prefix("oak_closet")).asItem()));
+        BIRDBATHS = register(new FurnitureCategory("bird_baths", BuiltInRegistries.BLOCK.getValue(FabulousFurniture.prefix("stone_birdbath")).asItem()));
+        PARK_BENCHES = register(new FurnitureCategory("park_benches", BuiltInRegistries.BLOCK.getValue(FabulousFurniture.prefix("oak_log_copper_bench")).asItem()));
+        FLOWER_BOXES = register(new FurnitureCategory("flower_boxes", BuiltInRegistries.BLOCK.getValue(FabulousFurniture.prefix("oak_log_flower_box")).asItem()));
+        OUTDOOR_MISC = register(new FurnitureCategory("outdoor_misc", BuiltInRegistries.BLOCK.getValue(FabulousFurniture.prefix("oak_log_trash_bin")).asItem()));
     }
 }

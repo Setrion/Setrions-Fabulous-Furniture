@@ -48,13 +48,15 @@ public class FlowerBoxRenderer implements BlockEntityRenderer<FlowerBoxBlockEnti
                     stack.popPose();
                 }
             } else {
+                int d = 0;
+                if (j == 3) d = 1;
                 if (itemstack != ItemStack.EMPTY && itemstack.getItem() instanceof BlockItem blockItem) {
                     stack.pushPose();
                     stack.translate(0.5F, 0.3F+h, 0.5F);
                     Direction direction1 = Direction.from2DDataValue((direction.get2DDataValue()) % 4);
                     float f = -direction1.getOpposite().toYRot();
                     stack.mulPose(Axis.YP.rotationDegrees(f));
-                    stack.translate(-0.6251F, 0.0F, -0.6249F);
+                    stack.translate(-0.6251F + (d * 0.5), 0.0F, -0.6249F);
                     stack.scale(0.75F, 0.75F, 0.75F);
                     this.blockRenderer.renderSingleBlock(blockItem.getBlock().defaultBlockState(), stack, bufferSource, p_112348_, p_112349_, EmptyBlockAndTintGetter.INSTANCE, blockEntity.getBlockPos());
                     stack.popPose();
