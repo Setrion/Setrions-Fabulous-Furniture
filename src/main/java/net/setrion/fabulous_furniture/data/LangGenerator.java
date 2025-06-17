@@ -81,6 +81,18 @@ public class LangGenerator extends LanguageProvider {
         add(WHITE_PURPLE_KITCHEN_TILES.asItem(), "Purple Kitchen Tiles");
         add(WHITE_MAGENTA_KITCHEN_TILES.asItem(), "Magenta Kitchen Tiles");
         add(WHITE_PINK_KITCHEN_TILES.asItem(), "Pink Kitchen Tiles");
+
+        add(OAK_HEDGE.asItem(), "Oak Hedge");
+        add(SPRUCE_HEDGE.asItem(), "Spruce Hedge");
+        add(BIRCH_HEDGE.asItem(), "Birch Hedge");
+        add(JUNGLE_HEDGE.asItem(), "Jungle Hedge");
+        add(ACACIA_HEDGE.asItem(), "Acacia Hedge");
+        add(CHERRY_HEDGE.asItem(), "Cherry Hedge");
+        add(DARK_OAK_HEDGE.asItem(), "Dark Oak Hedge");
+        add(PALE_OAK_HEDGE.asItem(), "Pale Oak Hedge");
+        add(MANGROVE_HEDGE.asItem(), "Mangrove Hedge");
+        add(AZALEA_HEDGE.asItem(), "Azalea Hedge");
+        add(FLOWERING_AZALEA_HEDGE.asItem(), "Flowering Azalea Hedge");
     }
 
     private void translateStats() {
@@ -215,6 +227,37 @@ public class LangGenerator extends LanguageProvider {
         translate(type.name()+"_trash_bin");
         translate(type.name()+log_suffix+"_trash_bin");
         translate("stripped_"+type.name()+log_suffix+"_trash_bin");
+
+        for (WoodType type2 : WOOD_TYPES) {
+            String log_suffix2;
+            if (type2 == WoodType.CRIMSON || type2 == WoodType.WARPED) {
+                log_suffix2 = "_stem";
+            } else if (type2 == WoodType.BAMBOO) {
+                log_suffix2 = "_block";
+            } else {
+                log_suffix2 = "_log";
+            }
+
+            translate(type.name()+"_"+type2.name()+"_birdhouse");
+            translate(type.name()+log_suffix+"_"+type2.name()+"_birdhouse");
+            translate("stripped_"+type.name()+log_suffix+"_"+type2.name()+"_birdhouse");
+            translate(type.name()+"_"+type2.name()+log_suffix2+"_birdhouse");
+            translate(type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse");
+            translate("stripped_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse");
+            translate(type.name()+"_stripped_"+type2.name()+log_suffix2+"_birdhouse");
+            translate(type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse");
+            translate("stripped_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse");
+
+            translate("hanging_"+type.name()+"_"+type2.name()+"_birdhouse");
+            translate("hanging_"+type.name()+log_suffix+"_"+type2.name()+"_birdhouse");
+            translate("hanging_stripped_"+type.name()+log_suffix+"_"+type2.name()+"_birdhouse");
+            translate("hanging_"+type.name()+"_"+type2.name()+log_suffix2+"_birdhouse");
+            translate("hanging_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse");
+            translate("hanging_stripped_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse");
+            translate("hanging_"+type.name()+"_stripped_"+type2.name()+log_suffix2+"_birdhouse");
+            translate("hanging_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse");
+            translate("hanging_stripped_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse");
+        }
 
         METALS.forEach((metal, name) -> {
             if (metal != Blocks.COPPER_BLOCK) {

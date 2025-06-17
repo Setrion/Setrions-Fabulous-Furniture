@@ -44,6 +44,7 @@ public class RecipeGenerator extends RecipeProvider {
     public void buildRecipes() {
         ShapedRecipeBuilder.shaped(items, RecipeCategory.DECORATIONS, CARPENTRY_TABLE.get()).define('#', ItemTags.PLANKS).define('X', Items.COPPER_INGOT).pattern("XX").pattern("##").pattern("##").unlockedBy("has_copper", this.has(Items.COPPER_INGOT)).save(this.output);
         createFridgeRecipes();
+        createHedgeRecipes();
         createCurtainRecipes();
         createKitchenTileRecipes();
         METALS.forEach((metal, name) -> carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(name+"_toaster")), 1, FurnitureCategory.KITCHEN_MISC, getMaterialTypeFromTop(metal), new ItemStack(metal)));
@@ -81,6 +82,20 @@ public class RecipeGenerator extends RecipeProvider {
         carpentryTableCrafting(SFFBlocks.WAXED_OXIDIZED_COPPER_FRIDGE.get(), 1, FurnitureCategory.FRIDGES, MaterialType.COPPER, new ItemStack(Blocks.WAXED_OXIDIZED_COPPER, 2), new ItemStack(Blocks.IRON_BARS, 3));
         carpentryTableCrafting(SFFBlocks.GOLD_FRIDGE.get(), 1, FurnitureCategory.FRIDGES, MaterialType.GOLD, new ItemStack(Blocks.GOLD_BLOCK, 2), new ItemStack(Blocks.IRON_BARS, 3));
         carpentryTableCrafting(SFFBlocks.NETHERITE_FRIDGE.get(), 1, FurnitureCategory.FRIDGES, MaterialType.NETHERITE, new ItemStack(Blocks.NETHERITE_BLOCK, 2), new ItemStack(Blocks.IRON_BARS, 3));
+    }
+
+    private void createHedgeRecipes() {
+        carpentryTableCrafting(OAK_HEDGE.get(), 4, FurnitureCategory.OUTDOOR_MISC, MaterialType.LEAVES, new ItemStack(OAK_LEAVES, 6));
+        carpentryTableCrafting(SPRUCE_HEDGE.get(), 4, FurnitureCategory.OUTDOOR_MISC, MaterialType.LEAVES, new ItemStack(SPRUCE_LEAVES, 6));
+        carpentryTableCrafting(BIRCH_HEDGE.get(), 4, FurnitureCategory.OUTDOOR_MISC, MaterialType.LEAVES, new ItemStack(BIRCH_LEAVES, 6));
+        carpentryTableCrafting(JUNGLE_HEDGE.get(), 4, FurnitureCategory.OUTDOOR_MISC, MaterialType.LEAVES, new ItemStack(JUNGLE_LEAVES, 6));
+        carpentryTableCrafting(ACACIA_HEDGE.get(), 4, FurnitureCategory.OUTDOOR_MISC, MaterialType.LEAVES, new ItemStack(ACACIA_LEAVES, 6));
+        carpentryTableCrafting(CHERRY_HEDGE.get(), 4, FurnitureCategory.OUTDOOR_MISC, MaterialType.LEAVES, new ItemStack(CHERRY_LEAVES, 6));
+        carpentryTableCrafting(DARK_OAK_HEDGE.get(), 4, FurnitureCategory.OUTDOOR_MISC, MaterialType.LEAVES, new ItemStack(DARK_OAK_LEAVES, 6));
+        carpentryTableCrafting(PALE_OAK_HEDGE.get(), 4, FurnitureCategory.OUTDOOR_MISC, MaterialType.LEAVES, new ItemStack(PALE_OAK_LEAVES, 6));
+        carpentryTableCrafting(MANGROVE_HEDGE.get(), 4, FurnitureCategory.OUTDOOR_MISC, MaterialType.LEAVES, new ItemStack(MANGROVE_LEAVES, 6));
+        carpentryTableCrafting(AZALEA_HEDGE.get(), 4, FurnitureCategory.OUTDOOR_MISC, MaterialType.LEAVES, new ItemStack(AZALEA_LEAVES, 6));
+        carpentryTableCrafting(FLOWERING_AZALEA_HEDGE.get(), 4, FurnitureCategory.OUTDOOR_MISC, MaterialType.LEAVES, new ItemStack(FLOWERING_AZALEA_LEAVES, 6));
     }
 
     private void createCurtainRecipes() {
@@ -210,6 +225,48 @@ public class RecipeGenerator extends RecipeProvider {
         carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_trash_bin")), 1, FurnitureCategory.OUTDOOR_MISC, materialType, new ItemStack(planks), new ItemStack(Items.IRON_INGOT, 4));
         carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_trash_bin")), 1, FurnitureCategory.OUTDOOR_MISC, materialType, new ItemStack(log), new ItemStack(Items.IRON_INGOT, 4));
         carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_trash_bin")), 1, FurnitureCategory.OUTDOOR_MISC, materialType, new ItemStack(strippedLog), new ItemStack(Items.IRON_INGOT, 4));
+
+        for (WoodType type2 : WOOD_TYPES) {
+
+            Block planks2 = getBlockFromResourceLocation(ResourceLocation.parse(type2.name()+"_planks"));
+            Block log2;
+            Block strippedLog2;
+            String log_suffix2;
+            if (type2 == WoodType.CRIMSON || type2 == WoodType.WARPED) {
+                log2 = getBlockFromResourceLocation(ResourceLocation.parse(type2.name()+"_stem"));
+                strippedLog2 = getBlockFromResourceLocation(ResourceLocation.parse("stripped_"+type2.name()+"_stem"));
+                log_suffix2 = "_stem";
+            } else if (type2 == WoodType.BAMBOO) {
+                log2 = getBlockFromResourceLocation(ResourceLocation.parse(type2.name()+"_block"));
+                strippedLog2 = getBlockFromResourceLocation(ResourceLocation.parse("stripped_"+type2.name()+"_block"));
+                log_suffix2 = "_block";
+            } else {
+                log2 = getBlockFromResourceLocation(ResourceLocation.parse(type2.name()+"_log"));
+                strippedLog2 = getBlockFromResourceLocation(ResourceLocation.parse("stripped_"+type2.name()+"_log"));
+                log_suffix2 = "_log";
+            }
+            MaterialType additional = getMaterialTypeFromTop(getBlockFromResourceLocation(ResourceLocation.parse(type2.name()+"_planks")));
+
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_"+type2.name()+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(planks), new ItemStack(planks2));
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_"+type2.name()+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log, 2), new ItemStack(planks2));
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_"+type2.name()+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(strippedLog), new ItemStack(planks2));
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_"+type2.name()+log_suffix2+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(planks), new ItemStack(log2));
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log, 2), new ItemStack(log2));
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(strippedLog), new ItemStack(log2));
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(planks), new ItemStack(strippedLog2));
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log, 2), new ItemStack(strippedLog2));
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(strippedLog), new ItemStack(strippedLog2));
+
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+"_"+type2.name()+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(planks), new ItemStack(planks2));
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+log_suffix+"_"+type2.name()+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log, 2), new ItemStack(planks2));
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_stripped_"+type.name()+log_suffix+"_"+type2.name()+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(strippedLog), new ItemStack(planks2));
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+"_"+type2.name()+log_suffix2+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(planks), new ItemStack(log2));
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log, 2), new ItemStack(log2));
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_stripped_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(strippedLog), new ItemStack(log2));
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(planks), new ItemStack(strippedLog2));
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log, 2), new ItemStack(strippedLog2));
+            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_stripped_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(strippedLog), new ItemStack(strippedLog2));
+        }
 
         METALS.forEach((metal, name) -> {
             if (metal != Blocks.COPPER_BLOCK) {

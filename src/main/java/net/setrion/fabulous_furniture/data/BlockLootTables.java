@@ -44,6 +44,7 @@ public class BlockLootTables extends BlockLootSubProvider {
         generateCurtains();
         generateKitchenTiles();
         generateFurniture();
+        generateHedges();
         WOOD_TYPES.forEach(this::generateWoodenFurniture);
     }
 
@@ -194,6 +195,37 @@ public class BlockLootTables extends BlockLootSubProvider {
         dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_trash_bin")));
         dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_trash_bin")));
 
+        for (WoodType type2 : WOOD_TYPES) {
+            String log_suffix2;
+            if (type2 == WoodType.CRIMSON || type2 == WoodType.WARPED) {
+                log_suffix2 = "_stem";
+            } else if (type2 == WoodType.BAMBOO) {
+                log_suffix2 = "_block";
+            } else {
+                log_suffix2 = "_log";
+            }
+
+            add(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_"+type2.name()+"_birdhouse")), block -> createSinglePropConditionTable(block, BirdhouseBlock.HALF, DoubleBlockHalf.LOWER));
+            add(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_"+type2.name()+"_birdhouse")), block -> createSinglePropConditionTable(block, BirdhouseBlock.HALF, DoubleBlockHalf.LOWER));
+            add(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_"+type2.name()+"_birdhouse")), block -> createSinglePropConditionTable(block, BirdhouseBlock.HALF, DoubleBlockHalf.LOWER));
+            add(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_"+type2.name()+log_suffix2+"_birdhouse")), block -> createSinglePropConditionTable(block, BirdhouseBlock.HALF, DoubleBlockHalf.LOWER));
+            add(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), block -> createSinglePropConditionTable(block, BirdhouseBlock.HALF, DoubleBlockHalf.LOWER));
+            add(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), block -> createSinglePropConditionTable(block, BirdhouseBlock.HALF, DoubleBlockHalf.LOWER));
+            add(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), block -> createSinglePropConditionTable(block, BirdhouseBlock.HALF, DoubleBlockHalf.LOWER));
+            add(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), block -> createSinglePropConditionTable(block, BirdhouseBlock.HALF, DoubleBlockHalf.LOWER));
+            add(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), block -> createSinglePropConditionTable(block, BirdhouseBlock.HALF, DoubleBlockHalf.LOWER));
+
+            dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+"_"+type2.name()+"_birdhouse")));
+            dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+log_suffix+"_"+type2.name()+"_birdhouse")));
+            dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_stripped_"+type.name()+log_suffix+"_"+type2.name()+"_birdhouse")));
+            dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+"_"+type2.name()+log_suffix2+"_birdhouse")));
+            dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")));
+            dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_stripped_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")));
+            dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")));
+            dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")));
+            dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_stripped_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")));
+        }
+
         METALS.forEach((metal, name) -> {
             if (metal != Blocks.COPPER_BLOCK) {
                 dropSelf(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_" + name + "_bench")));
@@ -241,6 +273,20 @@ public class BlockLootTables extends BlockLootSubProvider {
                 add(getBlockFromResourceLocation(FabulousFurniture.prefix(color+"_stripped_"+type.name()+log_suffix+"_bed")), loot -> createSinglePropConditionTable(loot, WoodenBedBlock.PART, BedPart.HEAD));
             }
         }));
+    }
+
+    private void generateHedges() {
+        dropSelf(OAK_HEDGE.get());
+        dropSelf(SPRUCE_HEDGE.get());
+        dropSelf(BIRCH_HEDGE.get());
+        dropSelf(JUNGLE_HEDGE.get());
+        dropSelf(ACACIA_HEDGE.get());
+        dropSelf(CHERRY_HEDGE.get());
+        dropSelf(DARK_OAK_HEDGE.get());
+        dropSelf(PALE_OAK_HEDGE.get());
+        dropSelf(MANGROVE_HEDGE.get());
+        dropSelf(AZALEA_HEDGE.get());
+        dropSelf(FLOWERING_AZALEA_HEDGE.get());
     }
 
     private Block getBlockFromResourceLocation(ResourceLocation location) {

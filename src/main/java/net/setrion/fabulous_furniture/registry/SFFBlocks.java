@@ -210,6 +210,37 @@ public class SFFBlocks {
             registerBlockWithItem(type.name()+log_suffix+"_trash_bin", TrashBinBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
             registerBlockWithItem("stripped_"+type.name()+log_suffix+"_trash_bin", TrashBinBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
 
+            for (WoodType type2 : WOOD_TYPES) {
+                String log_suffix2;
+                if (type2 == WoodType.CRIMSON || type2 == WoodType.WARPED) {
+                    log_suffix2 = "_stem";
+                } else if (type2 == WoodType.BAMBOO) {
+                    log_suffix2 = "_block";
+                } else {
+                    log_suffix2 = "_log";
+                }
+
+                registerBlockWithItem(type.name()+"_"+type2.name()+"_birdhouse", BirdhouseBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem(type.name()+log_suffix+"_"+type2.name()+"_birdhouse", BirdhouseBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem("stripped_"+type.name()+log_suffix+"_"+type2.name()+"_birdhouse", BirdhouseBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem(type.name()+"_"+type2.name()+log_suffix2+"_birdhouse", BirdhouseBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem(type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse", BirdhouseBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem("stripped_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse", BirdhouseBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem(type.name()+"_stripped_"+type2.name()+log_suffix2+"_birdhouse", BirdhouseBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem(type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse", BirdhouseBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem("stripped_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse", BirdhouseBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+
+                registerBlockWithItem("hanging_"+type.name()+"_"+type2.name()+"_birdhouse", HangingBirdhouseBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem("hanging_"+type.name()+log_suffix+"_"+type2.name()+"_birdhouse", HangingBirdhouseBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem("hanging_stripped_"+type.name()+log_suffix+"_"+type2.name()+"_birdhouse", HangingBirdhouseBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem("hanging_"+type.name()+"_"+type2.name()+log_suffix2+"_birdhouse", HangingBirdhouseBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem("hanging_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse", HangingBirdhouseBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem("hanging_stripped_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse", HangingBirdhouseBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem("hanging_"+type.name()+"_stripped_"+type2.name()+log_suffix2+"_birdhouse", HangingBirdhouseBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem("hanging_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse", HangingBirdhouseBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+                registerBlockWithItem("hanging_stripped_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse", HangingBirdhouseBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
+            }
+
             WOOL_COLORS.forEach(((block, color) -> {
                 registerBlockWithItem(color.getName()+"_"+type.name()+"_chair", ChairBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
                 registerBlockWithItem(color.getName()+"_"+type.name()+log_suffix+"_chair", ChairBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(type.name()+"_planks"))));
@@ -294,6 +325,18 @@ public class SFFBlocks {
     public static final DeferredBlock<Block> WAXED_EXPOSED_COPPER_FRIDGE = registerBlockWithItem("waxed_exposed_copper_fridge", FridgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WAXED_EXPOSED_COPPER).pushReaction(PushReaction.BLOCK));
     public static final DeferredBlock<Block> WAXED_WEATHERED_COPPER_FRIDGE = registerBlockWithItem("waxed_weathered_copper_fridge", FridgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WAXED_WEATHERED_COPPER).pushReaction(PushReaction.BLOCK));
     public static final DeferredBlock<Block> WAXED_OXIDIZED_COPPER_FRIDGE = registerBlockWithItem("waxed_oxidized_copper_fridge", FridgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WAXED_OXIDIZED_COPPER).pushReaction(PushReaction.BLOCK));
+
+    public static final DeferredBlock<Block> OAK_HEDGE = registerBlockWithItem("oak_hedge", HedgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES));
+    public static final DeferredBlock<Block> SPRUCE_HEDGE = registerBlockWithItem("spruce_hedge", HedgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_LEAVES));
+    public static final DeferredBlock<Block> BIRCH_HEDGE = registerBlockWithItem("birch_hedge", HedgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BIRCH_LEAVES));
+    public static final DeferredBlock<Block> JUNGLE_HEDGE = registerBlockWithItem("jungle_hedge", HedgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.JUNGLE_LEAVES));
+    public static final DeferredBlock<Block> ACACIA_HEDGE = registerBlockWithItem("acacia_hedge", HedgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.ACACIA_LEAVES));
+    public static final DeferredBlock<Block> CHERRY_HEDGE = registerBlockWithItem("cherry_hedge", HedgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_LEAVES));
+    public static final DeferredBlock<Block> DARK_OAK_HEDGE = registerBlockWithItem("dark_oak_hedge", HedgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.DARK_OAK_LEAVES));
+    public static final DeferredBlock<Block> PALE_OAK_HEDGE = registerBlockWithItem("pale_oak_hedge", HedgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.PALE_OAK_LEAVES));
+    public static final DeferredBlock<Block> MANGROVE_HEDGE = registerBlockWithItem("mangrove_hedge", HedgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.MANGROVE_LEAVES));
+    public static final DeferredBlock<Block> AZALEA_HEDGE = registerBlockWithItem("azalea_hedge", HedgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.AZALEA_LEAVES));
+    public static final DeferredBlock<Block> FLOWERING_AZALEA_HEDGE = registerBlockWithItem("flowering_azalea_hedge", HedgeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWERING_AZALEA_LEAVES));
 
     public static final DeferredBlock<Block> WHITE_LIGHT_GRAY_KITCHEN_TILES = registerBlockWithItem("white_light_gray_kitchen_tiles", KitchenTileBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));
     public static final DeferredBlock<Block> WHITE_GRAY_KITCHEN_TILES = registerBlockWithItem("white_gray_kitchen_tiles", KitchenTileBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_CONCRETE));

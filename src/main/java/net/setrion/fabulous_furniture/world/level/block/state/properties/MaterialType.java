@@ -24,6 +24,7 @@ public record MaterialType(String name, Item item) {
     public static final MaterialType WARPED;
     public static final MaterialType MANGROVE;
     public static final MaterialType BAMBOO;
+    public static final MaterialType LEAVES;
     public static final MaterialType WOOL;
     public static final MaterialType CONCRETE;
     public static final MaterialType STONE;
@@ -94,6 +95,7 @@ public record MaterialType(String name, Item item) {
         WARPED = register(new MaterialType("warped", Blocks.WARPED_PLANKS.asItem()));
         MANGROVE = register(new MaterialType("mangrove", Blocks.MANGROVE_PLANKS.asItem()));
         BAMBOO = register(new MaterialType("bamboo", Blocks.BAMBOO_PLANKS.asItem()));
+        LEAVES = register(new MaterialType("leaves", Blocks.OAK_LEAVES.asItem()));
         WOOL = register(new MaterialType("wool", Blocks.WHITE_WOOL.asItem()));
         CONCRETE = register(new MaterialType("concrete", Blocks.WHITE_CONCRETE.asItem()));
         STONE = register(new MaterialType("stone", Blocks.STONE.asItem()));

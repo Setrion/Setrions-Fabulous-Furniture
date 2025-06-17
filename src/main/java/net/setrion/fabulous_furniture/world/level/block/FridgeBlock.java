@@ -27,6 +27,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -79,6 +80,37 @@ public class FridgeBlock extends BaseEntityBlock implements BlockTagSupplier, It
         }
     }
 
+    @Override
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        if (!level.isClientSide) {
+            if (player.preventsBlockDrops()) {
+                preventDropFromBottomPart(level, pos, state, player);
+            } else {
+                dropResources(state, level, pos, null, player, player.getMainHandItem());
+            }
+        }
+
+        return super.playerWillDestroy(level, pos, state, player);
+    }
+
+    @Override
+    public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity te, ItemStack stack) {
+        super.playerDestroy(level, player, pos, Blocks.AIR.defaultBlockState(), te, stack);
+    }
+
+    protected static void preventDropFromBottomPart(Level level, BlockPos pos, BlockState state, Player player) {
+        DoubleBlockHalf doubleblockhalf = state.getValue(HALF);
+        if (doubleblockhalf == DoubleBlockHalf.UPPER) {
+            BlockPos blockpos = pos.below();
+            BlockState blockstate = level.getBlockState(blockpos);
+            if (blockstate.is(state.getBlock()) && blockstate.getValue(HALF) == DoubleBlockHalf.LOWER) {
+                BlockState blockstate1 = blockstate.getFluidState().is(Fluids.WATER) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState();
+                level.setBlock(blockpos, blockstate1, 35);
+                level.levelEvent(player, 2001, blockpos, Block.getId(blockstate));
+            }
+        }
+    }
+
     protected void onExplosionHit(BlockState blockState, ServerLevel level, BlockPos blockPos, Explosion explosion, BiConsumer<ItemStack, BlockPos> consumer) {
         if (explosion.canTriggerBlocks() && blockState.getValue(HALF) == DoubleBlockHalf.LOWER) {
             this.setOpen(null, level, blockState, blockPos, !this.isOpen(blockState));
@@ -106,8 +138,8 @@ public class FridgeBlock extends BaseEntityBlock implements BlockTagSupplier, It
     }
 
     @Override
-    protected void affectNeighborsAfterRemoval(BlockState p_393681_, ServerLevel p_394632_, BlockPos p_394133_, boolean p_394282_) {
-        Containers.updateNeighboursAfterDestroy(p_393681_, p_394632_, p_394133_);
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean bool) {
+        Containers.updateNeighboursAfterDestroy(state, level, pos);
     }
 
     private DoorHingeSide getHinge(BlockPlaceContext context) {

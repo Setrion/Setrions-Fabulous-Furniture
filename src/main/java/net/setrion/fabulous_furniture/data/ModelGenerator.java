@@ -62,6 +62,18 @@ public class ModelGenerator extends ModelProvider {
         createTableware(blockModels);
         createToasters(blockModels);
 
+        createHedgeBlock(OAK_HEDGE.get(), TextureMapping.getBlockTexture(OAK_LEAVES), blockModels, -12012264);
+        createHedgeBlock(SPRUCE_HEDGE.get(), TextureMapping.getBlockTexture(SPRUCE_LEAVES), blockModels, -10380959);
+        createHedgeBlock(BIRCH_HEDGE.get(), TextureMapping.getBlockTexture(BIRCH_LEAVES), blockModels, -8345771);
+        createHedgeBlock(JUNGLE_HEDGE.get(), TextureMapping.getBlockTexture(JUNGLE_LEAVES), blockModels, -12012264);
+        createHedgeBlock(ACACIA_HEDGE.get(), TextureMapping.getBlockTexture(ACACIA_LEAVES), blockModels, -12012264);
+        createHedgeBlock(CHERRY_HEDGE.get(), TextureMapping.getBlockTexture(CHERRY_LEAVES), blockModels);
+        createHedgeBlock(DARK_OAK_HEDGE.get(), TextureMapping.getBlockTexture(DARK_OAK_LEAVES), blockModels, -12012264);
+        createHedgeBlock(PALE_OAK_HEDGE.get(), TextureMapping.getBlockTexture(PALE_OAK_LEAVES), blockModels);
+        createHedgeBlock(MANGROVE_HEDGE.get(), TextureMapping.getBlockTexture(MANGROVE_LEAVES), blockModels, -7158200);
+        createHedgeBlock(AZALEA_HEDGE.get(), TextureMapping.getBlockTexture(AZALEA_LEAVES), blockModels);
+        createHedgeBlock(FLOWERING_AZALEA_HEDGE.get(), TextureMapping.getBlockTexture(FLOWERING_AZALEA_LEAVES), blockModels);
+
         Collection<Block> blocks = BLOCKS.getEntries().stream().map(DeferredHolder::get).collect(Collectors.toList());
         blocks.forEach((block -> {
             if (block instanceof ItemModelSupplier itemModel) {
@@ -220,6 +232,46 @@ public class ModelGenerator extends ModelProvider {
         createModel(blockModels, createTrashBinBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_trash_bin")), TextureMapping.getBlockTexture(log), blockModels));
         createModel(blockModels, createTrashBinBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_trash_bin")), TextureMapping.getBlockTexture(strippedLog), blockModels));
 
+        for (WoodType type2 : WOOD_TYPES) {
+            Block planks2 = getBlockFromResourceLocation(ResourceLocation.parse(type2.name()+"_planks"));
+            Block log2;
+            Block strippedLog2;
+            String log_suffix2;
+            if (type2 == WoodType.CRIMSON || type2 == WoodType.WARPED) {
+                log2 = getBlockFromResourceLocation(ResourceLocation.parse(type2.name()+"_stem"));
+                strippedLog2 = getBlockFromResourceLocation(ResourceLocation.parse("stripped_"+type2.name()+"_stem"));
+                log_suffix2 = "_stem";
+            } else if (type2 == WoodType.BAMBOO) {
+                log2 = getBlockFromResourceLocation(ResourceLocation.parse(type2.name()+"_block"));
+                strippedLog2 = getBlockFromResourceLocation(ResourceLocation.parse("stripped_"+type2.name()+"_block"));
+                log_suffix2 = "_block";
+            } else {
+                log2 = getBlockFromResourceLocation(ResourceLocation.parse(type2.name()+"_log"));
+                strippedLog2 = getBlockFromResourceLocation(ResourceLocation.parse("stripped_"+type2.name()+"_log"));
+                log_suffix2 = "_log";
+            }
+
+            createModel(blockModels, createBirdhouseBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_"+type2.name()+"_birdhouse")), TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(log, "_top"), TextureMapping.getBlockTexture(planks), TextureMapping.getBlockTexture(planks2), blockModels));
+            createModel(blockModels, createBirdhouseBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_"+type2.name()+"_birdhouse")), TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(log, "_top"), TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(planks2), blockModels));
+            createModel(blockModels, createBirdhouseBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_"+type2.name()+"_birdhouse")), TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(log, "_top"), TextureMapping.getBlockTexture(strippedLog), TextureMapping.getBlockTexture(planks2), blockModels));
+            createModel(blockModels, createBirdhouseBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_"+type2.name()+log_suffix2+"_birdhouse")), TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(log, "_top"), TextureMapping.getBlockTexture(planks), TextureMapping.getBlockTexture(log2), blockModels));
+            createModel(blockModels, createBirdhouseBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(log, "_top"), TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(log2), blockModels));
+            createModel(blockModels, createBirdhouseBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(log, "_top"), TextureMapping.getBlockTexture(strippedLog), TextureMapping.getBlockTexture(log2), blockModels));
+            createModel(blockModels, createBirdhouseBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(log, "_top"), TextureMapping.getBlockTexture(planks), TextureMapping.getBlockTexture(strippedLog2), blockModels));
+            createModel(blockModels, createBirdhouseBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(log, "_top"), TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(strippedLog2), blockModels));
+            createModel(blockModels, createBirdhouseBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(log, "_top"), TextureMapping.getBlockTexture(strippedLog), TextureMapping.getBlockTexture(strippedLog2), blockModels));
+
+            createModel(blockModels, createHangingBirdhouseBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+"_"+type2.name()+"_birdhouse")), TextureMapping.getBlockTexture(planks), TextureMapping.getBlockTexture(planks2), blockModels));
+            createModel(blockModels, createHangingBirdhouseBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+log_suffix+"_"+type2.name()+"_birdhouse")), TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(planks2), blockModels));
+            createModel(blockModels, createHangingBirdhouseBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_stripped_"+type.name()+log_suffix+"_"+type2.name()+"_birdhouse")), TextureMapping.getBlockTexture(strippedLog), TextureMapping.getBlockTexture(planks2), blockModels));
+            createModel(blockModels, createHangingBirdhouseBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+"_"+type2.name()+log_suffix2+"_birdhouse")), TextureMapping.getBlockTexture(planks), TextureMapping.getBlockTexture(log2), blockModels));
+            createModel(blockModels, createHangingBirdhouseBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(log2), blockModels));
+            createModel(blockModels, createHangingBirdhouseBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_stripped_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), TextureMapping.getBlockTexture(strippedLog), TextureMapping.getBlockTexture(log2), blockModels));
+            createModel(blockModels, createHangingBirdhouseBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), TextureMapping.getBlockTexture(planks), TextureMapping.getBlockTexture(strippedLog2), blockModels));
+            createModel(blockModels, createHangingBirdhouseBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), TextureMapping.getBlockTexture(log), TextureMapping.getBlockTexture(strippedLog2), blockModels));
+            createModel(blockModels, createHangingBirdhouseBlock(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_stripped_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), TextureMapping.getBlockTexture(strippedLog), TextureMapping.getBlockTexture(strippedLog2), blockModels));
+        }
+
         METALS.forEach((metal, name) -> {
             if (metal != Blocks.COPPER_BLOCK) {
                 createModel(blockModels, createBenchBlock(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name() + "_" + name + "_bench")), planks, TextureMapping.getBlockTexture(metal), blockModels));
@@ -278,7 +330,6 @@ public class ModelGenerator extends ModelProvider {
 
     private MultiVariantGenerator createKitchenTiles(Block block, ResourceLocation tile_base, ResourceLocation tile_2, BlockModelGenerators blockModels) {
         return BlockModelGenerators.createSimpleBlock(block, BlockModelGenerators.plainVariant(ModelTemplates.KITCHEN_TILES.create(block, new TextureMapping().put(TextureSlot.PARTICLE, tile_base).put(TextureSlots.TILE_BASE, tile_base).put(TextureSlots.TILE_2, tile_2), blockModels.modelOutput)));
-
     }
 
     private MultiVariantGenerator createKitchenCounter(Block block, Block counter, ResourceLocation top, BlockModelGenerators blockModels) {
@@ -496,7 +547,7 @@ public class ModelGenerator extends ModelProvider {
         MultiVariant top_open = BlockModelGenerators.plainVariant(ModelTemplates.FRIDGE_TOP_OPEN.create(block, mapping_top, blockModels.modelOutput));
         MultiVariant top_mirrored = BlockModelGenerators.plainVariant(ModelTemplates.FRIDGE_TOP_MIRRORED.create(block, mapping_top, blockModels.modelOutput));
         MultiVariant top_mirrored_open = BlockModelGenerators.plainVariant(ModelTemplates.FRIDGE_TOP_MIRRORED_OPEN.create(block, mapping_top, blockModels.modelOutput));
-        ResourceLocation item = ModelTemplates.FRIDGE_ITEM.create(block, mapping_top, blockModels.modelOutput);
+        ResourceLocation item = ModelTemplates.FRIDGE_INVENTORY.create(block, mapping_top, blockModels.modelOutput);
         blockModels.registerSimpleItemModel(block, item);
         return MultiVariantGenerator.dispatch(block).with(
                 PropertyDispatch.initial(FridgeBlock.HALF, FridgeBlock.HINGE, FridgeBlock.OPEN)
@@ -629,7 +680,7 @@ public class ModelGenerator extends ModelProvider {
         MultiVariant bottom_open = BlockModelGenerators.plainVariant(ModelTemplates.CLOSET_BOTTOM_OPEN.create(block, mapping_bottom, blockModels.modelOutput));
         MultiVariant top = BlockModelGenerators.plainVariant(ModelTemplates.CLOSET_TOP.create(block, mapping_top, blockModels.modelOutput));
         MultiVariant top_open = BlockModelGenerators.plainVariant(ModelTemplates.CLOSET_TOP_OPEN.create(block, mapping_top, blockModels.modelOutput));
-        ResourceLocation item = ModelTemplates.CLOSET_ITEM.create(block, mapping_top, blockModels.modelOutput);
+        ResourceLocation item = ModelTemplates.CLOSET_INVENTORY.create(block, mapping_top, blockModels.modelOutput);
         blockModels.registerSimpleItemModel(block, item);
         return MultiVariantGenerator.dispatch(block).with(
                 PropertyDispatch.initial(ClosetBlock.HALF, ClosetBlock.OPEN)
@@ -670,8 +721,8 @@ public class ModelGenerator extends ModelProvider {
         MultiVariant foot_left = BlockModelGenerators.plainVariant(ModelTemplates.WOODEN_BED_FOOT_LEFT.create(block, mapping, blockModels.modelOutput));
         MultiVariant foot_right = BlockModelGenerators.plainVariant(ModelTemplates.WOODEN_BED_FOOT_RIGHT.create(block, mapping, blockModels.modelOutput));
         MultiVariant foot_middle = BlockModelGenerators.plainVariant(ModelTemplates.WOODEN_BED_FOOT_MIDDLE.create(block, mapping, blockModels.modelOutput));
-        ResourceLocation item = ModelTemplates.WOODEN_BED_ITEM.create(block, mapping, blockModels.modelOutput);
-        blockModels.registerSimpleItemModel(block, item);
+        ResourceLocation inventory = ModelTemplates.WOODEN_BED_INVENTORY.create(block, mapping, blockModels.modelOutput);
+        blockModels.registerSimpleItemModel(block, inventory);
         return MultiVariantGenerator.dispatch(block).with(
                 PropertyDispatch.initial(WoodenBedBlock.PART, WoodenBedBlock.SHAPE, WoodenBedBlock.OCCUPIED)
                         .select(BedPart.HEAD, BedShape.SINGLE, false, head_single)
@@ -758,6 +809,46 @@ public class ModelGenerator extends ModelProvider {
         return MultiVariantGenerator.dispatch(block, model);
     }
 
+    private MultiVariantGenerator createBirdhouseBlock(Block block, ResourceLocation log, ResourceLocation log_top, ResourceLocation planks, ResourceLocation roof, BlockModelGenerators blockModels) {
+        MultiVariant top = BlockModelGenerators.plainVariant(ModelTemplates.BIRDHOUSE_TOP.create(block, new TextureMapping().put(TextureSlot.PARTICLE, planks).put(TextureSlots.LOG, log).put(TextureSlots.PLANKS, planks).put(TextureSlots.ROOF, roof), blockModels.modelOutput));
+        MultiVariant bottom = BlockModelGenerators.plainVariant(ModelTemplates.BIRDHOUSE_BOTTOM.create(block, new TextureMapping().put(TextureSlot.PARTICLE, log).put(TextureSlots.LOG, log).put(TextureSlots.LOG_TOP, log_top), blockModels.modelOutput));
+        ResourceLocation inventory = ModelTemplates.BIRDHOUSE_INVENTORY.create(block, new TextureMapping().put(TextureSlots.LOG, log).put(TextureSlots.LOG_TOP, log_top).put(TextureSlots.PLANKS, planks).put(TextureSlots.ROOF, roof), blockModels.modelOutput);
+        blockModels.registerSimpleItemModel(block, inventory);
+        return MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(BirdhouseBlock.HALF)
+                        .select(DoubleBlockHalf.LOWER, bottom)
+                        .select(DoubleBlockHalf.UPPER, top)
+        ).with(ROTATION_HORIZONTAL_FACING);
+    }
+
+    private MultiVariantGenerator createHangingBirdhouseBlock(Block block, ResourceLocation planks, ResourceLocation roof, BlockModelGenerators blockModels) {
+        MultiVariant model = BlockModelGenerators.plainVariant(ModelTemplates.HANGING_BIRDHOUSE.create(block, new TextureMapping().put(TextureSlot.PARTICLE, planks).put(TextureSlots.PLANKS, planks).put(TextureSlots.ROOF, roof), blockModels.modelOutput));
+        return MultiVariantGenerator.dispatch(block, model).with(ROTATION_HORIZONTAL_FACING);
+    }
+
+    private void createHedgeBlock(Block block, ResourceLocation leaves, BlockModelGenerators blockModels) {
+        createHedgeBlock(block, leaves, blockModels, 0);
+    }
+
+    private void createHedgeBlock(Block block, ResourceLocation leaves, BlockModelGenerators blockModels, int tint) {
+        MultiVariant multivariant = BlockModelGenerators.plainVariant(
+                ModelTemplates.HEDGE_POST.create(block, new TextureMapping().put(TextureSlot.PARTICLE, leaves).put(TextureSlot.WALL, leaves), blockModels.modelOutput)
+        );
+        MultiVariant multivariant1 = BlockModelGenerators.plainVariant(
+                ModelTemplates.HEDGE_LOW_SIDE.create(block, new TextureMapping().put(TextureSlot.PARTICLE, leaves).put(TextureSlot.WALL, leaves), blockModels.modelOutput)
+        );
+        MultiVariant multivariant2 = BlockModelGenerators.plainVariant(
+                ModelTemplates.HEDGE_TALL_SIDE.create(block, new TextureMapping().put(TextureSlot.PARTICLE, leaves).put(TextureSlot.WALL, leaves), blockModels.modelOutput)
+        );
+        blockModels.blockStateOutput.accept(BlockModelGenerators.createWall(block, multivariant, multivariant1, multivariant2));
+        ResourceLocation inventory = ModelTemplates.HEDGE_INVENTORY.create(block, new TextureMapping().put(TextureSlot.PARTICLE, leaves).put(TextureSlot.WALL, leaves), blockModels.modelOutput);
+        if (tint != 0) {
+            blockModels.registerSimpleTintedItemModel(block, inventory, ItemModelUtils.constantTint(tint));
+        } else {
+            blockModels.registerSimpleItemModel(block, inventory);
+        }
+    }
+
     private void createModel(BlockModelGenerators blockModels, MultiVariantGenerator generator) {
         blockModels.blockStateOutput.accept(generator);
     }
@@ -794,6 +885,7 @@ public class ModelGenerator extends ModelProvider {
         public static final TextureSlot METAL = TextureSlot.create("metal");
         public static final TextureSlot STONE = TextureSlot.create("stone");
         public static final TextureSlot CHAIR = TextureSlot.create("chair");
+        public static final TextureSlot ROOF = TextureSlot.create("roof");
         public static final TextureSlot LOG = TextureSlot.create("log");
         public static final TextureSlot LOG_TOP = TextureSlot.create("log_top");
         public static final TextureSlot STRIPPED_LOG = TextureSlot.create("stripped_log");
@@ -877,7 +969,7 @@ public class ModelGenerator extends ModelProvider {
         public static final ModelTemplate FRIDGE_TOP_OPEN = getTemplate("fridge_top_open_template", Optional.of("_top_open"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
         public static final ModelTemplate FRIDGE_TOP_MIRRORED = getTemplate("fridge_top_mirrored_template", Optional.of("_top_mirrored"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
         public static final ModelTemplate FRIDGE_TOP_MIRRORED_OPEN = getTemplate("fridge_top_mirrored_open_template", Optional.of("_top_mirrored_open"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
-        public static final ModelTemplate FRIDGE_ITEM = getTemplate("fridge_item_template", Optional.of("_item"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
+        public static final ModelTemplate FRIDGE_INVENTORY = getTemplate("fridge_inventory_template", Optional.of("_inventory"), TextureSlot.PARTICLE, TextureSlots.FRIDGE, TextureSlots.HANDLE);
 
         public static final ModelTemplate KNIFE_BLOCK = getTemplate("knife_block_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.BLOCK, TextureSlots.STAND, TextureSlots.HANDLE, TextureSlots.KNIFE);
         public static final ModelTemplate TABLEWARE = getTemplate("tableware_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.TABLEWARE, TextureSlots.LIQUID);
@@ -920,7 +1012,7 @@ public class ModelGenerator extends ModelProvider {
         public static final ModelTemplate CLOSET_BOTTOM_OPEN = getTemplate("closet_bottom_open_template", Optional.of("_bottom_open"), TextureSlot.PARTICLE, TextureSlots.CLOSET, TextureSlots.DOOR);
         public static final ModelTemplate CLOSET_TOP = getTemplate("closet_top_template", Optional.of("_top"), TextureSlot.PARTICLE, TextureSlots.CLOSET, TextureSlots.DOOR);
         public static final ModelTemplate CLOSET_TOP_OPEN = getTemplate("closet_top_open_template", Optional.of("_top_open"), TextureSlot.PARTICLE, TextureSlots.CLOSET, TextureSlots.DOOR);
-        public static final ModelTemplate CLOSET_ITEM = getTemplate("closet_item_template", Optional.of("_item"), TextureSlot.PARTICLE, TextureSlots.CLOSET, TextureSlots.DOOR);
+        public static final ModelTemplate CLOSET_INVENTORY = getTemplate("closet_inventory_template", Optional.of("_inventory"), TextureSlot.PARTICLE, TextureSlots.CLOSET, TextureSlots.DOOR);
 
         public static final ModelTemplate LAMP_SINGLE = getTemplate("lamp_single_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.LOG, TextureSlots.STRIPPED_LOG, TextureSlots.LOG_TOP, TextureSlots.PLANKS, TextureSlots.WOOL, TextureSlots.LAMP);
         public static final ModelTemplate LAMP_SINGLE_ON = getTemplate("lamp_single_template", Optional.of("_on"), TextureSlot.PARTICLE, TextureSlots.LOG, TextureSlots.STRIPPED_LOG, TextureSlots.LOG_TOP, TextureSlots.PLANKS, TextureSlots.WOOL, TextureSlots.LAMP);
@@ -937,7 +1029,7 @@ public class ModelGenerator extends ModelProvider {
         public static final ModelTemplate WOODEN_BED_FOOT_LEFT = getTemplate("wooden_bed_foot_left_template", Optional.of("_foot_left"), TextureSlot.PARTICLE, TextureSlots.WOOD, TextureSlots.WOOL, TextureSlots.DECORATION);
         public static final ModelTemplate WOODEN_BED_FOOT_RIGHT = getTemplate("wooden_bed_foot_right_template", Optional.of("_foot_right"), TextureSlot.PARTICLE, TextureSlots.WOOD, TextureSlots.WOOL, TextureSlots.DECORATION);
         public static final ModelTemplate WOODEN_BED_FOOT_MIDDLE = getTemplate("wooden_bed_foot_middle_template", Optional.of("_foot_middle"), TextureSlot.PARTICLE, TextureSlots.WOOD, TextureSlots.WOOL, TextureSlots.DECORATION);
-        public static final ModelTemplate WOODEN_BED_ITEM = getTemplate("wooden_bed_item_template", Optional.of("_item"), TextureSlot.PARTICLE, TextureSlots.WOOD, TextureSlots.WOOL, TextureSlots.DECORATION);
+        public static final ModelTemplate WOODEN_BED_INVENTORY = getTemplate("wooden_bed_inventory_template", Optional.of("_inventory"), TextureSlot.PARTICLE, TextureSlots.WOOD, TextureSlots.WOOL, TextureSlots.DECORATION);
 
         public static final ModelTemplate BENCH_SINGLE = getTemplate("bench_single_template", Optional.of("_single"), TextureSlot.PARTICLE, TextureSlots.WOOD, TextureSlots.METAL);
         public static final ModelTemplate BENCH_RIGHT = getTemplate("bench_right_template", Optional.of("_right"), TextureSlot.PARTICLE, TextureSlots.WOOD, TextureSlots.METAL);
@@ -955,6 +1047,17 @@ public class ModelGenerator extends ModelProvider {
 
         public static final ModelTemplate TRASH_BIN = getTemplate("trash_bin_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.METAL, TextureSlots.WOOD);
         public static final ModelTemplate BIRDBATH = getTemplate("birdbath_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.STONE, TextureSlots.WATER);
+
+        public static final ModelTemplate HEDGE_POST = getTemplate("hedge_post_template", Optional.of("_post"), TextureSlot.WALL).extend().renderType("cutout_mipped").build();
+        public static final ModelTemplate HEDGE_LOW_SIDE = getTemplate("hedge_side_template", Optional.of("_side"), TextureSlot.WALL).extend().renderType("cutout_mipped").build();
+        public static final ModelTemplate HEDGE_TALL_SIDE = getTemplate("hedge_side_tall_template", Optional.of("_side_tall"), TextureSlot.WALL).extend().renderType("cutout_mipped").build();
+        public static final ModelTemplate HEDGE_INVENTORY = getTemplate("hedge_inventory_template", Optional.of("_inventory"), TextureSlot.WALL);
+
+        public static final ModelTemplate BIRDHOUSE_BOTTOM = getTemplate("birdhouse_bottom_template", Optional.of("_bottom"), TextureSlot.PARTICLE, TextureSlots.LOG, TextureSlots.LOG_TOP);
+        public static final ModelTemplate BIRDHOUSE_TOP = getTemplate("birdhouse_top_template", Optional.of("_top"), TextureSlot.PARTICLE, TextureSlots.LOG, TextureSlots.PLANKS, TextureSlots.ROOF);
+        public static final ModelTemplate BIRDHOUSE_INVENTORY = getTemplate("birdhouse_inventory_template", Optional.of("_inventory"), TextureSlots.LOG, TextureSlots.LOG_TOP, TextureSlots.PLANKS, TextureSlots.ROOF);
+
+        public static final ModelTemplate HANGING_BIRDHOUSE = getTemplate("hanging_birdhouse_template", Optional.empty(), TextureSlot.PARTICLE, TextureSlots.PLANKS, TextureSlots.ROOF);
 
         private static ModelTemplate getTemplate(String name, Optional<String> suffix, TextureSlot... slots) {
             return new ModelTemplate(Optional.of(FabulousFurniture.prefix(name).withPrefix("block/template/")), suffix, slots);

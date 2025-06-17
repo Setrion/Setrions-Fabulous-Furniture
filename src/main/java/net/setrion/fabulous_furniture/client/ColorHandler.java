@@ -23,6 +23,9 @@ public class ColorHandler {
             } else if (block.get() instanceof BirdbathBlock) {
                 event.register((state, getter, pos, tintIndex) -> tintIndex == 1 && getter != null && pos != null ? BiomeColors.getAverageWaterColor(getter, pos) : -1, block.get());
             }
+            event.register((state, getter, pos, tintIndex) -> -10380959, SFFBlocks.SPRUCE_HEDGE.get());
+            event.register((state, getter, pos, tintIndex) -> -8345771, SFFBlocks.BIRCH_HEDGE.get());
+            event.register((state, getter, pos, tintIndex) -> getter != null && pos != null ? BiomeColors.getAverageFoliageColor(getter, pos) : -12012264, SFFBlocks.OAK_HEDGE.get(), SFFBlocks.JUNGLE_HEDGE.get(), SFFBlocks.ACACIA_HEDGE.get(), SFFBlocks.DARK_OAK_HEDGE.get(), SFFBlocks.MANGROVE_HEDGE.get());
         }
     }
 }
