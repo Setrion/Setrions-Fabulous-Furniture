@@ -300,7 +300,6 @@ public class SFFBlocks {
 
         STONE_MATERIALS.forEach(((block, suffix) -> {
             String top_name = block.getDescriptionId().replaceFirst("block.minecraft.", "").replaceFirst("quartz_block", "quartz");
-            System.out.println(top_name);
             registerBlockWithItem(top_name+"_birdbath", BirdbathBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(block));
         }));
 

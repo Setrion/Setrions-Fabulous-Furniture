@@ -41,10 +41,10 @@ public class ClientIngredientTooltip implements ClientTooltipComponent {
         return 18 + font.width(getStack().getDisplayName());
     }
 
-    @Override
+    /*@Override
     public void renderText(Font font, int mouseX, int mouseY, Matrix4f matrix, MultiBufferSource.BufferSource bufferSource) {
         ClientTooltipComponent.super.renderText(font, mouseX, mouseY, matrix, bufferSource);
-    }
+    }*/
 
     @Override
     public void renderImage(Font font, int start, int top, int width, int height, GuiGraphics graphics) {
@@ -56,11 +56,11 @@ public class ClientIngredientTooltip implements ClientTooltipComponent {
         graphics.drawString(font, name, start + 18 + 5, top + 4, 0xFFFFFFFF);
 
         // Draw check or cross depending on if we have the materials
-        PoseStack pose = graphics.pose();
+        /*PoseStack pose = graphics.pose();
         pose.pushPose();
         pose.translate(0, 0, 200);
         graphics.blit(RenderType::guiTextured, CarpentryTableScreen.BG_LOCATION, start, top, 240, 40, 6, 5, 256, 256);
-        pose.popPose();
+        pose.popPose();*/
     }
 
     private ItemStack getStack() {

@@ -10,7 +10,7 @@ import net.setrion.fabulous_furniture.client.renderer.entity.SeatRenderer;
 import net.setrion.fabulous_furniture.registry.SFFBlockEntityTypes;
 import net.setrion.fabulous_furniture.registry.SFFEntityTypes;
 
-@EventBusSubscriber(modid = FabulousFurniture.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = FabulousFurniture.MOD_ID, value = Dist.CLIENT)
 public class ClientEvents {
 
     @SubscribeEvent

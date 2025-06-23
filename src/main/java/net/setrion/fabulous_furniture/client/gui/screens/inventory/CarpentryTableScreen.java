@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
@@ -112,7 +112,6 @@ public class CarpentryTableScreen extends AbstractContainerScreen<CarpentryTable
         int i = leftPos-80;
         int j = topPos-40;
         filterButton = new StateSwitchingButton(i+224, j+9, 26, 16, filterEnabled);
-        addRenderableWidget(filterButton);
         updateFilterButtonTooltip();
         initFilterButtonTextures();
     }
@@ -199,13 +198,13 @@ public class CarpentryTableScreen extends AbstractContainerScreen<CarpentryTable
         return name.keyPressed(keyCode, scanCode, modifiers) || name.canConsumeInput() || super.keyPressed(keyCode, scanCode, modifiers);
     }
 
-    public void render(GuiGraphics guiGraphics, int p_282517_, int p_282840_, float p_282389_) {
-        super.render(guiGraphics, p_282517_, p_282840_, p_282389_);
+    public void render(GuiGraphics guiGraphics, int x, int y, float p_282389_) {
+        super.render(guiGraphics, x, y, p_282389_);
         guiGraphics.drawString(font, Component.translatable("carpentry_table.categories"), leftPos-73, topPos-34, 4210752, false);
         guiGraphics.drawString(font, Component.translatable("carpentry_table.materials"), leftPos-73, topPos+76, 4210752, false);
-        renderFg(guiGraphics, p_282517_, p_282840_, p_282389_);
-        filterButton.render(guiGraphics, p_282517_, p_282840_, p_282389_);
-        renderTooltip(guiGraphics, p_282517_, p_282840_);
+        renderFg(guiGraphics, x, y, p_282389_);
+        filterButton.render(guiGraphics, x, y, p_282389_);
+        renderTooltip(guiGraphics, x, y);
     }
 
     private boolean isRecipeCraftable(RecipeHolder<CarpentryTableRecipe> recipe) {
@@ -235,7 +234,7 @@ public class CarpentryTableScreen extends AbstractContainerScreen<CarpentryTable
                 }
             }
 
-            guiGraphics.blitSprite(RenderType::guiTextured, resourcelocation, k, i1 - 1, 25, 25);
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, resourcelocation, k, i1 - 1, 25, 25);
         }
     }
 
@@ -247,7 +246,7 @@ public class CarpentryTableScreen extends AbstractContainerScreen<CarpentryTable
             int k = x + j % 6 * 25;
             int l = j / 6;
             int i1 = y + l * 25 + 1;
-            SlotDisplay slotdisplay = recipesForInput.get(i).value().display().get(0).result();
+            SlotDisplay slotdisplay = recipesForInput.get(i).value().display().getFirst().result();
             guiGraphics.renderItem(slotdisplay.resolveForFirstStack(contextmap), k, i1);
         }
     }
@@ -257,13 +256,21 @@ public class CarpentryTableScreen extends AbstractContainerScreen<CarpentryTable
         super.renderTooltip(guiGraphics, x, y);
         categoryList.forEach(box -> {
             if (box.isActive() && box.isMouseOver(x, y)) {
-                guiGraphics.renderTooltip(font, box.getTooltip().toCharSequence(Minecraft.getInstance()), x, y);
+                for(int i = categoryListStartIndex; i < categoryListStartIndex+5 && i < categoryList.size(); ++i) {
+                    if (box == categoryList.get(i)) {
+                        guiGraphics.setTooltipForNextFrame(font, FurnitureCategory.values().toList().get(i).getTranslatedName(), x, y);
+                    }
+                }
             }
         });
 
         materialList.forEach(box -> {
             if (box.isActive() && box.isMouseOver(x, y)) {
-                guiGraphics.renderTooltip(font, box.getTooltip().toCharSequence(Minecraft.getInstance()), x, y);
+                for(int i = materialListStartIndex; i < materialListStartIndex+5 && i < materialList.size(); ++i) {
+                    if (box == materialList.get(i)) {
+                        guiGraphics.setTooltipForNextFrame(font, MaterialType.values().toList().get(i).getTranslatedName(), x, y);
+                    }
+                }
             }
         });
 
@@ -278,14 +285,14 @@ public class CarpentryTableScreen extends AbstractContainerScreen<CarpentryTable
                 int k1 = j + i1 / 6 * 25 + 1;
                 if (x >= j1 && x < j1 + 25 && y >= k1 && y < k1 + 25) {
                     ContextMap contextmap = SlotDisplayContext.fromLevel(this.minecraft.level);
-                    SlotDisplay slotdisplay = recipesForInput.get(l).value().display().get(0).result();
+                    SlotDisplay slotdisplay = recipesForInput.get(l).value().display().getFirst().result();
                     List<Either<FormattedText, TooltipComponent>> components = new ArrayList<>();
                     components.add(Either.left(FormattedText.of(Component.translatable(slotdisplay.resolveForFirstStack(contextmap).getItemName().getString()).getString())));
                     components.add(Either.left(FormattedText.of(Component.translatable("carpentry_table.amount").getString()+slotdisplay.resolveForFirstStack(contextmap).getCount(), Style.EMPTY.withColor(ChatFormatting.BLUE))));
                     components.add(Either.left(FormattedText.of("")));
                     components.add(Either.left(FormattedText.of(Component.translatable("carpentry_table.ingredients").getString())));
                     recipesForInput.get(l).value().getMaterials().forEach(material -> components.add(Either.left(FormattedText.of(material.count()+"x "+Component.translatable(material.ingredient().getValues().get(0).value().getDescriptionId()).getString(), Style.EMPTY.withColor(ChatFormatting.BLUE)))));
-                    guiGraphics.renderComponentTooltipFromElements(this.font, components, x, y, slotdisplay.resolveForFirstStack(contextmap));
+                    guiGraphics.setComponentTooltipFromElementsForNextFrame(this.font, components, x, y, slotdisplay.resolveForFirstStack(contextmap));
                 }
             }
         }
@@ -329,16 +336,16 @@ public class CarpentryTableScreen extends AbstractContainerScreen<CarpentryTable
     protected void renderBg(GuiGraphics guiGraphics, float v, int mouseX, int mouseY) {
         int i = leftPos-80;
         int j = topPos-40;
-        guiGraphics.blit(RenderType::guiTextured, BG_LOCATION, i, j, 0.0F, 0.0F, 256, 256, 256, 256);
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, BG_LOCATION, i, j, 0.0F, 0.0F, 256, 256, 256, 256);
         int r = (int)(85.0F * recipeListScrollOffs);
         int c = (int)(78.0F * categoryListScrollOffs);
         int m = (int)(78.0F * materialListScrollOffs);
         ResourceLocation scroller = isRecipeListScrollBarActive() ? SCROLLER_SPRITE : SCROLLER_DISABLED_SPRITE;
         ResourceLocation scroller_filter = isCategoryScrollBarActive() ? SCROLLER_FILTER_SPRITE : SCROLLER_FILTER_DISABLED_SPRITE;
         ResourceLocation scroller_filter2 = isMaterialTypeScrollBarActive() ? SCROLLER_FILTER_SPRITE : SCROLLER_FILTER_DISABLED_SPRITE;
-        guiGraphics.blitSprite(RenderType::guiTextured, scroller, i+239, j+31+r, 11, 15);
-        guiGraphics.blitSprite(RenderType::guiTextured, scroller_filter, i+61, j+19+c, 12, 15);
-        guiGraphics.blitSprite(RenderType::guiTextured, scroller_filter2, i+61, j+128+m, 12, 15);
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, scroller, i+239, j+31+r, 11, 15);
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, scroller_filter, i+61, j+19+c, 12, 15);
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, scroller_filter2, i+61, j+128+m, 12, 15);
         int l = leftPos+7;
         int i1 = topPos-10;
         int j1 = recipeListStartIndex + 24;

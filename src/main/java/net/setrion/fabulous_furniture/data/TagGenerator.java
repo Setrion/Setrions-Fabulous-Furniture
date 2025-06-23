@@ -3,10 +3,10 @@ package net.setrion.fabulous_furniture.data;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
+import net.neoforged.neoforge.common.data.ItemTagsProvider;
 import net.setrion.fabulous_furniture.FabulousFurniture;
 import net.setrion.fabulous_furniture.registry.SFFBlocks;
 import net.setrion.fabulous_furniture.registry.SFFTags;
@@ -20,8 +20,8 @@ public class TagGenerator {
 
     public static class Items extends ItemTagsProvider {
 
-        public Items(PackOutput output, CompletableFuture<HolderLookup.Provider> future, CompletableFuture<TagLookup<Block>> blockProvider) {
-            super(output, future, blockProvider, FabulousFurniture.MOD_ID);
+        public Items(PackOutput output, CompletableFuture<HolderLookup.Provider> future) {
+            super(output, future, FabulousFurniture.MOD_ID);
         }
 
         @Override

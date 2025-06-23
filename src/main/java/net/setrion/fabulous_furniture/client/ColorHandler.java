@@ -12,7 +12,7 @@ import net.setrion.fabulous_furniture.registry.SFFBlocks;
 import net.setrion.fabulous_furniture.world.level.block.BirdbathBlock;
 import net.setrion.fabulous_furniture.world.level.block.KitchenCounterSinkBlock;
 
-@EventBusSubscriber(modid = FabulousFurniture.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = FabulousFurniture.MOD_ID, value = Dist.CLIENT)
 public class ColorHandler {
 
     @SubscribeEvent

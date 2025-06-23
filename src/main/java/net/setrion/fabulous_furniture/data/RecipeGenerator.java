@@ -247,25 +247,48 @@ public class RecipeGenerator extends RecipeProvider {
             }
             MaterialType additional = getMaterialTypeFromTop(getBlockFromResourceLocation(ResourceLocation.parse(type2.name()+"_planks")));
 
-            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_"+type2.name()+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(planks), new ItemStack(planks2));
+            if (planks == planks2) {
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_"+type2.name()+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(planks, 2));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+"_"+type2.name()+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(planks, 2));
+            } else {
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_"+type2.name()+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(planks), new ItemStack(planks2));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+"_"+type2.name()+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(planks), new ItemStack(planks2));
+            }
+
+            if (log == log2) {
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_"+type2.name()+log_suffix2+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log, 2), new ItemStack(planks));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log, 3));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log, 2), new ItemStack(strippedLog));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+"_"+type2.name()+log_suffix2+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log, 2), new ItemStack(planks));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log, 3));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_stripped_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log, 2), new ItemStack(strippedLog));
+            } else {
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_"+type2.name()+log_suffix2+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(planks), new ItemStack(log2));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log, 2), new ItemStack(log2));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(strippedLog), new ItemStack(log2));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+"_"+type2.name()+log_suffix2+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(planks), new ItemStack(log2));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log, 2), new ItemStack(log2));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_stripped_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(strippedLog), new ItemStack(log2));
+            }
+
+            if (strippedLog == strippedLog2) {
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(strippedLog, 2));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_stripped_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(strippedLog, 2));
+            } else {
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(strippedLog), new ItemStack(strippedLog2));
+                carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_stripped_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(strippedLog), new ItemStack(strippedLog2));
+            }
+
+
             carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_"+type2.name()+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log, 2), new ItemStack(planks2));
             carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_"+type2.name()+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(strippedLog), new ItemStack(planks2));
-            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_"+type2.name()+log_suffix2+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(planks), new ItemStack(log2));
-            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log, 2), new ItemStack(log2));
-            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(strippedLog), new ItemStack(log2));
             carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(planks), new ItemStack(strippedLog2));
             carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix(type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log, 2), new ItemStack(strippedLog2));
-            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("stripped_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), 2, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(strippedLog), new ItemStack(strippedLog2));
 
-            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+"_"+type2.name()+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(planks), new ItemStack(planks2));
             carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+log_suffix+"_"+type2.name()+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log, 2), new ItemStack(planks2));
             carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_stripped_"+type.name()+log_suffix+"_"+type2.name()+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(strippedLog), new ItemStack(planks2));
-            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+"_"+type2.name()+log_suffix2+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(planks), new ItemStack(log2));
-            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log, 2), new ItemStack(log2));
-            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_stripped_"+type.name()+log_suffix+"_"+type2.name()+log_suffix2+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(strippedLog), new ItemStack(log2));
             carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(planks), new ItemStack(strippedLog2));
             carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log, 2), new ItemStack(strippedLog2));
-            carpentryTableCrafting(getBlockFromResourceLocation(FabulousFurniture.prefix("hanging_stripped_"+type.name()+log_suffix+"_stripped_"+type2.name()+log_suffix2+"_birdhouse")), 3, FurnitureCategory.OUTDOOR_MISC, materialType, additional, new ItemStack(log), new ItemStack(strippedLog), new ItemStack(strippedLog2));
         }
 
         METALS.forEach((metal, name) -> {

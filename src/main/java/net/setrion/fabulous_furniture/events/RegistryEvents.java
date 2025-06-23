@@ -16,7 +16,7 @@ import net.setrion.fabulous_furniture.registry.*;
 
 import java.util.concurrent.CompletableFuture;
 
-@EventBusSubscriber(bus=EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber()
 public class RegistryEvents {
 
     public static void registerEverything(IEventBus modEventBus) {
@@ -55,7 +55,7 @@ public class RegistryEvents {
         generator.addProvider(true, blockTags);
         generator.addProvider(true, new LangGenerator(output));
         generator.addProvider(true, new RecipeRunner(output, newLookup));
-        generator.addProvider(true, new TagGenerator.Items(output, newLookup, blockTags.contentsGetter()));
+        generator.addProvider(true, new TagGenerator.Items(output, newLookup));
         generator.addProvider(true, new ModelGenerator(output));
     }
 
@@ -71,6 +71,6 @@ public class RegistryEvents {
         generator.addProvider(true, new LangGenerator(output));
         generator.addProvider(true, blockTags);
         generator.addProvider(true, new RecipeRunner(output, newLookup));
-        generator.addProvider(true, new TagGenerator.Items(output, newLookup, blockTags.contentsGetter()));
+        generator.addProvider(true, new TagGenerator.Items(output, newLookup));
     }
 }
