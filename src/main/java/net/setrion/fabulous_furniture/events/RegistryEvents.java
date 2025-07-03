@@ -39,6 +39,9 @@ public class RegistryEvents {
                 CarpentryRecipes.STREAM_CODEC,
                 new MainThreadPayloadHandler<>(
                         CarpentryRecipes.ClientPayloadHandler::handleDataOnMain
+                ),
+                new MainThreadPayloadHandler<>(
+                        CarpentryRecipes.ClientPayloadHandler::handleDataOnMain
                 )
         );
     }
