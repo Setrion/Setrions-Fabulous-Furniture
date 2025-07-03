@@ -1,6 +1,8 @@
 {
 	"homepage": "https://www.curseforge.com/minecraft/mc-mods/setrions-fabulous-furniture",
 	"promos": {
+		"1.21.7-latest": "0.3.1",
+		"1.21.7-recommenced": "0.3.1",
 		"1.21.6-latest": "0.3.1",
 		"1.21.6-recommended": "0.3.1",
 		"1.21.5-latest": "0.3.0",
@@ -19,5 +21,8 @@
 	"1.21.6": {
 		"0.3.0": "Updated to 1.21.6",
 		"0.3.1": "Added Furniture for Gardens & Parks, officially"
+	}
+	"1.21.7": {
+		"0.3.1": "Updated to 1.21.7"
 	}
 }
